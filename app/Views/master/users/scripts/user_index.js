@@ -53,17 +53,9 @@ $(document).ready(function () {
         $("#userId").val(""); // Clear ID
         $("#userForm")[0].reset(); // Reset form fields
         table.ajax.reload(null, false);
-        VibeApp.show({
-          title: "Success",
-          message: response.message,
-          type: "success",
-        });
+        vibeToast.success(response.message);
       } else {
-        VibeApp.show({
-          title: "Error",
-          message: "Failed to save data.",
-          type: "danger",
-        });
+        vibeToast.error("Failed to save data.");
       }
     });
   });
@@ -95,11 +87,7 @@ $(document).ready(function () {
       window.api.delete(route.delete + id).then(function (response) {
         if (response.success) {
           table.ajax.reload(null, false);
-          VibeApp.show({
-            title: "Deleted",
-            message: response.message,
-            type: "success",
-          });
+          vibeToast.success(response.message, "Deleted");
         }
       });
     }
