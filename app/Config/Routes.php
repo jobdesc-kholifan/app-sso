@@ -19,3 +19,22 @@ $routes->group('master/users', function ($routes) {
     $routes->post('update/(:num)', 'UserController::update/$1');
     $routes->post('delete/(:num)', 'UserController::delete/$1');
 });
+
+// OAuth Sessions Monitoring
+$routes->group('oauth/sessions', function ($routes) {
+    $routes->get('/', 'OAuthSessionController::index');
+    $routes->get('datatable', 'OAuthSessionController::datatable');
+    $routes->post('revoke/(:segment)', 'OAuthSessionController::revoke/$1');
+});
+
+// OAuth & OIDC Routes
+$routes->get('oauth/login', 'OAuthController::login');
+$routes->post('oauth/login/process', 'OAuthController::processLogin');
+
+$routes->get('oauth/authorize', 'OAuthController::authorize');
+$routes->post('oauth/authorize', 'OAuthController::authorizeProcess');
+$routes->get('oauth/logout', 'OAuthController::logout');
+
+$routes->post('oauth/token', 'OAuthController::token');
+$routes->get('oauth/userinfo', 'OAuthController::userinfo');
+$routes->post('oauth/userinfo', 'OAuthController::userinfo');

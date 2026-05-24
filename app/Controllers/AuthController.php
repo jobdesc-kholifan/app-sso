@@ -10,9 +10,16 @@ class AuthController extends BaseController
 {
     public function login()
     {
+        $redirect = $this->request->getGet('redirect');
+        if ($redirect) {
+            session()->set('redirect_after_login', $redirect);
+        }
+
         // If already logged in, redirect to dashboard or master user
         if (session()->get('isLoggedIn')) {
-            return redirect()->to('/master/users');
+            $redirectUrl = session()->get('redirect_after_login') ?? '/master/users';
+            session()->remove('redirect_after_login');
+            return redirect()->to($redirectUrl);
         }
 
         return view('auth/v_login');
@@ -61,7 +68,9 @@ class AuthController extends BaseController
                 $userModel->update($user->id, ['last_login' => date('Y-m-d H:i:s')]);
 
                 session()->set($sessionData);
-                return redirect()->to('/master/users')->with('success', 'Welcome back, ' . $user->full_name);
+                $redirectUrl = session()->get('redirect_after_login') ?? '/master/users';
+                session()->remove('redirect_after_login');
+                return redirect()->to($redirectUrl)->with('success', 'Welcome back, ' . $user->full_name);
             } else {
                 return redirect()->back()->with('error', 'Invalid password.');
             }
