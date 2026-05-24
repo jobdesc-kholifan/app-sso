@@ -1,9 +1,5 @@
 <?= $this->extend('layouts/main') ?>
 
-<?= $this->section('title') ?>
-Landing Page
-<?= $this->endSection() ?>
-
 <?= $this->section('content') ?>
 <div class="w-full flex items-center justify-center min-h-[80vh]">
 	<div class="w-full max-w-5xl h-[70vh] flex flex-col items-center justify-center text-center p-8 bg-surface rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 relative overflow-hidden">
@@ -37,4 +33,8 @@ Landing Page
 		</div>
 	</div>
 </div>
+<?= $this->endSection() ?>
+
+<?= $this->section('script_foot') ?>
+	<?= vite_asset('landing.js') ?>
 <?= $this->endSection() ?>

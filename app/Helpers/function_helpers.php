@@ -1,95 +1,71 @@
 <?php
 
-/**
- * Vite Helper untuk CodeIgniter 4
- * Membantu me-load asset dari Vite Dev Server saat development,
- * atau dari manifest.json saat sudah di-build (production).
- */
-
 if (!function_exists('vite_asset')) {
     /**
-     * Meng-generate tag <script> dan <link> untuk Vite
-     *
-     * @param string $entryPoint Path entry point, misal 'public/dist/js/app.js' atau 'src/main.js'
-     * @return string HTML script/link tags
+     * Vite integration for CodeIgniter 4
+     * Automatically loads from Vite dev server during development
+     * and from build manifest during production.
      */
-    function vite_asset(string $entryPoint): string
+    function vite_asset(string $entry = 'main.js', $dynamicResolve = true): string
     {
-        $isDev = env('CI_ENVIRONMENT') === 'development';
-        $devServerUrl = env('VITE_DEV_SERVER', 'http://localhost:5173/');
-
-        // Jika mode development, load langsung dari Vite Dev Server
-        if ($isDev) {
-            $html  = '<script type="module" src="' . $devServerUrl . '@vite/client"></script>' . "\n";
-            $html .= '<script type="module" src="' . $devServerUrl . ltrim($entryPoint, '/') . '"></script>';
-            return $html;
-        }
-
-        // Jika mode production, baca dari manifest.json
-        $manifestPath = FCPATH . 'dist/.vite/manifest.json'; // Path bawaan Vite 5+
-        if (!file_exists($manifestPath)) {
-            $manifestPath = FCPATH . 'dist/manifest.json'; // Path bawaan Vite 4
-        }
-
-        // Fallback jika tidak ada manifest
-        if (!file_exists($manifestPath)) {
-            return '<script type="module" src="' . base_url('dist/' . ltrim($entryPoint, '/')) . '"></script>';
-        }
-
-        $manifest = json_decode(file_get_contents($manifestPath), true);
-
-        if (!isset($manifest[$entryPoint])) {
-            return '<!-- Vite Entry Not Found: ' . $entryPoint . ' -->';
-        }
-
-        $html = '';
-        $file = $manifest[$entryPoint]['file'];
-
-        // Load file CSS yang berelasi dengan JS entry point ini (jika ada)
-        if (isset($manifest[$entryPoint]['css'])) {
-            foreach ($manifest[$entryPoint]['css'] as $css) {
-                $html .= '<link rel="stylesheet" href="' . base_url('dist/' . $css) . '"/>' . "\n";
+        $viteHost = env('vite.host', '127.0.0.1');
+        $vitePort = env('vite.port', '5173');
+        $devServerUrl = "http://{$viteHost}:{$vitePort}";
+        $manifestPath = FCPATH . 'build/.vite/manifest.json';
+        
+        if($dynamicResolve) {
+            // Dynamically resolve entry path based on where this function is called
+            $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+            if (isset($trace[0]['file'])) {
+                $callerDir = dirname($trace[0]['file']);
+                // Convert absolute path to relative path from project root
+                $relativePath = str_replace(rtrim(ROOTPATH, '/'), '', $callerDir);
+                $relativePath = ltrim($relativePath, '/'); // e.g., 'app/Views'
+                
+                // Only prepend if entry doesn't already have the path
+                if (!str_starts_with($entry, $relativePath)) {
+                    $entry = $relativePath . '/' . ltrim($entry, '/');
+                }
             }
         }
 
-        // Load JS file
-        $html .= '<script type="module" src="' . base_url('dist/' . $file) . '"></script>';
-
-        return $html;
-    }
-}
-
-if (!function_exists('vite')) {
-    /**
-     * Me-load single asset URL dari Vite (berguna untuk gambar, dsb)
-     *
-     * @param string $path Path file di dalam folder source
-     * @return string URL ke file tersebut
-     */
-    function vite(string $path): string
-    {
-        $isDev = env('CI_ENVIRONMENT') === 'development';
-        $devServerUrl = env('VITE_DEV_SERVER', 'http://localhost:5173/');
+        // Try to determine if dev server is running
+        $isDev = false;
+        
+        if (ENVIRONMENT === 'development') {
+            // Cek port dengan timeout cepat (0.5s)
+            $connection = @fsockopen($viteHost, (int) $vitePort, $errno, $errstr, 0.5);
+            if ($connection !== false) {
+                $isDev = true;
+                fclose($connection);
+            }
+        }
 
         if ($isDev) {
-            return $devServerUrl . ltrim($path, '/');
+            return '<script type="module" src="' . $devServerUrl . '/@vite/client"></script>' . "\n" .
+                   '<script type="module" src="' . $devServerUrl . '/' . $entry . '"></script>';
         }
 
-        $manifestPath = FCPATH . 'dist/.vite/manifest.json';
-        if (!file_exists($manifestPath)) {
-            $manifestPath = FCPATH . 'dist/manifest.json';
-        }
-
-        if (!file_exists($manifestPath)) {
-            return base_url('dist/' . ltrim($path, '/'));
+        if (!is_file($manifestPath)) {
+            return '<!-- Vite manifest not found at ' . $manifestPath . ' -->';
         }
 
         $manifest = json_decode(file_get_contents($manifestPath), true);
 
-        if (isset($manifest[$path])) {
-            return base_url('dist/' . $manifest[$path]['file']);
+        if (!isset($manifest[$entry])) {
+            return '<!-- Vite entry ' . $entry . ' not found in manifest -->';
         }
 
-        return base_url('dist/' . ltrim($path, '/'));
+        $tags = '';
+        $file = $manifest[$entry]['file'];
+        $tags .= '<script type="module" src="' . base_url('build/' . $file) . '"></script>' . "\n";
+
+        if (isset($manifest[$entry]['css'])) {
+            foreach ($manifest[$entry]['css'] as $css) {
+                $tags .= '<link rel="stylesheet" href="' . base_url('build/' . $css) . '">' . "\n";
+            }
+        }
+
+        return $tags;
     }
 }

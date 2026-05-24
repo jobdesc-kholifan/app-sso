@@ -6,6 +6,9 @@ class Home extends BaseController
 {
     public function index(): string
     {
-        return view('landing');
+        $data['title'] = "Landing Page";
+        $data['pageTitle'] = "Landing Page";
+
+        return view('landing', $data);
     }
 }

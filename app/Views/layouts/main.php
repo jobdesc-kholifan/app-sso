@@ -4,11 +4,10 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><?= $this->renderSection('title') ?> - Vibe UI Kit</title>
-	<script src="<?= base_url('dist/js/vendor/tailwindcss.js') ?>"></script>
+	<title><?= $title ?? '' ?> - Vibe UI Kit</title>
+	<?= vite_asset('resources/js/main.js', false) ?>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 	<link href="<?= base_url('dist/css/boxicons.min.css') ?>" rel="stylesheet">
-	<script src="<?= base_url('dist/js/tailwind-config.js') ?>"></script>
 	<link rel="stylesheet" href="<?= base_url('dist/css/theme.css') ?>">
 	<link rel="stylesheet" href="<?= base_url('dist/css/layout.css') ?>">
 	<link rel="stylesheet" href="<?= base_url('dist/css/components.css') ?>">
@@ -64,6 +63,9 @@
 			transform: scale(1.05);
 		}
 	</style>
+
+	<?= $this->renderSection('style_head') ?>
+	<?= $this->renderSection('script_head') ?>
 </head>
 
 <body class="bg-body text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
@@ -94,6 +96,8 @@
 	<script src="<?= base_url('dist/js/config.js') ?>"></script>
 	<script src="<?= base_url('dist/js/menu.js') ?>"></script>
 	<script src="<?= base_url('dist/js/app.js') ?>"></script>
+
+	<?= $this->renderSection('script_foot') ?>
 </body>
 
 </html>

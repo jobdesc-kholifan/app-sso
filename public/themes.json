@@ -1,0 +1,11 @@
+{
+  "color-theme": "light",
+  "light-palette": "Soft Slate",
+  "dark-palette": "Antigravity IDE",
+  "accent-color": "37, 99, 235",
+  "bg-preset": "Neutral",
+  "canvas-style": "Full",
+  "zoom-level": "Standard",
+  "nav-mode": "sidebar",
+  "sidebar-theme": "expanded"
+}

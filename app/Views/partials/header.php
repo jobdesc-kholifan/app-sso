@@ -4,7 +4,7 @@
 			<i class="bx bx-menu text-2xl"></i>
 		</button>
 		<h1 class="text-sm font-bold flex items-center">
-			<i class="bx bx-circle mr-2 text-primary-600"></i> <?= $this->renderSection('title') ?>
+			<i class="bx bx-circle mr-2 text-primary-600"></i> <?= $pageTitle ?? '' ?>
 		</h1>
 	</div>
 	<div class="flex items-center gap-2">
