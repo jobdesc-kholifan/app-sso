@@ -14,8 +14,8 @@
 				</div>
 			</div>
 			<div class="ml-4 sidebar-hide overflow-hidden whitespace-nowrap transition-all duration-300">
-				<span class="block text-sm font-bold text-muted/80">Administrator</span>
-				<span class="block text-[11px] text-muted/60 font-medium uppercase tracking-tight">Super Admin</span>
+				<span class="block text-sm font-bold">Administrator</span>
+				<span class="block text-[11px] font-medium uppercase tracking-tight">Super Admin</span>
 			</div>
 		</div>
 		<nav id="sidebar-nav" class="flex-1 px-3 py-2 space-y-1 overflow-y-auto pt-8"></nav>

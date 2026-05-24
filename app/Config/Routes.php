@@ -13,7 +13,7 @@ $routes->get('logout', 'AuthController::logout');
 // Master User Management
 $routes->group('master/users', function($routes) {
     $routes->get('/', 'UserController::index');
-    $routes->post('ajaxList', 'UserController::ajaxList');
+    $routes->post('datatable', 'UserController::ajaxList');
     $routes->post('store', 'UserController::store');
     $routes->get('edit/(:num)', 'UserController::edit/$1');
     $routes->post('update/(:num)', 'UserController::update/$1');

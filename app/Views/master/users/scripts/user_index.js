@@ -1,5 +1,5 @@
 const route = {
-  ajaxList: "/master/users/ajaxList",
+  ajaxList: "/master/users/datatable",
   store: "/master/users/store",
   update: "/master/users/update/",
   edit: "/master/users/edit/",
@@ -50,6 +50,8 @@ $(document).ready(function () {
     window.api.post(url, this).then(function (response) {
       if (response.success) {
         closeModal("userModal");
+        $("#userId").val(""); // Clear ID
+        $("#userForm")[0].reset(); // Reset form fields
         table.ajax.reload(null, false);
         VibeApp.show({
           title: "Success",
@@ -80,7 +82,7 @@ $(document).ready(function () {
         $("#user_password").val("");
 
         $("#modalTitle").text("Edit User");
-        window.openUserModal();
+        window.openUserModal(true);
       }
     });
   });
@@ -104,8 +106,9 @@ $(document).ready(function () {
   });
 });
 
-window.openUserModal = function () {
-  if (!$("#userId").val()) {
+window.openUserModal = function (isEdit = false) {
+  if (!isEdit) {
+    $("#userId").val("");
     $("#userForm")[0].reset();
     $("#modalTitle").text("Add User");
   }

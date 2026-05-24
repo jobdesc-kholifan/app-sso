@@ -1548,7 +1548,6 @@
 .table {
   width: 100%;
   margin-bottom: 1rem;
-  color: rgb(var(--sidebar-text));
   vertical-align: top;
   border-color: rgb(var(--color-border));
 }
@@ -1563,15 +1562,20 @@
   color: rgb(var(--color-text-muted)) !important;
   background-color: rgba(var(--color-bg-alt), 0.5) !important;
   border-bottom: 1px solid rgb(var(--color-border)) !important;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .table td {
   padding: 1rem 1.25rem;
   font-size: 0.875rem;
   border-bottom: 1px solid rgb(var(--color-border)) !important;
-  color: rgb(var(--sidebar-text)) !important;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .table-hover tbody tr:hover {
