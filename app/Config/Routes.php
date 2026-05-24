@@ -11,9 +11,9 @@ $routes->post('login/process', 'AuthController::process');
 $routes->get('logout', 'AuthController::logout');
 
 // Master User Management
-$routes->group('master/users', function($routes) {
+$routes->group('master/users', function ($routes) {
     $routes->get('/', 'UserController::index');
-    $routes->post('datatable', 'UserController::ajaxList');
+    $routes->post('datatable', 'UserController::datatable');
     $routes->post('store', 'UserController::store');
     $routes->get('edit/(:num)', 'UserController::edit/$1');
     $routes->post('update/(:num)', 'UserController::update/$1');

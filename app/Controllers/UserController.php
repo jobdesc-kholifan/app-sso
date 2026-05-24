@@ -12,25 +12,23 @@ class UserController extends BaseController
         return view('master/users/v_user_index');
     }
 
-    public function ajaxList()
+    public function datatable()
     {
-        if ($this->request->isAJAX()) {
-            $db = db_connect();
-            
-            // To ensure DataTables works correctly, we should query with the search path set, 
-            // or we use the builder with the exact table. Hermawan datatables handles it via the builder.
-            $builder = $db->table('master.users')->select('id, full_name, username, role, status, last_login');
+        $db = db_connect();
 
-            return DataTable::of($builder)
-                ->add('action', function($row){
-                    return '<button class="btn btn-sm btn-primary edit-btn" data-id="'.$row->id.'">Edit</button>
-                            <button class="btn btn-sm btn-danger delete-btn" data-id="'.$row->id.'">Delete</button>';
-                })
-                ->format('status', function($value){
-                    return $value == 1 ? '<span class="badge bg-emerald-100 text-emerald-700">Active</span>' : '<span class="badge bg-rose-100 text-rose-700">Inactive</span>';
-                })
-                ->toJson(true);
-        }
+        // To ensure DataTables works correctly, we should query with the search path set, 
+        // or we use the builder with the exact table. Hermawan datatables handles it via the builder.
+        $builder = $db->table('master.users')->select('id, full_name, username, role, status, last_login');
+
+        return DataTable::of($builder)
+            ->add('action', function ($row) {
+                return '<button class="btn btn-sm btn-primary edit-btn" data-id="' . $row->id . '">Edit</button>
+                        <button class="btn btn-sm btn-danger delete-btn" data-id="' . $row->id . '">Delete</button>';
+            })
+            ->format('status', function ($value) {
+                return $value == 1 ? '<span class="badge bg-emerald-100 text-emerald-700">Active</span>' : '<span class="badge bg-rose-100 text-rose-700">Inactive</span>';
+            })
+            ->toJson(true);
     }
 
     public function store()

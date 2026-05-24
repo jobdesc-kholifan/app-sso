@@ -1,7 +1,7 @@
 <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 border-r transition-all duration-300 transform -translate-x-full md:translate-x-0 md:relative flex flex-col flex-shrink-0 lg:translate-x-0">
 	<div class="flex flex-col h-full w-full">
 		<!-- Floating Sidebar Toggle (Desktop) -->
-		<button id="desktop-sidebar-toggle" class="hidden md:flex absolute -right-3 top-6 w-6 h-6 bg-primary-600 text-white rounded-full items-center justify-center shadow-lg transition-all hover:scale-110 z-[60] focus:outline-none">
+		<button id="desktop-sidebar-toggle" class="hidden md:flex absolute -right-3 top-6 w-6 h-6 bg-primary-600 text-white border rounded-full items-center justify-center shadow-lg transition-all hover:scale-110 z-[60] focus:outline-none">
 			<i id="toggle-icon" class="bx bx-chevron-left text-lg"></i>
 		</button>
 		<div id="profile-container" class="pt-4 pb-2 px-6 flex flex-row items-center transition-all duration-500">
