@@ -1,0 +1,14 @@
+{
+  "name": "vibe-ui-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server for dynamic Vibe UI component extraction",
+  "main": "mcp-server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node mcp-server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "cheerio": "^1.2.0"
+  }
+}
