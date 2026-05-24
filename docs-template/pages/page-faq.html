@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequently Asked Questions - Vibe UI Kit</title>
+    <script src="../dist/js/vendor/tailwindcss.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../dist/css/boxicons.min.css" rel="stylesheet">
+    <script src="../dist/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../dist/css/theme.css">
+    <link rel="stylesheet" href="../dist/css/layout.css">
+    <link rel="stylesheet" href="../dist/css/components.css">
+    <script>
+        if (localStorage.getItem('vibe-template.color-theme') === 'dark' || (!('vibe-template.color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+
+    <style id="critical-loader-style">
+        #app-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+        }
+        .dark #app-loader { background: #0b1120; }
+        .loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(79, 70, 229, 0.1);
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        #app-loader.fade-out { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.05); }
+    </style>
+</head>
+
+<body class="bg-body text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
+    <div id="app-loader">
+        <div class="loader-spinner"></div>
+    </div>
+    
+    <div id="app-layout" class="flex w-full h-screen overflow-hidden transition-all duration-500 bg-body">
+        <!-- Overlay Layer for Mobile -->
+        <div id="sidebar-overlay"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0">
+        </div>
+
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-50 w-64 border-r transition-all duration-300 transform -translate-x-full md:translate-x-0 md:relative flex flex-col flex-shrink-0 lg:translate-x-0 no-print">
+            <div class="flex flex-col h-full w-full">
+                <!-- Floating Sidebar Toggle (Desktop) -->
+                <button id="desktop-sidebar-toggle"
+                    class="hidden md:flex absolute -right-3 top-6 w-6 h-6 bg-primary-600 text-white rounded-full items-center justify-center shadow-lg transition-all hover:scale-110 z-[60] focus:outline-none">
+                    <i id="toggle-icon" class="bx bx-chevron-left text-lg"></i>
+                </button>
+                <div id="profile-container"
+                    class="pt-4 pb-2 px-6 flex flex-row items-center transition-all duration-500">
+                    <div class="relative w-max h-auto group flex-shrink-0">
+                        <img id="side-avatar" src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff"
+                            class="w-12 h-12 rounded-full shadow-lg transition-all duration-500 border-2 border-white/20"
+                            style="background-color: rgb(var(--color-primary))" alt="side-avatar">
+                        <div class="absolute -left-1 -top-1 sidebar-hide">
+                            <button
+                                class="bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-lg hover:bg-amber-600 transition border-2 border-white">
+                                <i class="bx bx-edit-alt text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="ml-4 sidebar-hide overflow-hidden whitespace-nowrap transition-all duration-300">
+                        <span class="block text-sm font-bold text-muted/80">Administrator</span>
+                        <span class="block text-[11px] text-muted/60 font-medium uppercase tracking-tight">Super
+                            Admin</span>
+                    </div>
+                </div>
+                <nav id="sidebar-nav" class="flex-1 px-3 py-2 space-y-1 overflow-y-auto pt-8"></nav>
+            </div>
+        </aside>
+
+        <div id="content-wrapper" class="flex flex-col flex-1 min-w-0 overflow-hidden">
+            <header id="app-header"
+                class="h-16 flex items-center justify-between px-8 border-b sticky top-0 z-30 transition-all duration-500 bg-surface">
+                <div class="flex items-center">
+                    <button id="mobile-sidebar-toggle"
+                        class="md:hidden mr-4 p-2 rounded-lg text-muted hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <i class="bx bx-menu text-2xl"></i>
+                    </button>
+                    <h1 class="text-sm font-bold flex items-center">
+                        <i class="bx bx-help-circle mr-2 text-primary-600"></i> Pages / FAQs
+                    </h1>
+                </div>
+            </header>
+
+            <main id="main-content" class="flex-1 overflow-y-auto w-full space-y-8 transition-all duration-500">
+                <div id="main-canvas" class="w-full space-y-8 transition-all duration-500 p-6">
+                    <div class="max-w-4xl mx-auto">
+                        <!-- Search Header -->
+                        <div class="text-center mb-16">
+                            <h2 class="text-4xl font-black text-slate-900 dark:text-white tracking-tighter mb-4">How can
+                                we <span class="text-primary-600">help</span> you?</h2>
+                            <p class="text-lg text-muted font-medium mb-10">Search our knowledge base or browse
+                                categories below.</p>
+                            <div class="relative max-w-2xl mx-auto">
+                                <i
+                                    class="bx bx-search absolute left-6 top-1/2 -translate-y-1/2 text-2xl text-muted"></i>
+                                <input type="text"
+                                    class="form-control h-16 pl-16 pr-6 rounded-full text-lg shadow-xl shadow-primary-600/5 border-2 border-transparent focus:border-primary-600"
+                                    placeholder="Ask a question...">
+                            </div>
+                        </div>
+
+                        <!-- FAQ Categories -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+                            <div
+                                class="card p-6 text-center cursor-pointer border-2 hover:border-primary-600/30 transition-all">
+                                <i class="bx bx-rocket text-4xl text-primary-600 mb-4 block"></i>
+                                <h4 class="font-bold mb-1">Getting Started</h4>
+                                <p class="text-xs text-muted font-medium">Setup your account and dashboard settings.</p>
+                            </div>
+                            <div
+                                class="card p-6 text-center cursor-pointer border-2 hover:border-primary-600/30 transition-all">
+                                <i class="bx bx-credit-card text-4xl text-success-600 mb-4 block"></i>
+                                <h4 class="font-bold mb-1">Billing & Invoices</h4>
+                                <p class="text-xs text-muted font-medium">Manage subscriptions and payment methods.</p>
+                            </div>
+                            <div
+                                class="card p-6 text-center cursor-pointer border-2 hover:border-primary-600/30 transition-all text-primary-600 border-primary-600/20 bg-primary-600/5">
+                                <i class="bx bx-code-alt text-4xl mb-4 block"></i>
+                                <h4 class="font-bold mb-1">Developer API</h4>
+                                <p class="text-xs text-muted font-medium">Integrate our tools into your workflow.</p>
+                            </div>
+                        </div>
+
+                        <!-- Accordion Content -->
+                        <div class="space-y-12 pb-12">
+                            <!-- Category 1 -->
+                            <div>
+                                <h3
+                                    class="text-xs font-black text-muted uppercase tracking-[0.2em] mb-6 flex items-center">
+                                    <i class="bx bx-code-alt mr-2 text-primary-600 text-lg"></i> Developer Documentation
+                                </h3>
+                                <div class="accordion accordion-single">
+                                    <div class="accordion-item active">
+                                        <button class="accordion-header">
+                                            <span>How do I authenticate API requests?</span>
+                                            <i class="bx bx-chevron-down accordion-icon"></i>
+                                        </button>
+                                        <div class="accordion-body">
+                                            <p class="text-sm text-muted leading-relaxed font-medium">You can
+                                                authenticate your requests by passing the Bearer token in the
+                                                <code>Authorization</code> header of your HTTP requests. You can
+                                                generate tokens in your account security settings.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item">
+                                        <button class="accordion-header">
+                                            <span>What are the rate limits for the free tier?</span>
+                                            <i class="bx bx-chevron-down accordion-icon"></i>
+                                        </button>
+                                        <div class="accordion-body">
+                                            <p class="text-sm text-muted leading-relaxed font-medium">The free tier
+                                                allows up to 1,000 requests per month. For higher limits, consider
+                                                upgrading to a Professional or Enterprise plan.</p>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item">
+                                        <button class="accordion-header">
+                                            <span>Can I use Vibe UI with React or Vue?</span>
+                                            <i class="bx bx-chevron-down accordion-icon"></i>
+                                        </button>
+                                        <div class="accordion-body">
+                                            <p class="text-sm text-muted leading-relaxed font-medium">Absolutely! While
+                                                the core kit uses vanilla JS, the components and Tailwind classes are
+                                                fully compatible with any modern JavaScript framework including React,
+                                                Vue, and Svelte.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Category 2 -->
+                            <div>
+                                <h3
+                                    class="text-xs font-black text-muted uppercase tracking-[0.2em] mb-6 flex items-center">
+                                    <i class="bx bx-shield-quarter mr-2 text-primary-600 text-lg"></i> Privacy &
+                                    Security
+                                </h3>
+                                <div class="accordion accordion-single">
+                                    <div class="accordion-item">
+                                        <button class="accordion-header">
+                                            <span>Where is my data stored?</span>
+                                            <i class="bx bx-chevron-down accordion-icon"></i>
+                                        </button>
+                                        <div class="accordion-body">
+                                            <p class="text-sm text-muted font-medium">Your data is stored securely on
+                                                encrypted servers located in AWS US-East regions with multi-zone
+                                                redundancy.</p>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item">
+                                        <button class="accordion-header">
+                                            <span>How many users can I invite?</span>
+                                            <i class="bx bx-chevron-down accordion-icon"></i>
+                                        </button>
+                                        <div class="accordion-body">
+                                            <p class="text-sm text-muted font-medium">The number of users depends on
+                                                your plan. Starter fits 1 user, Pro fits up to 10 users, and Enterprise
+                                                has no limits.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer Help -->
+                        <div
+                            class="p-10 bg-primary-600 rounded-[2rem] text-center text-white relative overflow-hidden mb-20 shadow-2xl shadow-primary-600/30">
+                            <h4 class="text-2xl font-black mb-2 relative z-10">Still have questions?</h4>
+                            <p class="text-white/80 font-medium mb-8 relative z-10">Can't find the answer you're looking
+                                for? Please chat with our friendly team.</p>
+                            <button
+                                class="btn bg-white text-primary-600 hover:bg-slate-50 btn-lg font-black relative z-10 px-10">Contact
+                                Support</button>
+
+                            <!-- BG Decoration -->
+                            <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+                            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-black/10 rounded-full blur-3xl"></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Vendor Scripts -->
+    <script src="../dist/js/vendor/floating-ui.core.min.js"></script>
+    <script src="../dist/js/vendor/floating-ui.dom.min.js"></script>
+    <script src="../dist/js/config.js"></script>
+    <script src="../dist/js/menu.js"></script>
+    <script src="../dist/js/app.js"></script>
+</body>
+
+</html>

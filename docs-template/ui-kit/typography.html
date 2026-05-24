@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typography - Vibe UI Library</title>
+    <script src="../dist/js/vendor/tailwindcss.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="../dist/css/boxicons.min.css" rel="stylesheet">
+    <script src="../dist/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../dist/css/theme.css">
+    <link rel="stylesheet" href="../dist/css/layout.css">
+    <link rel="stylesheet" href="../dist/css/components.css">
+    <link rel="stylesheet" href="../dist/css/docs.css">
+    <script>
+        if (localStorage.getItem('vibe-template.color-theme') === 'dark' || (!('vibe-template.color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+    <style>
+        .doc-section {
+            background: rgb(var(--color-bg-surface));
+            border: 1px solid rgb(var(--color-border));
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .doc-section-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .example-block {
+            padding: 2rem;
+            background: rgba(var(--color-bg-alt), 0.3);
+            border-radius: 1rem;
+            border: 1px dashed rgb(var(--color-border));
+        }
+    </style>
+
+    <style id="critical-loader-style">
+        #app-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+        }
+        .dark #app-loader { background: #0b1120; }
+        .loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(79, 70, 229, 0.1);
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        #app-loader.fade-out { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.05); }
+    </style>
+</head>
+
+<body class="bg-body text-slate-800 dark:text-slate-100 font-sans transition-colors duration-300">
+    <div id="app-loader">
+        <div class="loader-spinner"></div>
+    </div>
+    
+    <div id="app-layout" class="flex w-full h-screen overflow-hidden transition-all duration-500 bg-body">
+        <div id="sidebar-overlay"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0">
+        </div>
+
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-50 w-64 border-r transition-all duration-300 transform -translate-x-full md:translate-x-0 md:relative flex flex-col flex-shrink-0 lg:translate-x-0">
+            <button id="desktop-sidebar-toggle"
+                class="hidden md:flex absolute -right-3 top-6 w-6 h-6 bg-primary-600 text-white rounded-full items-center justify-center shadow-lg transition-all hover:scale-110 z-[60] focus:outline-none">
+                <i id="toggle-icon" class="bx bx-chevron-left text-lg"></i>
+            </button>
+            <div class="flex flex-col h-full w-full">
+                <div id="profile-container"
+                    class="pt-4 pb-2 px-6 flex flex-row items-center transition-all duration-500">
+                    <div class="relative w-max h-auto group flex-shrink-0">
+                        <img id="side-avatar" src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff"
+                            class="w-12 h-12 rounded-full shadow-lg transition-all duration-500 border-2 border-white/20"
+                            style="background-color: rgb(var(--color-primary))" alt="side-avatar">
+                        <div class="absolute -left-1 -top-1 sidebar-hide">
+                            <button
+                                class="bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-lg hover:bg-amber-600 transition border-2 border-white">
+                                <i class="bx bx-edit-alt text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="ml-4 sidebar-hide overflow-hidden whitespace-nowrap transition-all duration-300">
+                        <span class="block text-sm font-bold text-muted/80">Administrator</span>
+                        <span class="block text-[11px] text-muted/60 font-medium uppercase tracking-tight">Super
+                            Admin</span>
+                    </div>
+                </div>
+                <nav id="sidebar-nav" class="flex-1 px-3 py-2 space-y-1 overflow-y-auto"></nav>
+                <div class="p-4 border-t transition-all duration-300" style="border-color: rgb(var(--color-border))">
+                    <button
+                        class="w-full flex items-center justify-start px-4 py-2.5 text-sm font-bold bg-primary-600 text-white rounded-lg shadow-sm hover:bg-primary-700 transition"
+                        id="logout-btn">
+                        <i class="bx bx-log-out lg:mr-3 text-lg"></i>
+                        <span class="sidebar-hide">Log Out</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <div id="content-wrapper" class="flex flex-col flex-1 min-w-0 overflow-hidden">
+            <header id="app-header"
+                class="h-16 flex items-center justify-between px-8 border-b sticky top-0 z-30 transition-all duration-500">
+                <div class="flex items-center">
+                    <button id="mobile-sidebar-toggle"
+                        class="md:hidden mr-4 p-2 rounded-lg text-muted hover:bg-slate-100 dark:hover:bg-slate-800 text-2xl">
+                        <i class="bx bx-menu"></i>
+                    </button>
+                    <h1 class="text-sm font-bold flex items-center uppercase tracking-wider text-muted">
+                        <i class="bx bx-text mr-2 text-primary-600"></i> UI Kit / Typography
+                    </h1>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="theme-toggle"
+                        class="flex items-center justify-center w-9 h-9 rounded-lg text-muted hover:bg-slate-200 dark:hover:bg-slate-700 border transition-all">
+                        <i id="theme-toggle-dark-icon" class="bx bx-moon text-xl hidden"></i>
+                        <i id="theme-toggle-light-icon" class="bx bx-sun text-xl hidden"></i>
+                    </button>
+                    <button id="settings-toggle"
+                        class="flex items-center justify-center w-9 h-9 rounded-lg text-muted hover:bg-slate-200 dark:hover:bg-slate-700 border transition-all">
+                        <i class="bx bx-cog text-xl"></i>
+                    </button>
+                </div>
+            </header>
+
+            <main id="main-content" class="flex-1 overflow-y-auto bg-body p-6 lg:p-12 space-y-12">
+                <div id="main-canvas" class="max-w-5xl mx-auto">
+                    <div class="mb-12">
+                        <h2 class="text-4xl font-extrabold mb-4 tracking-tight">Typography</h2>
+                        <p class="text-lg text-muted leading-relaxed max-w-2xl">Use typography to present your design
+                            and content as clearly and efficiently as possible. Our styles are built on top of the Inter
+                            font family.</p>
+                    </div>
+
+                    <!-- Headings -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-primary-600"><i class="bx bx-heading text-2xl"></i> Standard
+                            Headings</div>
+                        <p class="text-sm text-muted mb-8">All HTML headings, <code>&lt;h1&gt;</code> through
+                            <code>&lt;h6&gt;</code>, are available.</p>
+
+                        <div class="example-block space-y-6 mb-8">
+                            <h1 class="text-4xl font-bold">h1. Vibe UI Heading</h1>
+                            <h2 class="text-3xl font-bold">h2. Vibe UI Heading</h2>
+                            <h3 class="text-2xl font-bold">h3. Vibe UI Heading</h3>
+                            <h4 class="text-xl font-bold">h4. Vibe UI Heading</h4>
+                            <h5 class="text-lg font-bold">h5. Vibe UI Heading</h5>
+                            <h6 class="text-base font-bold uppercase tracking-wide">h6. Vibe UI Heading</h6>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Structure</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;h1</span> <span class="token-attr">class</span>=<span class="token-val">"text-4xl font-bold"</span><span class="token-tag">&gt;</span><span class="token-text">Heading 1</span><span class="token-tag">&lt;/h1&gt;</span>
+<span class="token-tag">&lt;h2</span> <span class="token-attr">class</span>=<span class="token-val">"text-3xl font-bold"</span><span class="token-tag">&gt;</span><span class="token-text">Heading 2</span><span class="token-tag">&lt;/h2&gt;</span>
+<span class="token-tag">&lt;h3</span> <span class="token-attr">class</span>=<span class="token-val">"text-2xl font-bold"</span><span class="token-tag">&gt;</span><span class="token-text">Heading 3</span><span class="token-tag">&lt;/h3&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Display Headings -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-primary-600"><i class="bx bx-font-size text-2xl"></i> Display
+                            Headings</div>
+                        <p class="text-sm text-muted mb-8">When you need a heading to stand out, use a display heading—a
+                            larger, slightly more opinionated style.</p>
+
+                        <div class="example-block space-y-10 mb-8">
+                            <div class="display-1 text-7xl font-extrabold tracking-tighter">Display 1</div>
+                            <div class="display-2 text-6xl font-extrabold tracking-tighter">Display 2</div>
+                            <div class="display-3 text-5xl font-extrabold tracking-tight">Display 3</div>
+                            <div class="display-4 text-4xl font-extrabold tracking-tight">Display 4</div>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"text-7xl font-extrabold tracking-tighter"</span><span class="token-tag">&gt;</span><span class="token-text">Display 1</span><span class="token-tag">&lt;/div&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Body & Context -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-primary-600"><i class="bx bx-paragraph text-2xl"></i> Body &
+                            Lead Text</div>
+                        <p class="text-sm text-muted mb-8">Make a paragraph stand out by adding <code>.lead</code> or
+                            styling standard <code>&lt;p&gt;</code> tags.</p>
+
+                        <div class="example-block space-y-6 mb-8">
+                            <p class="text-lg font-medium text-slate-700 dark:text-slate-300 leading-relaxed">
+                                Lead Paragraph: Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+                                Duis mollis, est non commodo luctus.
+                            </p>
+                            <p class="text-base text-muted leading-relaxed">
+                                Standard Paragraph: Curabitur blandit tempus porttitor. Nullam quis risus eget urna
+                                mollis ornare vel eu leo. Maecenas sed diam eget risus varius blandit sit amet non
+                                magna.
+                            </p>
+                            <p class="text-sm text-muted">
+                                Small Text: Cum sociis natoque penatibus et magnis dis parturient montes, nascetur
+                                ridiculus mus.
+                            </p>
+                            <p class="text-xs font-bold uppercase tracking-widest text-primary-600">
+                                Muted Small Caps: Done c id elit non mi porta gravida at eget metus.
+                            </p>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Structure</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;p</span> <span class="token-attr">class</span>=<span class="token-val">"text-lg font-medium"</span><span class="token-tag">&gt;</span><span class="token-text">Lead text</span><span class="token-tag">&lt;/p&gt;</span>
+<span class="token-tag">&lt;p</span> <span class="token-attr">class</span>=<span class="token-val">"text-sm text-muted"</span><span class="token-tag">&gt;</span><span class="token-text">Small muted text</span><span class="token-tag">&lt;/p&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Weights & Utilities -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-primary-600"><i class="bx bx-bold text-2xl"></i> Font Weights
+                        </div>
+                        <p class="text-sm text-muted mb-8">Quickly change the weight of any text element using utility
+                            classes.</p>
+
+                        <div class="example-block space-y-4 mb-8">
+                            <p class="font-light">Light weight text (300)</p>
+                            <p class="font-normal">Regular weight text (400)</p>
+                            <p class="font-medium">Medium weight text (500)</p>
+                            <p class="font-semibold">Semibold weight text (600)</p>
+                            <p class="font-bold">Bold weight text (700)</p>
+                            <p class="font-extrabold">Extrabold weight text (800)</p>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">Weight Utilities</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;p</span> <span class="token-attr">class</span>=<span class="token-val">"font-light"</span><span class="token-tag">&gt;</span><span class="token-text">Light text</span><span class="token-tag">&lt;/p&gt;</span>
+<span class="token-tag">&lt;p</span> <span class="token-attr">class</span>=<span class="token-val">"font-bold"</span><span class="token-tag">&gt;</span><span class="token-text">Bold text</span><span class="token-tag">&lt;/p&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Text Colors -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-primary-600"><i class="bx bx-palette text-2xl"></i> Semantic
+                            Text Colors</div>
+                        <p class="text-sm text-muted mb-8">Convey meaning through color with a handful of emphasis
+                            utility classes.</p>
+
+                        <div class="example-block space-y-3 mb-8">
+                            <p class="text-primary-600 font-bold">.text-primary - Primary action text color.</p>
+                            <p class="text-emerald-500 font-bold">.text-success - Success indicators and messages.</p>
+                            <p class="text-rose-500 font-bold">.text-danger - Alerts, errors, and destructive actions.
+                            </p>
+                            <p class="text-amber-500 font-bold">.text-warning - Cautions and warning indicators.</p>
+                            <p class="text-sky-500 font-bold">.text-info - Neutral information or tips.</p>
+                            <p class="text-muted">.text-muted - De-emphasized secondary text.</p>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">Color Utilities</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;span</span> <span class="token-attr">class</span>=<span class="token-val">"text-primary-600"</span><span class="token-tag">&gt;</span><span class="token-text">Primary Text</span><span class="token-tag">&lt;/span&gt;</span>
+<span class="token-tag">&lt;span</span> <span class="token-attr">class</span>=<span class="token-val">"text-rose-500"</span><span class="token-tag">&gt;</span><span class="token-text">Danger Text</span><span class="token-tag">&lt;/span&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Lists -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-primary-600"><i class="bx bx-list-ul text-2xl"></i> Styled
+                            Lists</div>
+                        <p class="text-sm text-muted mb-8">Remove the default <code>list-style</code> and
+                            <code>margin-left</code> on list items (immediate children only).</p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                            <div class="example-block">
+                                <span class="block text-xs font-bold uppercase text-muted mb-4">Unordered List</span>
+                                <ul class="space-y-2 text-sm">
+                                    <li class="flex items-center gap-2"><i
+                                            class="bx bx-check-circle text-emerald-500"></i> Lorem ipsum dolor sit amet
+                                    </li>
+                                    <li class="flex items-center gap-2"><i
+                                            class="bx bx-check-circle text-emerald-500"></i> Consectetur adipiscing elit
+                                    </li>
+                                    <li class="flex items-center gap-2"><i
+                                            class="bx bx-check-circle text-emerald-500"></i> Integer molestie lorem at
+                                        massa</li>
+                                    <li class="flex items-center gap-2 text-muted italic line-through"><i
+                                            class="bx bx-x-circle text-rose-300"></i> Facilisis in pretium nisl aliquet
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="example-block">
+                                <span class="block text-xs font-bold uppercase text-muted mb-4">Ordered List</span>
+                                <ol class="space-y-3 text-sm">
+                                    <li class="flex gap-3">
+                                        <span
+                                            class="w-6 h-6 rounded-full bg-primary-600 text-white flex items-center justify-center text-[10px] flex-shrink-0">1</span>
+                                        <span>Download the package from your dashboard.</span>
+                                    </li>
+                                    <li class="flex gap-3">
+                                        <span
+                                            class="w-6 h-6 rounded-full bg-primary-600 text-white flex items-center justify-center text-[10px] flex-shrink-0">2</span>
+                                        <span>Extract the files into your project root.</span>
+                                    </li>
+                                    <li class="flex gap-3">
+                                        <span
+                                            class="w-6 h-6 rounded-full bg-primary-600 text-white flex items-center justify-center text-[10px] flex-shrink-0">3</span>
+                                        <span>Run npm install to sync dependencies.</span>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">Custom List Examples</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;ul</span> <span class="token-attr">class</span>=<span class="token-val">"space-y-2"</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;li</span> <span class="token-attr">class</span>=<span class="token-val">"flex items-center gap-2"</span><span class="token-tag">&gt;</span>
+    <span class="token-tag">&lt;i</span> <span class="token-attr">class</span>=<span class="token-val">"bx bx-check-circle"</span><span class="token-tag">&gt;&lt;/i&gt;</span> <span class="token-text">List Item</span>
+  <span class="token-tag">&lt;/li&gt;</span>
+<span class="token-tag">&lt;/ul&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Blockquotes -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-primary-600"><i class="bx bxs-quote-alt-left text-2xl"></i>
+                            Blockquotes</div>
+                        <p class="text-sm text-muted mb-8">For quoting blocks of content from another source within your
+                            document.</p>
+
+                        <div class="example-block mb-8">
+                            <blockquote
+                                class="p-8 border-l-4 border-primary-600 bg-primary-50/50 dark:bg-primary-950/20 rounded-r-2xl italic">
+                                <p class="text-lg text-slate-700 dark:text-slate-200 mb-4 font-medium">"A well-known
+                                    quote, contained in a blockquote element. Style it however you like with utility
+                                    classes!"</p>
+                                <footer class="text-sm text-muted font-bold not-italic font-sans">— Someone famous in
+                                    <cite title="Source Title">Source Title</cite></footer>
+                            </blockquote>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">Blockquote HTML</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;blockquote</span> <span class="token-attr">class</span>=<span class="token-val">"p-8 border-l-4 border-primary-600 bg-primary-50 rounded-r-2xl"</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;p</span><span class="token-tag">&gt;</span><span class="token-text">"Your quote here..."</span><span class="token-tag">&lt;/p&gt;</span>
+  <span class="token-tag">&lt;footer</span><span class="token-tag">&gt;</span><span class="token-text">— Author</span><span class="token-tag">&lt;/footer&gt;</span>
+<span class="token-tag">&lt;/blockquote&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../dist/js/vendor/floating-ui.core.min.js"></script>
+    <script src="../dist/js/vendor/floating-ui.dom.min.js"></script>
+    <script src="../dist/js/config.js"></script>
+    <script src="../dist/js/menu.js"></script>
+    <script src="../dist/js/app.js"></script>
+    <script src="../dist/js/docs.js"></script>
+</body>
+
+</html>

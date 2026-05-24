@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Components - Vibe UI Library</title>
+    <script src="../dist/js/vendor/tailwindcss.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../dist/css/boxicons.min.css" rel="stylesheet">
+    <script src="../dist/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../dist/css/theme.css">
+    <link rel="stylesheet" href="../dist/css/layout.css">
+    <link rel="stylesheet" href="../dist/css/components.css">
+    <link rel="stylesheet" href="../dist/css/docs.css">
+    <script>
+        if (localStorage.getItem('vibe-template.color-theme') === 'dark' || (!('vibe-template.color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+    <style>
+        /* Documentation UI Specific */
+        .doc-section {
+            background: rgb(var(--color-bg-surface));
+            border: 1px solid rgb(var(--color-border));
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .doc-section-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .doc-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .color-label {
+            width: 100%;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: rgb(var(--color-text-muted));
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+
+    <style id="critical-loader-style">
+        #app-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+        }
+        .dark #app-loader { background: #0b1120; }
+        .loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(79, 70, 229, 0.1);
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        #app-loader.fade-out { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.05); }
+    </style>
+</head>
+
+<body class="bg-body text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
+    <div id="app-loader">
+        <div class="loader-spinner"></div>
+    </div>
+    
+    <div id="app-layout" class="flex w-full h-screen overflow-hidden transition-all duration-500 bg-body">
+        <!-- Overlay Layer for Mobile -->
+        <div id="sidebar-overlay"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0">
+        </div>
+
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-50 w-64 border-r transition-all duration-300 transform -translate-x-full md:translate-x-0 md:relative flex flex-col flex-shrink-0 lg:translate-x-0">
+
+            <!-- Floating Sidebar Toggle (Desktop) -->
+            <button id="desktop-sidebar-toggle"
+                class="hidden md:flex absolute -right-3 top-6 w-6 h-6 bg-primary-600 text-white rounded-full items-center justify-center shadow-lg transition-all hover:scale-110 z-[60] focus:outline-none">
+                <i id="toggle-icon" class="bx bx-chevron-left text-lg"></i>
+            </button>
+            <div class="flex flex-col h-full w-full">
+                <!-- User Profile Section -->
+                <div id="profile-container"
+                    class="pt-4 pb-2 px-6 flex flex-row items-center transition-all duration-500">
+                    <div class="relative w-max h-auto group flex-shrink-0">
+                        <img id="side-avatar" src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff"
+                            class="w-12 h-12 rounded-full shadow-lg transition-all duration-500 border-2 border-white/20"
+                            style="background-color: rgb(var(--color-primary))" alt="side-avatar">
+                        <div class="absolute -left-1 -top-1 sidebar-hide">
+                            <button
+                                class="bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-lg hover:bg-amber-600 transition border-2 border-white">
+                                <i class="bx bx-edit-alt text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="ml-4 sidebar-hide overflow-hidden whitespace-nowrap transition-all duration-300">
+                        <span class="block text-sm font-bold text-muted/80">Administrator</span>
+                        <span class="block text-[11px] text-muted/60 font-medium uppercase tracking-tight">Super
+                            Admin</span>
+                    </div>
+                </div>
+
+                <!-- Nav Links -->
+                <nav id="sidebar-nav" class="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
+                    <!-- Menu generated by JS -->
+                </nav>
+
+                <!-- Logout Button -->
+                <div class="p-4 border-t transition-all duration-300" style="border-color: rgb(var(--color-border))">
+                    <button
+                        class="w-full flex items-center justify-start px-4 py-2.5 text-sm font-bold bg-primary-600 text-white rounded-lg shadow-sm hover:bg-primary-700 transition lg:justify-start"
+                        title="Log Out" id="logout-btn">
+                        <i class="bx bx-log-out lg:mr-3 text-lg sidebar-icon"></i>
+                        <span class="sidebar-hide">Log Out</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <div id="content-wrapper" class="flex flex-col flex-1 min-w-0 overflow-hidden">
+            <header id="app-header"
+                class="h-16 flex items-center justify-between px-8 border-b sticky top-0 z-30 transition-all duration-500">
+                <div class="flex items-center">
+                    <button id="mobile-sidebar-toggle"
+                        class="md:hidden mr-4 p-2 rounded-lg text-muted hover:bg-slate-100 dark:hover:bg-slate-800 text-2xl">
+                        <i class="bx bx-menu"></i>
+                    </button>
+                    <h1 class="text-sm font-bold flex items-center">
+                        <i class="bx bx-cube mr-2 text-primary-600"></i> Components / Buttons
+                    </h1>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="theme-toggle"
+                        class="flex items-center justify-center w-9 h-9 rounded-lg text-muted hover:bg-slate-200 dark:hover:bg-slate-700 transition-all focus:outline-none border shadow-sm"
+                        style="background-color: rgb(var(--color-bg-alt)); border-color: rgb(var(--color-border))">
+                        <i id="theme-toggle-dark-icon" class="bx bx-moon text-xl hidden"></i>
+                        <i id="theme-toggle-light-icon" class="bx bx-sun text-xl hidden"></i>
+                    </button>
+                    <button id="settings-toggle"
+                        class="flex items-center justify-center w-9 h-9 rounded-lg text-muted hover:bg-slate-200 dark:hover:bg-slate-700 transition-all focus:outline-none border shadow-sm"
+                        style="background-color: rgb(var(--color-bg-alt)); border-color: rgb(var(--color-border))">
+                        <i class="bx bx-cog text-xl"></i>
+                    </button>
+                </div>
+            </header>
+
+            <main id="main-content" class="flex-1 overflow-y-auto w-full space-y-8 transition-all duration-500">
+                <div id="main-canvas" class="w-full space-y-8 transition-all duration-500 p-6">
+
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-extrabold mb-2">Buttons</h2>
+                        <p class="text-muted">Use Vibe's custom button styles for actions in forms, dialogs, and more
+                            with
+                            support for multiple sizes, states, and more.</p>
+                    </div>
+
+                    <!-- Colors Section -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-primary-600">
+                            <i class="bx bx-palette"></i> Semantic Colors
+                        </div>
+                        <p class="text-sm text-muted mb-6">Standard colors for different semantic meanings.</p>
+                        <div class="doc-grid">
+                            <button class="btn btn-default">Default</button>
+                            <button class="btn btn-primary">Primary</button>
+                            <button class="btn btn-info">Info</button>
+                            <button class="btn btn-success">Success</button>
+                            <button class="btn btn-warning">Warning</button>
+                            <button class="btn btn-danger">Danger</button>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn">
+                                    <i class="bx bx-copy"></i> Copy
+                                </button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-default"</span><span class="token-tag">&gt;</span><span class="token-text">Default</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-primary"</span><span class="token-tag">&gt;</span><span class="token-text">Primary</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-info"</span><span class="token-tag">&gt;</span><span class="token-text">Info</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-success"</span><span class="token-tag">&gt;</span><span class="token-text">Success</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-warning"</span><span class="token-tag">&gt;</span><span class="token-text">Warning</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-danger"</span><span class="token-tag">&gt;</span><span class="token-text">Danger</span><span class="token-tag">&lt;/button&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Soft Variants Section -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-primary-500">
+                            <i class="bx bx-brush"></i> Soft Variations
+                        </div>
+                        <p class="text-sm text-muted mb-6">Subtle, modern button styles with low-opacity backgrounds.
+                        </p>
+                        <div class="doc-grid">
+                            <button class="btn btn-soft-primary">Soft Primary</button>
+                            <button class="btn btn-soft-info">Soft Info</button>
+                            <button class="btn btn-soft-success">Soft Success</button>
+                            <button class="btn btn-soft-warning">Soft Warning</button>
+                            <button class="btn btn-soft-danger">Soft Danger</button>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn">
+                                    <i class="bx bx-copy"></i> Copy
+                                </button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-soft-primary"</span><span class="token-tag">&gt;</span><span class="token-text">Soft Primary</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-soft-info"</span><span class="token-tag">&gt;</span><span class="token-text">Soft Info</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-soft-success"</span><span class="token-tag">&gt;</span><span class="token-text">Soft Success</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-soft-warning"</span><span class="token-tag">&gt;</span><span class="token-text">Soft Warning</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-soft-danger"</span><span class="token-tag">&gt;</span><span class="token-text">Soft Danger</span><span class="token-tag">&lt;/button&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Gradient Variants Section -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-indigo-600">
+                            <i class="bx bx-party"></i> Gradient Variations
+                        </div>
+                        <p class="text-sm text-muted mb-6">Rich, vibrant gradients for high-impact call to actions.</p>
+                        <div class="doc-grid">
+                            <button class="btn btn-gradient-primary">Primary Gradient</button>
+                            <button class="btn btn-gradient-success">Success Gradient</button>
+                            <button class="btn btn-gradient-danger">Danger Gradient</button>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn">
+                                    <i class="bx bx-copy"></i> Copy
+                                </button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-gradient-primary"</span><span class="token-tag">&gt;</span><span class="token-text">Primary Gradient</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-gradient-success"</span><span class="token-tag">&gt;</span><span class="token-text">Success Gradient</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-gradient-danger"</span><span class="token-tag">&gt;</span><span class="token-text">Danger Gradient</span><span class="token-tag">&lt;/button&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Variants Section -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-emerald-600">
+                            <i class="bx bx-layer"></i> Button Variants
+                        </div>
+
+                        <div class="color-label">Outline</div>
+                        <div class="doc-grid mb-8">
+                            <button class="btn btn-outline btn-primary">Outline Primary</button>
+                            <button class="btn btn-outline btn-info">Outline Info</button>
+                            <button class="btn btn-outline btn-success">Outline Success</button>
+                            <button class="btn btn-outline btn-warning">Outline Warning</button>
+                            <button class="btn btn-outline btn-danger">Outline Danger</button>
+                        </div>
+
+                        <div class="color-label">Ghost</div>
+                        <div class="doc-grid mb-8">
+                            <button class="btn btn-ghost">Ghost Default</button>
+                            <button class="btn btn-ghost btn-primary">Ghost Primary</button>
+                            <button class="btn btn-ghost text-blue-500">Ghost Info</button>
+                        </div>
+
+                        <div class="color-label">Link</div>
+                        <div class="doc-grid">
+                            <button class="btn btn-link btn-primary">Link Primary</button>
+                            <button class="btn btn-link text-slate-500">Link Muted</button>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn">
+                                    <i class="bx bx-copy"></i> Copy
+                                </button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-outline btn-primary"</span><span class="token-tag">&gt;</span><span class="token-text">Outline</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-ghost"</span><span class="token-tag">&gt;</span><span class="token-text">Ghost</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-link"</span><span class="token-tag">&gt;</span><span class="token-text">Link</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-pill btn-primary"</span><span class="token-tag">&gt;</span><span class="token-text">Pill Shape</span><span class="token-tag">&lt;/button&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Shapes & Utilities Section -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-rose-600">
+                            <i class="bx bx-shape-polygon"></i> Shapes & Layout
+                        </div>
+                        <p class="text-sm text-muted mb-6">Control button corners and width behaviors.</p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <div class="color-label">Corner Shapes</div>
+                                <div class="flex flex-wrap gap-2">
+                                    <button class="btn btn-primary rounded-none">Square</button>
+                                    <button class="btn btn-primary">Default (lg)</button>
+                                    <button class="btn btn-primary rounded-2xl">Rounded 2xl</button>
+                                    <button class="btn btn-primary btn-pill">Pill Shape</button>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="color-label">Block Width</div>
+                                <div class="space-y-2">
+                                    <button class="btn btn-primary btn-block">Full Width Button (Block)</button>
+                                    <button class="btn btn-outline btn-primary btn-block justify-between">
+                                        Aligned Justify <i class="bx bx-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn">
+                                    <i class="bx bx-copy"></i> Copy
+                                </button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;!-- Corner Shapes --&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-primary rounded-none"</span><span class="token-tag">&gt;</span><span class="token-text">Square</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-primary"</span><span class="token-tag">&gt;</span><span class="token-text">Default</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-primary rounded-2xl"</span><span class="token-tag">&gt;</span><span class="token-text">Rounded 2xl</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-primary btn-pill"</span><span class="token-tag">&gt;</span><span class="token-text">Pill Shape</span><span class="token-tag">&lt;/button&gt;</span>
+
+<span class="token-tag">&lt;!-- Layout Options --&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-primary btn-block"</span><span class="token-tag">&gt;</span><span class="token-text">Full Width Button</span><span class="token-tag">&lt;/button&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Sizes Section -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-amber-600">
+                            <i class="bx bx-expand"></i> Button Sizes
+                        </div>
+                        <p class="text-sm text-muted mb-6">Five different sizes ranging from extra small to extra large.
+                        </p>
+                        <div class="doc-grid">
+                            <button class="btn btn-primary btn-xs">X-Small (xs)</button>
+                            <button class="btn btn-primary btn-sm">Small (sm)</button>
+                            <button class="btn btn-primary btn-md">Medium (md)</button>
+                            <button class="btn btn-primary btn-lg">Large (lg)</button>
+                            <button class="btn btn-primary btn-xl">Extra Large (xl)</button>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn">
+                                    <i class="bx bx-copy"></i> Copy
+                                </button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-xs"</span><span class="token-tag">&gt;</span><span class="token-text">XS</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-sm"</span><span class="token-tag">&gt;</span><span class="token-text">SM</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-md"</span><span class="token-tag">&gt;</span><span class="token-text">MD</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-lg"</span><span class="token-tag">&gt;</span><span class="token-text">LG</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-xl"</span><span class="token-tag">&gt;</span><span class="token-text">XL</span><span class="token-tag">&lt;/button&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Icons Section -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-purple-600">
+                            <i class="bx bx-smile"></i> With Icons
+                        </div>
+                        <p class="text-sm text-muted mb-6">Combine text with Boxicons for better visual hierarchy.</p>
+                        <div class="doc-grid">
+                            <button class="btn btn-primary">
+                                <i class="bx bx-plus"></i> Prefix Icon
+                            </button>
+                            <button class="btn btn-outline btn-primary">
+                                Suffix Icon <i class="bx bx-chevron-right"></i>
+                            </button>
+                            <button class="btn btn-danger">
+                                <i class="bx bx-trash"></i> Delete
+                            </button>
+                            <button class="btn btn-info btn-sm">
+                                <i class="bx bx-cloud-download"></i> Download
+                            </button>
+                            <button class="btn btn-default aspect-square p-2" title="More Options">
+                                <i class="bx bx-dots-horizontal-rounded"></i>
+                                <span class="sr-only">Open menu</span>
+                            </button>
+                            <button class="btn btn-primary aspect-square p-2" title="Search">
+                                <i class="bx bx-search"></i>
+                                <span class="sr-only">Search database</span>
+                            </button>
+                        </div>
+                        <p class="text-xs text-muted mt-4 italic">* Tip: For icon-only buttons, always use the <code
+                                class="bg-slate-100 dark:bg-slate-800 px-1 rounded">.sr-only</code> utility for
+                            accessibility.</p>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn">
+                                    <i class="bx bx-copy"></i> Copy
+                                </button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;!-- Prefix Icon --&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-primary"</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;i</span> <span class="token-attr">class</span>=<span class="token-val">"bx bx-plus"</span><span class="token-tag">&gt;&lt;/i&gt;</span> <span class="token-text">Add Item</span>
+<span class="token-tag">&lt;/button&gt;</span>
+
+<span class="token-tag">&lt;!-- Suffix Icon --&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-outline btn-primary"</span><span class="token-tag">&gt;</span>
+  <span class="token-text">Next Step</span> <span class="token-tag">&lt;i</span> <span class="token-attr">class</span>=<span class="token-val">"bx bx-chevron-right"</span><span class="token-tag">&gt;&lt;/i&gt;</span>
+<span class="token-tag">&lt;/button&gt;</span>
+
+<span class="token-tag">&lt;!-- Icon Only (Accessible) --&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-default aspect-square p-2"</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;i</span> <span class="token-attr">class</span>=<span class="token-val">"bx bx-dots-horizontal-rounded"</span><span class="token-tag">&gt;&lt;/i&gt;</span>
+  <span class="token-tag">&lt;span</span> <span class="token-attr">class</span>=<span class="token-val">"sr-only"</span><span class="token-tag">&gt;</span><span class="token-text">Open menu</span><span class="token-tag">&lt;/span&gt;</span>
+<span class="token-tag">&lt;/button&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- States Section -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-slate-600">
+                            <i class="bx bx-error-circle"></i> Button States
+                        </div>
+                        <p class="text-sm text-muted mb-6">Visual styles for disabled and active interaction states.</p>
+
+                        <div class="color-label">Disabled State</div>
+                        <div class="doc-grid mb-8">
+                            <button class="btn btn-primary" disabled>Disabled Primary</button>
+                            <button class="btn btn-outline btn-info" disabled>Disabled Outline</button>
+                            <button class="btn btn-ghost" disabled>Disabled Ghost</button>
+                        </div>
+
+                        <div class="color-label">Active State (Active Group)</div>
+                        <div class="btn-group">
+                            <button class="btn btn-default active">Active Left</button>
+                            <button class="btn btn-default">Middle</button>
+                            <button class="btn btn-default">Right</button>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn">
+                                    <i class="bx bx-copy"></i> Copy
+                                </button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-primary"</span> <span class="token-attr">disabled</span><span class="token-tag">&gt;</span><span class="token-text">Disabled</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-default active"</span><span class="token-tag">&gt;</span><span class="token-text">Active State</span><span class="token-tag">&lt;/button&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Checkable Section -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-pink-600">
+                            <i class="bx bx-check-square"></i> Checkable Buttons
+                        </div>
+                        <p class="text-sm text-muted mb-6">Use buttons as checkboxes or radio groups for cleaner form
+                            UIs.</p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            <div>
+                                <div class="color-label">Checkbox Toggle</div>
+                                <div class="flex gap-2">
+                                    <input type="checkbox" id="btn-check-1" class="btn-check" autocomplete="off">
+                                    <label class="btn btn-outline btn-primary" for="btn-check-1">Toggle Me</label>
+
+                                    <input type="checkbox" id="btn-check-2" class="btn-check" checked
+                                        autocomplete="off">
+                                    <label class="btn btn-outline btn-primary" for="btn-check-2">Checked</label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="color-label">Radio Group</div>
+                                <div class="btn-group">
+                                    <input type="radio" name="vibe-radio" id="btn-radio-1" class="btn-check"
+                                        autocomplete="off" checked>
+                                    <label class="btn btn-default" for="btn-radio-1">Option 1</label>
+
+                                    <input type="radio" name="vibe-radio" id="btn-radio-2" class="btn-check"
+                                        autocomplete="off">
+                                    <label class="btn btn-default" for="btn-radio-2">Option 2</label>
+
+                                    <input type="radio" name="vibe-radio" id="btn-radio-3" class="btn-check"
+                                        autocomplete="off">
+                                    <label class="btn btn-default" for="vibe-radio-3">Monthly</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn">
+                                    <i class="bx bx-copy"></i> Copy
+                                </button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;!-- Checkbox Toggle --&gt;</span>
+<span class="token-tag">&lt;input</span> <span class="token-attr">type</span>=<span class="token-val">"checkbox"</span> <span class="token-attr">id</span>=<span class="token-val">"check1"</span> <span class="token-attr">class</span>=<span class="token-val">"btn-check"</span><span class="token-tag">&gt;</span>
+<span class="token-tag">&lt;label</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-outline btn-primary"</span> <span class="token-attr">for</span>=<span class="token-val">"check1"</span><span class="token-tag">&gt;</span><span class="token-text">Toggle</span><span class="token-tag">&lt;/label&gt;</span>
+
+<span class="token-tag">&lt;!-- Radio Group --&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"btn-group"</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;input</span> <span class="token-attr">type</span>=<span class="token-val">"radio"</span> <span class="token-attr">name</span>=<span class="token-val">"r"</span> <span class="token-attr">id</span>=<span class="token-val">"r1"</span> <span class="token-attr">class</span>=<span class="token-val">"btn-check"</span> <span class="token-attr">checked</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;label</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-default"</span> <span class="token-attr">for</span>=<span class="token-val">"r1"</span><span class="token-tag">&gt;</span><span class="token-text">Option 1</span><span class="token-tag">&lt;/label&gt;</span>
+  <span class="token-tag">&lt;input</span> <span class="token-attr">type</span>=<span class="token-val">"radio"</span> <span class="token-attr">name</span>=<span class="token-val">"r"</span> <span class="token-attr">id</span>=<span class="token-val">"r2"</span> <span class="token-attr">class</span>=<span class="token-val">"btn-check"</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;label</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-default"</span> <span class="token-attr">for</span>=<span class="token-val">"r2"</span><span class="token-tag">&gt;</span><span class="token-text">Option 2</span><span class="token-tag">&lt;/label&gt;</span>
+<span class="token-tag">&lt;/div&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Interactive States Section -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-cyan-600">
+                            <i class="bx bx-loader-alt"></i> Interactive States
+                        </div>
+                        <p class="text-sm text-muted mb-6">Advanced states for notifications and process feedback.</p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            <div>
+                                <div class="color-label">Loading States</div>
+                                <div class="flex flex-wrap gap-4">
+                                    <button class="btn btn-primary btn-loading">Processing</button>
+                                    <button class="btn btn-info btn-loading btn-sm">Loading</button>
+                                    <button class="btn btn-outline btn-primary btn-loading">Loading</button>
+                                </div>
+                                <p class="text-xs text-muted mt-4 italic">* Tip: Add .btn-loading class to simulate
+                                    async processing.</p>
+                            </div>
+
+                            <div>
+                                <div class="color-label">Button with Badges</div>
+                                <div class="flex flex-col gap-6">
+                                    <!-- Inline Badges -->
+                                    <div class="flex flex-wrap gap-3">
+                                        <button class="btn btn-primary">
+                                            Inbox <span class="badge badge-inline">12</span>
+                                        </button>
+                                        <button class="btn btn-soft-primary">
+                                            Updates <span class="badge badge-inline">4</span>
+                                        </button>
+                                        <button class="btn btn-default">
+                                            Tasks <span class="badge badge-inline">5</span>
+                                        </button>
+                                    </div>
+
+                                    <!-- Floating Badges -->
+                                    <div class="flex flex-wrap gap-4 pt-2">
+                                        <div class="btn-badge-container">
+                                            <button class="btn btn-default aspect-square p-2.5">
+                                                <i class="bx bx-bell text-xl"></i>
+                                            </button>
+                                            <span class="badge badge-floating">4</span>
+                                        </div>
+
+                                        <div class="btn-badge-container">
+                                            <button class="btn btn-primary btn-pill px-6">
+                                                Profile
+                                            </button>
+                                            <span class="badge badge-floating bg-emerald-500">
+                                                <i class="bx bx-check"></i>
+                                            </span>
+                                        </div>
+
+                                        <div class="btn-badge-container">
+                                            <button class="btn btn-soft-danger btn-pill p-2 aspect-square">
+                                                <i class="bx bx-heart text-xl"></i>
+                                            </button>
+                                            <span class="badge badge-inline">99+</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn">
+                                    <i class="bx bx-copy"></i> Copy
+                                </button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;!-- Loading States --&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-primary btn-loading"</span><span class="token-tag">&gt;</span><span class="token-text">Processing</span><span class="token-tag">&lt;/button&gt;</span>
+
+<span class="token-tag">&lt;!-- Inline Badges --&gt;</span>
+<span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-primary"</span><span class="token-tag">&gt;</span>
+  <span class="token-text">Inbox</span> <span class="token-tag">&lt;span</span> <span class="token-attr">class</span>=<span class="token-val">"badge badge-inline"</span><span class="token-tag">&gt;</span><span class="token-text">12</span><span class="token-tag">&lt;/span&gt;</span>
+<span class="token-tag">&lt;/button&gt;</span>
+
+<span class="token-tag">&lt;!-- Floating Badges --&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"btn-badge-container"</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-default aspect-square"</span><span class="token-tag">&gt;</span>
+    <span class="token-tag">&lt;i</span> <span class="token-attr">class</span>=<span class="token-val">"bx bx-bell"</span><span class="token-tag">&gt;&lt;/i&gt;</span>
+  <span class="token-tag">&lt;/button&gt;</span>
+  <span class="token-tag">&lt;span</span> <span class="token-attr">class</span>=<span class="token-val">"badge badge-floating"</span><span class="token-tag">&gt;</span><span class="token-text">4</span><span class="token-tag">&lt;/span&gt;</span>
+<span class="token-tag">&lt;/div&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Group & Dropdown Section -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-blue-600">
+                            <i class="bx bx-group"></i> Advanced Controls
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            <div>
+                                <div class="color-label">Normal Button Group</div>
+                                <div class="btn-group">
+                                    <button class="btn btn-default">Left</button>
+                                    <button class="btn btn-default">Middle</button>
+                                    <button class="btn btn-default">Right</button>
+                                </div>
+                                <div class="mt-4">
+                                    <div class="btn-group shadow-md">
+                                        <button class="btn btn-primary"><i class="bx bx-edit"></i></button>
+                                        <button class="btn btn-primary"><i class="bx bx-show"></i></button>
+                                        <button class="btn btn-primary"><i class="bx bx-copy"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="color-label">Dropdown Trigger Examples</div>
+                                <div class="flex flex-wrap gap-4">
+                                    <!-- Default Click Trigger -->
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary dropdown-toggle">
+                                            Click Me <i class="bx bx-chevron-down"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a href="#" class="dropdown-item"><i class="bx bx-user mr-2"></i>
+                                                Profile</a>
+                                            <a href="#" class="dropdown-item"><i class="bx bx-cog mr-2"></i>
+                                                Settings</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" class="dropdown-item text-danger"><i
+                                                    class="bx bx-log-out mr-2"></i> Logout</a>
+                                        </div>
+                                    </div>
+
+                                    <!-- Hover Trigger -->
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline btn-primary dropdown-toggle"
+                                            data-trigger="mouseenter">
+                                            Hover Me <i class="bx bx-chevron-down"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a href="#" class="dropdown-item">Action 1</a>
+                                            <a href="#" class="dropdown-item">Action 2</a>
+                                            <a href="#" class="dropdown-item">Action 3</a>
+                                        </div>
+                                    </div>
+
+                                    <!-- Multi Trigger -->
+                                    <div class="dropdown">
+                                        <button class="btn btn-ghost btn-primary dropdown-toggle"
+                                            data-trigger="mouseenter click">
+                                            Hover/Click <i class="bx bx-chevron-down"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a href="#" class="dropdown-item">Action 1</a>
+                                            <a href="#" class="dropdown-item">Action 2</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn">
+                                    <i class="bx bx-copy"></i> Copy
+                                </button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;!-- Button Group --&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"btn-group"</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-default"</span><span class="token-tag">&gt;</span><span class="token-text">Left</span><span class="token-tag">&lt;/button&gt;</span>
+  <span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-default"</span><span class="token-tag">&gt;</span><span class="token-text">Middle</span><span class="token-tag">&lt;/button&gt;</span>
+  <span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-default"</span><span class="token-tag">&gt;</span><span class="token-text">Right</span><span class="token-tag">&lt;/button&gt;</span>
+<span class="token-tag">&lt;/div&gt;</span>
+
+<span class="token-tag">&lt;!-- Dropdown (Click/Hover) --&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"dropdown"</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-primary dropdown-toggle"</span> <span class="token-attr">data-trigger</span>=<span class="token-val">"click"</span><span class="token-tag">&gt;</span>
+    <span class="token-text">Click Me</span> <span class="token-tag">&lt;i</span> <span class="token-attr">class</span>=<span class="token-val">"bx bx-chevron-down"</span><span class="token-tag">&gt;&lt;/i&gt;</span>
+  <span class="token-tag">&lt;/button&gt;</span>
+  <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"dropdown-menu"</span><span class="token-tag">&gt;</span>
+    <span class="token-tag">&lt;a</span> <span class="token-attr">href</span>=<span class="token-val">"#"</span> <span class="token-attr">class</span>=<span class="token-val">"dropdown-item"</span><span class="token-tag">&gt;</span><span class="token-text">Profile</span><span class="token-tag">&lt;/a&gt;</span>
+    <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"dropdown-divider"</span><span class="token-tag">&gt;&lt;/div&gt;</span>
+    <span class="token-tag">&lt;a</span> <span class="token-attr">href</span>=<span class="token-val">"#"</span> <span class="token-attr">class</span>=<span class="token-val">"dropdown-item text-danger"</span><span class="token-tag">&gt;</span><span class="token-text">Logout</span><span class="token-tag">&lt;/a&gt;</span>
+  <span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;/div&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <!-- Vendor Scripts -->
+    <script src="../dist/js/vendor/floating-ui.core.min.js"></script>
+    <script src="../dist/js/vendor/floating-ui.dom.min.js"></script>
+    <script src="../dist/js/config.js"></script>
+    <script src="../dist/js/menu.js"></script>
+    <script src="../dist/js/app.js"></script>
+    <script src="../dist/js/docs.js"></script>
+
+</body>
+
+</html>

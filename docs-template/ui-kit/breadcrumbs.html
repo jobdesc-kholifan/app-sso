@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breadcrumbs - Vibe UI Kit</title>
+    <script src="../dist/js/vendor/tailwindcss.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../dist/css/boxicons.min.css" rel="stylesheet">
+    <script src="../dist/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../dist/css/theme.css">
+    <link rel="stylesheet" href="../dist/css/layout.css">
+    <link rel="stylesheet" href="../dist/css/components.css">
+    <link rel="stylesheet" href="../dist/css/docs.css">
+    <script>
+        if (localStorage.getItem('vibe-template.color-theme') === 'dark' || (!('vibe-template.color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+    <style>
+        .doc-section {
+            background: rgb(var(--color-bg-surface));
+            border: 1px solid rgb(var(--color-border));
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .doc-section-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+
+    <style id="critical-loader-style">
+        #app-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+        }
+        .dark #app-loader { background: #0b1120; }
+        .loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(79, 70, 229, 0.1);
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        #app-loader.fade-out { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.05); }
+    </style>
+</head>
+
+<body class="bg-body text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
+    <div id="app-loader">
+        <div class="loader-spinner"></div>
+    </div>
+    
+    <div id="app-layout" class="flex w-full h-screen overflow-hidden transition-all duration-500 bg-body">
+        <div id="sidebar-overlay"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0">
+        </div>
+
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-50 w-64 border-r transition-all duration-300 transform -translate-x-full md:translate-x-0 md:relative flex flex-col flex-shrink-0 lg:translate-x-0">
+            <button id="desktop-sidebar-toggle"
+                class="hidden md:flex absolute -right-3 top-6 w-6 h-6 bg-primary-600 text-white rounded-full items-center justify-center shadow-lg transition-all hover:scale-110 z-[60] focus:outline-none">
+                <i id="toggle-icon" class="bx bx-chevron-left text-lg"></i>
+            </button>
+            <div class="flex flex-col h-full w-full">
+                <div id="profile-container"
+                    class="pt-4 pb-2 px-6 flex flex-row items-center transition-all duration-500">
+                    <div class="relative w-max h-auto group flex-shrink-0">
+                        <img id="side-avatar" src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff"
+                            class="w-12 h-12 rounded-full shadow-lg transition-all duration-500 border-2 border-white/20"
+                            style="background-color: rgb(var(--color-primary))" alt="side-avatar">
+                        <div class="absolute -left-1 -top-1 sidebar-hide">
+                            <button
+                                class="bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-lg hover:bg-amber-600 transition border-2 border-white">
+                                <i class="bx bx-edit-alt text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="ml-4 sidebar-hide overflow-hidden whitespace-nowrap transition-all duration-300">
+                        <span class="block text-sm font-bold text-muted/80">Administrator</span>
+                        <span class="block text-[11px] text-muted/60 font-medium uppercase tracking-tight">Super
+                            Admin</span>
+                    </div>
+                </div>
+                <nav id="sidebar-nav" class="flex-1 px-3 py-2 space-y-1 overflow-y-auto"></nav>
+                <div class="p-4 border-t transition-all duration-300" style="border-color: rgb(var(--color-border))">
+                    <button
+                        class="w-full flex items-center justify-start px-4 py-2.5 text-sm font-bold bg-primary-600 text-white rounded-lg shadow-sm hover:bg-primary-700 transition"
+                        id="logout-btn">
+                        <i class="bx bx-log-out lg:mr-3 text-lg sidebar-icon"></i>
+                        <span class="sidebar-hide">Log Out</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <div id="content-wrapper" class="flex flex-col flex-1 min-w-0 overflow-hidden">
+            <header id="app-header"
+                class="h-16 flex items-center justify-between px-8 border-b sticky top-0 z-30 transition-all duration-500">
+                <div class="flex items-center">
+                    <button id="mobile-sidebar-toggle"
+                        class="md:hidden mr-4 p-2 rounded-lg text-muted hover:bg-slate-100 dark:hover:bg-slate-800 text-2xl">
+                        <i class="bx bx-menu"></i>
+                    </button>
+                    <h1 class="text-sm font-bold flex items-center">
+                        <i class="bx bx-cube mr-2 text-primary-600"></i> Components / Breadcrumbs
+                    </h1>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="theme-toggle"
+                        class="flex items-center justify-center w-9 h-9 rounded-lg text-muted hover:bg-slate-200 dark:hover:bg-slate-700 transition-all focus:outline-none border shadow-sm"
+                        style="background-color: rgb(var(--color-bg-alt)); border-color: rgb(var(--color-border))">
+                        <i id="theme-toggle-dark-icon" class="bx bx-moon text-xl hidden"></i>
+                        <i id="theme-toggle-light-icon" class="bx bx-sun text-xl hidden"></i>
+                    </button>
+                    <button id="settings-toggle"
+                        class="flex items-center justify-center w-9 h-9 rounded-lg text-muted hover:bg-slate-200 dark:hover:bg-slate-700 transition-all focus:outline-none border shadow-sm"
+                        style="background-color: rgb(var(--color-bg-alt)); border-color: rgb(var(--color-border))">
+                        <i class="bx bx-cog text-xl"></i>
+                    </button>
+                </div>
+            </header>
+
+            <main id="main-content" class="flex-1 overflow-y-auto w-full space-y-8 transition-all duration-500">
+                <div id="main-canvas" class="w-full space-y-8 transition-all duration-500 p-6">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-extrabold mb-2">Breadcrumbs</h2>
+                        <p class="text-muted">Indicate the current page's location within a navigational hierarchy that
+                            automatically adds separators via CSS.</p>
+                    </div>
+
+                    <!-- Default Breadcrumb -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-primary-600"><i class="bx bx-chevron-right"></i> Default
+                            Style</div>
+                        <p class="text-sm text-muted mb-6">The standard breadcrumb style uses chevrons as separators.
+                        </p>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="../dashboards/index.html">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="#">Components</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Breadcrumbs</li>
+                            </ol>
+                        </nav>
+                    </section>
+
+                    <!-- With Icons -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-primary-600"><i class="bx bx-home"></i> With Icons</div>
+                        <p class="text-sm text-muted mb-6">Enhance breadcrumbs with icons for better visual recognition.
+                        </p>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="../dashboards/index.html" class="flex items-center gap-1.5">
+                                        <i class="bx bxs-dashboard text-lg"></i> Dashboard
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="#" class="flex items-center gap-1.5">
+                                        <i class="bx bx-cube text-lg"></i> UI Kit
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">Breadcrumbs</li>
+                            </ol>
+                        </nav>
+                    </section>
+
+                    <!-- Inside a Card -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-primary-600"><i class="bx bx-window"></i> Inside Layout
+                            Containers</div>
+                        <p class="text-sm text-muted mb-6">Breadcrumbs fit perfectly at the top of cards or section
+                            headers.</p>
+                        <div class="card p-4">
+                            <div class="flex items-center justify-between mb-4">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0">
+                                        <li class="breadcrumb-item"><a href="../dashboards/index.html">Home</a></li>
+                                        <li class="breadcrumb-item active">Current Page</li>
+                                    </ol>
+                                </nav>
+                                <button class="btn btn-sm btn-primary">Action</button>
+                            </div>
+                            <div
+                                class="h-32 bg-alt rounded-xl flex items-center justify-center text-muted italic border-2 border-dashed">
+                                Page Content Area
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="../dist/js/vendor/floating-ui.core.min.js"></script>
+    <script src="../dist/js/vendor/floating-ui.dom.min.js"></script>
+    <script src="../dist/js/config.js"></script>
+    <script src="../dist/js/menu.js"></script>
+    <script src="../dist/js/app.js"></script>
+    <script src="../dist/js/docs.js"></script>
+</body>
+
+</html>

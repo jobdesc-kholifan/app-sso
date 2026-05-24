@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url=dashboards/index.html">
+    <title>Redirecting...</title>
+    <script>
+        window.location.href = "dashboards/index.html";
+    </script>
+
+    <style id="critical-loader-style">
+        #app-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+        }
+        .dark #app-loader { background: #0b1120; }
+        .loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(79, 70, 229, 0.1);
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        #app-loader.fade-out { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <div id="app-loader">
+        <div class="loader-spinner"></div>
+    </div>
+    <p>If you are not redirected, <a href="dashboards/index.html">click here</a>.</p>
+</body>
+</html>

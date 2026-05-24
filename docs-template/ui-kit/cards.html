@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Components - Vibe UI Library</title>
+    <script src="../dist/js/vendor/tailwindcss.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../dist/css/boxicons.min.css" rel="stylesheet">
+    <script src="../dist/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../dist/css/theme.css">
+    <link rel="stylesheet" href="../dist/css/layout.css">
+    <link rel="stylesheet" href="../dist/css/components.css">
+    <link rel="stylesheet" href="../dist/css/docs.css">
+    <script>
+        if (localStorage.getItem('vibe-template.color-theme') === 'dark' || (!('vibe-template.color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+    <style>
+        .doc-section {
+            background: rgb(var(--color-bg-surface));
+            border: 1px solid rgb(var(--color-border));
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .doc-section-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+
+    <style id="critical-loader-style">
+        #app-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+        }
+        .dark #app-loader { background: #0b1120; }
+        .loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(79, 70, 229, 0.1);
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        #app-loader.fade-out { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.05); }
+    </style>
+</head>
+
+<body class="bg-body text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
+    <div id="app-loader">
+        <div class="loader-spinner"></div>
+    </div>
+    
+    <div id="app-layout" class="flex w-full h-screen overflow-hidden transition-all duration-500 bg-body">
+        <div id="sidebar-overlay"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0">
+        </div>
+
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-50 w-64 border-r transition-all duration-300 transform -translate-x-full md:translate-x-0 md:static flex flex-col flex-shrink-0 relative">
+            <button id="desktop-sidebar-toggle"
+                class="hidden md:flex absolute -right-3 top-6 w-6 h-6 bg-primary-600 text-white rounded-full items-center justify-center shadow-lg transition-all hover:scale-110 z-[60] focus:outline-none">
+                <i id="toggle-icon" class="bx bx-chevron-left text-lg"></i>
+            </button>
+            <div class="flex flex-col h-full w-full">
+                <!-- User Profile Section -->
+                <div id="profile-container"
+                    class="pt-4 pb-2 px-6 flex flex-row items-center transition-all duration-500">
+                    <div class="relative w-max h-auto group flex-shrink-0">
+                        <img id="side-avatar" src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff"
+                            class="w-12 h-12 rounded-full shadow-lg transition-all duration-500 border-2 border-white/20"
+                            style="background-color: rgb(var(--color-primary))" alt="side-avatar">
+                        <div class="absolute -left-1 -top-1 sidebar-hide">
+                            <button
+                                class="bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-lg hover:bg-amber-600 transition border-2 border-white">
+                                <i class="bx bx-edit-alt text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="ml-4 sidebar-hide overflow-hidden whitespace-nowrap transition-all duration-300">
+                        <span class="block text-sm font-bold text-muted/80">Administrator</span>
+                        <span class="block text-[11px] text-muted/60 font-medium uppercase tracking-tight">Super
+                            Admin</span>
+                    </div>
+                </div>
+
+                <!-- Nav Links -->
+                <nav id="sidebar-nav" class="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
+                    <!-- Menu generated by JS -->
+                </nav>
+                <div class="p-4 border-t transition-all duration-300" style="border-color: rgb(var(--color-border))">
+                    <button
+                        class="w-full flex items-center justify-start px-4 py-2.5 text-sm font-bold bg-primary-600 text-white rounded-lg shadow-sm hover:bg-primary-700 transition"
+                        id="logout-btn">
+                        <i class="bx bx-log-out lg:mr-3 text-lg sidebar-icon"></i>
+                        <span class="sidebar-hide">Log Out</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <div id="content-wrapper" class="flex flex-col flex-1 min-w-0 overflow-hidden">
+            <header id="app-header"
+                class="h-16 flex items-center justify-between px-8 border-b sticky top-0 z-30 transition-all duration-500">
+                <div class="flex items-center">
+                    <button id="mobile-sidebar-toggle"
+                        class="md:hidden mr-4 p-2 rounded-lg text-muted hover:bg-slate-100 dark:hover:bg-slate-800 text-2xl">
+                        <i class="bx bx-menu"></i>
+                    </button>
+                    <h1 class="text-sm font-bold flex items-center">
+                        <i class="bx bx-cube mr-2 text-primary-600"></i> Components / Cards
+                    </h1>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="theme-toggle"
+                        class="flex items-center justify-center w-9 h-9 rounded-lg text-muted hover:bg-slate-200 dark:hover:bg-slate-700 transition-all focus:outline-none border shadow-sm"
+                        style="background-color: rgb(var(--color-bg-alt)); border-color: rgb(var(--color-border))">
+                        <i id="theme-toggle-dark-icon" class="bx bx-moon text-xl hidden"></i>
+                        <i id="theme-toggle-light-icon" class="bx bx-sun text-xl hidden"></i>
+                    </button>
+                    <button id="settings-toggle"
+                        class="flex items-center justify-center w-9 h-9 rounded-lg text-muted hover:bg-slate-200 dark:hover:bg-slate-700 transition-all focus:outline-none border shadow-sm"
+                        style="background-color: rgb(var(--color-bg-alt)); border-color: rgb(var(--color-border))">
+                        <i class="bx bx-cog text-xl"></i>
+                    </button>
+                </div>
+            </header>
+
+            <main id="main-content" class="flex-1 overflow-y-auto w-full space-y-8 transition-all duration-500 p-6">
+                <div id="main-canvas" class="w-full space-y-8">
+                    <div>
+                        <h2 class="text-3xl font-extrabold tracking-tight">Card Components</h2>
+                        <p class="text-muted mt-2">Versatile surface containers for grouping related information.</p>
+                    </div>
+
+                    <!-- Basic Cards Section -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-primary-600">
+                            <i class="bx bx-square"></i> Basic Card
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                            <div class="card">
+                                <div class="card-header font-bold text-slate-800 dark:text-slate-100">Featured Content
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="text-lg font-bold mb-2">Card Title</h5>
+                                    <p class="text-sm text-muted">Some quick example text to build on the card title and
+                                        make up the bulk of the card's content.</p>
+                                </div>
+                                <div class="card-footer flex justify-end gap-2">
+                                    <button class="btn btn-primary btn-sm">Read More</button>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body text-center py-10">
+                                    <div
+                                        class="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 text-primary-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <i class="bx bx-check-shield text-3xl"></i>
+                                    </div>
+                                    <h5 class="text-xl font-bold mb-2">Verified Security</h5>
+                                    <p class="text-sm text-muted">Your data is safe with our advanced encryption
+                                        protocols.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card"</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card-header"</span><span class="token-tag">&gt;</span><span class="token-text">Title</span><span class="token-tag">&lt;/div&gt;</span>
+  <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card-body"</span><span class="token-tag">&gt;</span><span class="token-text">Content...</span><span class="token-tag">&lt;/div&gt;</span>
+  <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card-footer"</span><span class="token-tag">&gt;</span><span class="token-text">Footer...</span><span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;/div&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Sizing Section -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-indigo-600">
+                            <i class="bx bx-expand"></i> Card Sizing
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+                            <!-- X-Small -->
+                            <div class="card card-xs">
+                                <div class="card-header font-bold text-xs uppercase tracking-wider opacity-70">X-Small
+                                </div>
+                                <div class="card-body">
+                                    <p class="text-xs mb-2">Minimal padding and radius for small widgets.</p>
+                                    <button class="btn btn-primary btn-xs w-full">Action</button>
+                                </div>
+                            </div>
+                            <!-- Small -->
+                            <div class="card card-sm">
+                                <div class="card-header font-bold text-sm">Small Card</div>
+                                <div class="card-body">
+                                    <p class="text-sm mb-3">Compact padding. Great for dense dashboard grids.</p>
+                                    <button class="btn btn-primary btn-sm">Action</button>
+                                </div>
+                            </div>
+                            <!-- Medium -->
+                            <div class="card card-md">
+                                <div class="card-header font-bold">Default (Medium)</div>
+                                <div class="card-body">
+                                    <p class="text-sm mb-4">Standard spacing for content-focused interfaces. Provides a
+                                        balanced feel.</p>
+                                    <button class="btn btn-primary">Action</button>
+                                </div>
+                                <div class="card-footer text-xs opacity-60 italic">MD Footer Example</div>
+                            </div>
+                            <!-- Large -->
+                            <div class="card card-lg">
+                                <div class="card-header font-bold text-lg">Large Card</div>
+                                <div class="card-body">
+                                    <p class="text-base mb-4">Spacious padding for high-impact hero sections or
+                                        highlighted content.</p>
+                                    <button class="btn btn-primary btn-lg">Large Action</button>
+                                </div>
+                            </div>
+                            <!-- X-Large -->
+                            <div class="card card-xl col-span-1 md:col-span-2">
+                                <div class="card-header font-bold text-xl">Extra Large (card-xl)</div>
+                                <div class="card-body">
+                                    <p class="text-lg opacity-80 mb-6">Maximum breathing room for major sections,
+                                        landing pages, or feature highlights where design needs to "pop".</p>
+                                    <div class="flex gap-4">
+                                        <button class="btn btn-primary btn-xl">Get Started</button>
+                                        <button class="btn btn-outline btn-xl">Learn More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;!-- Sizing Options --&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card card-xs"</span><span class="token-tag">&gt;</span><span class="token-text">...</span><span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card card-sm"</span><span class="token-tag">&gt;</span><span class="token-text">...</span><span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card card-md"</span><span class="token-tag">&gt;</span><span class="token-text">...</span><span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card card-lg"</span><span class="token-tag">&gt;</span><span class="token-text">...</span><span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card card-xl"</span><span class="token-tag">&gt;</span><span class="token-text">...</span><span class="token-tag">&lt;/div&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Colored & Semantic Section -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-rose-600">
+                            <i class="bx bx-palette"></i> Colored & Semantic
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div class="card card-border-top-primary">
+                                <div class="card-body">
+                                    <h6 class="font-bold mb-2">Primary Border</h6>
+                                    <p class="text-xs text-muted">A subtle accent at the top.</p>
+                                </div>
+                            </div>
+                            <div class="card card-border-top-success">
+                                <div class="card-body">
+                                    <h6 class="font-bold mb-2 text-success-600">Success Status</h6>
+                                    <p class="text-xs text-muted">Completed transaction.</p>
+                                </div>
+                            </div>
+                            <div class="card card-border-top-danger">
+                                <div class="card-body">
+                                    <h6 class="font-bold mb-2 text-danger-600">High Alert</h6>
+                                    <p class="text-xs text-muted">Failed login attempt.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <div class="card card-bg-primary">
+                                <div class="card-body">
+                                    <h5 class="text-lg font-bold mb-1">Solid Primary</h5>
+                                    <p class="text-sm opacity-90">Inverse text for dark backgrounds.</p>
+                                </div>
+                            </div>
+                            <div class="card card-bg-success">
+                                <div class="card-body">
+                                    <h5 class="text-lg font-bold mb-1">Solid Success</h5>
+                                    <p class="text-sm opacity-90">Healthy system status.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;!-- Border Accents --&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card card-border-top-primary"</span><span class="token-tag">&gt;</span><span class="token-text">...</span><span class="token-tag">&lt;/div&gt;</span>
+
+<span class="token-tag">&lt;!-- Solid Backgrounds --&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card card-bg-primary"</span><span class="token-tag">&gt;</span><span class="token-text">...</span><span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card card-bg-success"</span><span class="token-tag">&gt;</span><span class="token-text">...</span><span class="token-tag">&lt;/div&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Image Section -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-emerald-600">
+                            <i class="bx bx-image"></i> Image Cards
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                            <div class="card card-interactive">
+                                <img src="../dist/images/card-architecture.png" class="card-img-top" alt="Card image">
+                                <div class="card-body">
+                                    <h5 class="font-bold mb-1">City Architecture</h5>
+                                    <p class="text-xs text-muted">New York, USA</p>
+                                </div>
+                            </div>
+                            <div class="card card-interactive overflow-hidden group">
+                                <div class="relative">
+                                    <img src="../dist/images/card-architecture.png"
+                                        class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                                        alt="Card image">
+                                    <div
+                                        class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+                                        <div class="text-white">
+                                            <div class="text-xs font-bold uppercase tracking-wider mb-1">Premium</div>
+                                            <div class="text-lg font-bold leading-tight">Featured Project</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p class="text-xs text-muted">Modern skyscraper design for urban development.</p>
+                                </div>
+                            </div>
+                            <div class="card card-glass card-interactive">
+                                <div class="card-ribbon">New</div>
+                                <div class="card-body py-12 text-center">
+                                    <i class="bx bx-at text-4xl text-primary-600 mb-4 scale-animation"></i>
+                                    <h5 class="font-bold">Glassmorphism</h5>
+                                    <p class="text-xs text-muted">Translucent blurred surface.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;!-- Interactive Card (Hover Effect) --&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card card-interactive"</span><span class="token-tag">&gt;</span><span class="token-text">... Content ...</span><span class="token-tag">&lt;/div&gt;</span>
+
+<span class="token-tag">&lt;!-- Glassmorphism Card --&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card card-glass card-interactive"</span><span class="token-tag">&gt;</span><span class="token-text">... Content ...</span><span class="token-tag">&lt;/div&gt;</span>
+
+<span class="token-tag">&lt;!-- Card with Ribbon --&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card"</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card-ribbon"</span><span class="token-tag">&gt;</span><span class="token-text">New</span><span class="token-tag">&lt;/div&gt;</span>
+  <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card-body"</span><span class="token-tag">&gt;</span><span class="token-text">... Content ...</span><span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;/div&gt;</span>
+
+<span class="token-tag">&lt;!-- Image Card with Overlay --&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card overflow-hidden group"</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"relative"</span><span class="token-tag">&gt;</span>
+    <span class="token-tag">&lt;img</span> <span class="token-attr">src</span>=<span class="token-val">"..."</span> <span class="token-attr">class</span>=<span class="token-val">"w-full h-48 object-cover group-hover:scale-110 transition-all duration-500"</span><span class="token-tag">&gt;</span>
+    <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4"</span><span class="token-tag">&gt;</span>
+      <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"text-white font-bold"</span><span class="token-tag">&gt;</span><span class="token-text">Overlay Text</span><span class="token-tag">&lt;/div&gt;</span>
+    <span class="token-tag">&lt;/div&gt;</span>
+  <span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;/div&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Dashboard Stats Section -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-amber-600">
+                            <i class="bx bx-stats"></i> Dashboard Stats
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                            <div class="card card-sm card-interactive">
+                                <div class="card-body flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-900/30 text-primary-600 flex items-center justify-center text-2xl">
+                                        <i class="bx bx-group"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-muted font-bold">Total Users</div>
+                                        <div class="text-xl font-extrabold tracking-tight">24,562</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-sm card-interactive">
+                                <div class="card-body flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-xl bg-success-100 dark:bg-success-900/30 text-success-600 flex items-center justify-center text-2xl">
+                                        <i class="bx bx-trending-up"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-muted font-bold">Revenue</div>
+                                        <div class="text-xl font-extrabold tracking-tight">$12,400</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-sm card-interactive">
+                                <div class="card-body flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900/30 text-amber-600 flex items-center justify-center text-2xl">
+                                        <i class="bx bx-cart"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-muted font-bold">Orders</div>
+                                        <div class="text-xl font-extrabold tracking-tight">842</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-sm card-interactive">
+                                <div class="card-body flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-xl bg-rose-100 dark:bg-rose-900/30 text-rose-600 flex items-center justify-center text-2xl">
+                                        <i class="bx bx-bug"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-muted font-bold">Issues</div>
+                                        <div class="text-xl font-extrabold tracking-tight">12</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;!-- Dashboard Stat Card --&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card card-sm card-interactive"</span><span class="token-tag">&gt;</span>
+  <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"card-body flex items-center gap-4"</span><span class="token-tag">&gt;</span>
+    <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"w-12 h-12 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center text-2xl"</span><span class="token-tag">&gt;</span>
+      <span class="token-tag">&lt;i</span> <span class="token-attr">class</span>=<span class="token-val">"bx bx-group"</span><span class="token-tag">&gt;&lt;/i&gt;</span>
+    <span class="token-tag">&lt;/div&gt;</span>
+    <span class="token-tag">&lt;div&gt;</span>
+      <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"text-xs text-muted font-bold"</span><span class="token-tag">&gt;</span><span class="token-text">Total Users</span><span class="token-tag">&lt;/div&gt;</span>
+      <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"text-xl font-extrabold tracking-tight"</span><span class="token-tag">&gt;</span><span class="token-text">24,562</span><span class="token-tag">&lt;/div&gt;</span>
+    <span class="token-tag">&lt;/div&gt;</span>
+  <span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;/div&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="../dist/js/vendor/floating-ui.core.min.js"></script>
+    <script src="../dist/js/vendor/floating-ui.dom.min.js"></script>
+    <script src="../dist/js/config.js"></script>
+    <script src="../dist/js/menu.js"></script>
+    <script src="../dist/js/app.js"></script>
+    <script src="../dist/js/docs.js"></script>
+
+</body>
+
+</html>

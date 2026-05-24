@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Vibe Coding - Vibe UI</title>
+    <script src="../dist/js/vendor/tailwindcss.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../dist/css/boxicons.min.css" rel="stylesheet">
+    <script src="../dist/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../dist/css/theme.css">
+    <link rel="stylesheet" href="../dist/css/layout.css">
+    <link rel="stylesheet" href="../dist/css/components.css">
+    <script>
+        if (localStorage.getItem('vibe-template.color-theme') === 'dark' || (!('vibe-template.color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+
+    <style id="critical-loader-style">
+        #app-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+        }
+        .dark #app-loader { background: #0b1120; }
+        .loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(79, 70, 229, 0.1);
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        #app-loader.fade-out { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.05); }
+    </style>
+</head>
+
+<body class="bg-body text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
+    <div id="app-loader">
+        <div class="loader-spinner"></div>
+    </div>
+    
+    <div id="app-layout" class="flex w-full h-screen overflow-hidden transition-all duration-500 bg-body">
+        <!-- Overlay Layer for Mobile -->
+        <div id="sidebar-overlay"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0">
+        </div>
+
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-50 w-64 border-r transition-all duration-300 transform -translate-x-full md:translate-x-0 md:relative flex flex-col flex-shrink-0 lg:translate-x-0">
+            <div class="flex flex-col h-full w-full">
+                <!-- Floating Sidebar Toggle (Desktop) -->
+                <button id="desktop-sidebar-toggle"
+                    class="hidden md:flex absolute -right-3 top-6 w-6 h-6 bg-primary-600 text-white rounded-full items-center justify-center shadow-lg transition-all hover:scale-110 z-[60] focus:outline-none">
+                    <i id="toggle-icon" class="bx bx-chevron-left text-lg"></i>
+                </button>
+                <div id="profile-container"
+                    class="pt-4 pb-2 px-6 flex flex-row items-center transition-all duration-500">
+                    <div class="relative w-max h-auto group flex-shrink-0">
+                        <img id="side-avatar" src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff"
+                            class="w-12 h-12 rounded-full shadow-lg transition-all duration-500 border-2 border-white/20"
+                            style="background-color: rgb(var(--color-primary))" alt="side-avatar">
+                        <div class="absolute -left-1 -top-1 sidebar-hide">
+                            <button
+                                class="bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-lg hover:bg-amber-600 transition border-2 border-white">
+                                <i class="bx bx-edit-alt text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="ml-4 sidebar-hide overflow-hidden whitespace-nowrap transition-all duration-300">
+                        <span class="block text-sm font-bold text-muted/80">Administrator</span>
+                        <span class="block text-[11px] text-muted/60 font-medium uppercase tracking-tight">Super
+                            Admin</span>
+                    </div>
+                </div>
+                <nav id="sidebar-nav" class="flex-1 px-3 py-2 space-y-1 overflow-y-auto pt-8"></nav>
+            </div>
+        </aside>
+
+        <div id="content-wrapper" class="flex flex-col flex-1 min-w-0 overflow-hidden">
+            <header id="app-header"
+                class="h-16 flex items-center justify-between px-8 border-b sticky top-0 z-30 transition-all duration-500 bg-surface">
+                <div class="flex items-center">
+                    <button id="mobile-sidebar-toggle"
+                        class="md:hidden mr-4 p-2 rounded-lg text-muted hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <i class="bx bx-menu text-2xl"></i>
+                    </button>
+                    <h1 class="text-sm font-bold flex items-center">
+                        <i class="bx bx-circle mr-2 text-primary-600"></i> Documentation / AI Vibe Coding
+                    </h1>
+                </div>
+            </header>
+
+            <main id="main-content" class="flex-1 overflow-y-auto w-full space-y-8 transition-all duration-500">
+                <div id="main-canvas" class="w-full space-y-8 transition-all duration-500 p-6 md:p-8 max-w-5xl mx-auto">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-extrabold mb-2">AI Vibe Coding</h2>
+                        <p class="text-muted font-medium text-lg">Leverage AI to seamlessly generate and integrate your layouts.</p>
+                    </div>
+
+                    <div class="space-y-8">
+                        <!-- Introduction -->
+                        <div class="bg-surface rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 md:p-8">
+                            <h3 class="text-2xl font-bold mb-4 flex items-center">
+                                <i class="bx bx-bot text-purple-600 mr-3"></i> What is Vibe Coding?
+                            </h3>
+                            <p class="text-muted mb-4">"Vibe Coding" is our methodology for integrating the Vibe UI template using Large Language Models (like Claude, ChatGPT, or GitHub Copilot). Instead of manually copying and pasting HTML, you can use these tailored prompts to have the AI generate your layouts automatically.</p>
+                        </div>
+
+                        <!-- Phase 0: Fetching the Template -->
+                        <div class="bg-surface rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 md:p-8">
+                            <h3 class="text-2xl font-bold mb-4 flex items-center">
+                                <i class="bx bx-download text-blue-600 mr-3"></i> Phase 0: Fetching the Template
+                            </h3>
+                            <p class="text-muted mb-4">Before using the AI prompts, you must first clone the Vibe UI repository into your project root under a specific folder name (<code>docs-template</code>).</p>
+                            
+                            <div class="bg-slate-900 rounded-xl p-4 overflow-x-auto">
+                                <pre><code class="text-slate-300 font-mono text-sm">git clone https://github.com/your-repo/vibe-templating.git docs-template</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Phase 1: Initializing Setup -->
+                        <div class="bg-surface rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 md:p-8">
+                            <h3 class="text-2xl font-bold mb-4 flex items-center">
+                                <i class="bx bx-package text-orange-600 mr-3"></i> Phase 1: Initializing Setup
+                            </h3>
+                            <p class="text-muted mb-6">Use this universal prompt first to initialize your project, set up the static assets, and create a root landing page. The AI will automatically adapt to whatever framework you are using.</p>
+                            
+                            <div class="bg-slate-900 rounded-xl p-6 relative group">
+                                <button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText)" class="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg text-sm transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100 flex items-center gap-2" title="Copy Prompt">
+                                    <i class="bx bx-copy"></i> Copy Prompt
+                                </button>
+                                <pre class="whitespace-pre-wrap"><code class="text-slate-300 font-mono text-sm leading-relaxed">I have a frontend/backend project and want to initialize the "Vibe UI" templating system. I have cloned the template into a folder named `docs-template` at the root of my project.
+
+Please execute the following steps precisely:
+
+1. **Check Framework**: First, detect the framework or environment I am currently using in this project (e.g., CodeIgniter 4, Laravel, Express, etc.). If you cannot detect any framework, abort this process immediately.
+2. **Copy Assets**: Based on the detected framework, determine the correct public target directory (e.g., `public/`, `htdocs/`, or the root directory). Automatically copy the entire `docs-template/dist/` folder into that target directory.
+3. **Setup Landing Route**: Create a root route (`/`) using the routing system of the detected framework.
+4. **Create View**: Generate a view file for that `/` route. Use the layout structure and HTML content from `docs-template/pages/page-landing.html` as the exact reference for this view. 
+   - CRITICAL: Ensure all CSS and JS asset paths inside the view are linked correctly using the framework's native asset/URL helper (e.g., `base_url('dist/css/theme.css')` in CI4 or `asset('dist/css/theme.css')` in Laravel). DO NOT use relative paths like `../dist/` or `dist/` as they will cause 404 errors.
+   - For the "Get Started" and "Documentation" buttons, modify their `href` attributes to point to the raw HTML files inside the `docs-template` folder using the framework's native URL helper (e.g., `base_url('docs-template/pages/docs-setup.html')` and `base_url('docs-template/dashboards/index.html')`).
+
+Do not just provide the code. Please directly execute these changes and create/modify the necessary files in my project.</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Phase 2: Framework Integration (CodeIgniter 4) -->
+                        <div class="bg-surface rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 md:p-8">
+                            <h3 class="text-2xl font-bold mb-4 flex items-center">
+                                <i class="bx bx-code-block text-red-600 mr-3"></i> Phase 2: Framework Integration (CodeIgniter 4)
+                            </h3>
+                            <p class="text-muted mb-6">After initializing, use this prompt to instruct your AI assistant to generate the specific layout structure for CodeIgniter 4.</p>
+                        
+                            <div class="bg-slate-900 rounded-xl p-6 relative group">
+                                <button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText)" class="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg text-sm transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100 flex items-center gap-2" title="Copy Prompt">
+                                    <i class="bx bx-copy"></i> Copy Prompt
+                                </button>
+                                <pre class="whitespace-pre-wrap"><code class="text-slate-300 font-mono text-sm leading-relaxed">I have an HTML UI template called "Vibe UI" and I need to integrate it into my CodeIgniter 4 (CI4) project. I have cloned the template into a folder named `docs-template` at the root of my project.
+
+First, provide instructions to copy the entire `docs-template/dist/` folder directly into the `public/` directory of my CI4 project.
+
+Next, please help me convert the boilerplate layout (`docs-template/pages/page-blank.html`) into a CI4 view layout structure. Follow these exact steps:
+
+1. Create a base layout file at `app/Views/layouts/main.php`. It should contain the HTML &lt;head&gt;, the `div#app-loader`, and the main wrapper `div#app-layout`.
+2. Inside the base layout, use `&lt;?= $this-&gt;renderSection('title') ?&gt;` for the page title.
+3. Extract the `&lt;aside id="sidebar"&gt;` into a partial view at `app/Views/partials/sidebar.php` and include it in the main layout using `&lt;?= $this-&gt;include('partials/sidebar') ?&gt;`.
+4. Extract the `&lt;header id="app-header"&gt;` into a partial view at `app/Views/partials/header.php` and include it inside the `div#content-wrapper`.
+5. Inside the `main#main-content &gt; div#main-canvas`, place `&lt;?= $this-&gt;renderSection('content') ?&gt;` where the dynamic page content should go.
+6. Create an example page view (e.g., `app/Views/pages/blank.php`) that extends `layouts/main`, sets the `title` section, and puts the page-specific HTML content inside the `content` section.
+7. Ensure all CSS and JS asset paths correctly reference the assets we copied to the public directory using the base_url helper (e.g., `&lt;?= base_url('dist/css/theme.css') ?&gt;`).
+
+Please output the exact code for `main.php`, `sidebar.php`, `header.php`, and `blank.php`.</code></pre>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Vendor Scripts -->
+    <script src="../dist/js/vendor/floating-ui.core.min.js"></script>
+    <script src="../dist/js/vendor/floating-ui.dom.min.js"></script>
+    <script src="../dist/js/config.js"></script>
+    <script src="../dist/js/menu.js"></script>
+    <script src="../dist/js/app.js"></script>
+</body>
+
+</html>

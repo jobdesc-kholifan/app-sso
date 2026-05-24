@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup & Installation - Vibe UI</title>
+    <script src="../dist/js/vendor/tailwindcss.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../dist/css/boxicons.min.css" rel="stylesheet">
+    <script src="../dist/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../dist/css/theme.css">
+    <link rel="stylesheet" href="../dist/css/layout.css">
+    <link rel="stylesheet" href="../dist/css/components.css">
+    <script>
+        if (localStorage.getItem('vibe-template.color-theme') === 'dark' || (!('vibe-template.color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+
+    <style id="critical-loader-style">
+        #app-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+        }
+        .dark #app-loader { background: #0b1120; }
+        .loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(79, 70, 229, 0.1);
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        #app-loader.fade-out { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.05); }
+    </style>
+</head>
+
+<body class="bg-body text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
+    <div id="app-loader">
+        <div class="loader-spinner"></div>
+    </div>
+    
+    <div id="app-layout" class="flex w-full h-screen overflow-hidden transition-all duration-500 bg-body">
+        <!-- Overlay Layer for Mobile -->
+        <div id="sidebar-overlay"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0">
+        </div>
+
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-50 w-64 border-r transition-all duration-300 transform -translate-x-full md:translate-x-0 md:relative flex flex-col flex-shrink-0 lg:translate-x-0">
+            <div class="flex flex-col h-full w-full">
+                <!-- Floating Sidebar Toggle (Desktop) -->
+                <button id="desktop-sidebar-toggle"
+                    class="hidden md:flex absolute -right-3 top-6 w-6 h-6 bg-primary-600 text-white rounded-full items-center justify-center shadow-lg transition-all hover:scale-110 z-[60] focus:outline-none">
+                    <i id="toggle-icon" class="bx bx-chevron-left text-lg"></i>
+                </button>
+                <div id="profile-container"
+                    class="pt-4 pb-2 px-6 flex flex-row items-center transition-all duration-500">
+                    <div class="relative w-max h-auto group flex-shrink-0">
+                        <img id="side-avatar" src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff"
+                            class="w-12 h-12 rounded-full shadow-lg transition-all duration-500 border-2 border-white/20"
+                            style="background-color: rgb(var(--color-primary))" alt="side-avatar">
+                        <div class="absolute -left-1 -top-1 sidebar-hide">
+                            <button
+                                class="bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-lg hover:bg-amber-600 transition border-2 border-white">
+                                <i class="bx bx-edit-alt text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="ml-4 sidebar-hide overflow-hidden whitespace-nowrap transition-all duration-300">
+                        <span class="block text-sm font-bold text-muted/80">Administrator</span>
+                        <span class="block text-[11px] text-muted/60 font-medium uppercase tracking-tight">Super
+                            Admin</span>
+                    </div>
+                </div>
+                <nav id="sidebar-nav" class="flex-1 px-3 py-2 space-y-1 overflow-y-auto pt-8"></nav>
+            </div>
+        </aside>
+
+        <div id="content-wrapper" class="flex flex-col flex-1 min-w-0 overflow-hidden">
+            <header id="app-header"
+                class="h-16 flex items-center justify-between px-8 border-b sticky top-0 z-30 transition-all duration-500 bg-surface">
+                <div class="flex items-center">
+                    <button id="mobile-sidebar-toggle"
+                        class="md:hidden mr-4 p-2 rounded-lg text-muted hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <i class="bx bx-menu text-2xl"></i>
+                    </button>
+                    <h1 class="text-sm font-bold flex items-center">
+                        <i class="bx bx-circle mr-2 text-primary-600"></i> Documentation / Setup & Installation
+                    </h1>
+                </div>
+            </header>
+
+            <main id="main-content" class="flex-1 overflow-y-auto w-full space-y-8 transition-all duration-500">
+                <div id="main-canvas" class="w-full space-y-8 transition-all duration-500 p-6 md:p-8 max-w-5xl mx-auto">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-extrabold mb-2">Setup & Installation</h2>
+                        <p class="text-muted font-medium text-lg">Get started with Vibe UI templating system.</p>
+                    </div>
+
+                    <div class="space-y-8">
+                        <!-- Getting Started -->
+                        <div class="bg-surface rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 md:p-8">
+                            <h3 class="text-2xl font-bold mb-4 flex items-center">
+                                <i class="bx bx-rocket text-primary-600 mr-3"></i> Getting Started
+                            </h3>
+                            <p class="text-muted mb-4">Vibe UI is a high-performance, utility-first UI templating system designed for building stunning, themeable admin dashboards and web applications. Built with Vanilla JS and Tailwind CSS.</p>
+                            
+                            <h4 class="text-lg font-bold mt-6 mb-3">1. Installation</h4>
+                            <p class="text-muted mb-3">Clone the repository directly into your project's root directory.</p>
+                            <div class="bg-slate-900 rounded-xl p-4 overflow-x-auto mb-6">
+                                <pre><code class="text-slate-300 font-mono text-sm">git clone https://github.com/your-repo/vibe-templating.git .</code></pre>
+                            </div>
+
+                            <h4 class="text-lg font-bold mt-6 mb-3">2. Customization</h4>
+                            <p class="text-muted mb-3">Edit <code>themes.json</code> in the root directory to set your desired initial state. Modifying this file will change the starting theme, accent color, and layout for all new users.</p>
+                        </div>
+
+                        <!-- Configuration -->
+                        <div class="bg-surface rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 md:p-8">
+                            <h3 class="text-2xl font-bold mb-6 flex items-center">
+                                <i class="bx bx-cog text-primary-600 mr-3"></i> Configuration & Theming
+                            </h3>
+                            <p class="text-muted mb-6">Vibe UI uses a centralized configuration system powered by <code>themes.json</code> located in the root directory. This file defines the initial defaults for the application.</p>
+                            
+                            <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 text-sm font-semibold">
+                                            <th class="p-4">Key</th>
+                                            <th class="p-4">Description</th>
+                                            <th class="p-4">Available Values</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-sm divide-y divide-slate-200 dark:divide-slate-800">
+                                        <tr>
+                                            <td class="p-4 font-mono font-medium text-primary-600">color-theme</td>
+                                            <td class="p-4 text-muted">Sets the default theme mode on first load.</td>
+                                            <td class="p-4 font-mono text-xs">"light", "dark"</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-4 font-mono font-medium text-primary-600">light-palette</td>
+                                            <td class="p-4 text-muted">Selection of color schemes for Light Mode.</td>
+                                            <td class="p-4 font-mono text-xs">"Pure White", "Soft Slate", "Modern Gray", "Oceanic Light", "Professional Cream"</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-4 font-mono font-medium text-primary-600">dark-palette</td>
+                                            <td class="p-4 text-muted">Selection of color schemes for Dark Mode.</td>
+                                            <td class="p-4 font-mono text-xs">"Classic Slate", "Midnight Onyx", "Charcoal Elegance", "Oceanic Deep", "Antigravity IDE", "VS Code Modern"</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-4 font-mono font-medium text-primary-600">accent-color</td>
+                                            <td class="p-4 text-muted">The primary brand/accent color in RGB format.</td>
+                                            <td class="p-4 font-mono text-xs">Any RGB string (e.g., "79, 70, 229")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-4 font-mono font-medium text-primary-600">bg-preset</td>
+                                            <td class="p-4 text-muted">The background and surface color strategy.</td>
+                                            <td class="p-4 font-mono text-xs">"Neutral", "Solid", "Matching"</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-4 font-mono font-medium text-primary-600">canvas-style</td>
+                                            <td class="p-4 text-muted">The outer layout container style.</td>
+                                            <td class="p-4 font-mono text-xs">"Full", "Boxed", "Soft", "Floating"</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-4 font-mono font-medium text-primary-600">zoom-level</td>
+                                            <td class="p-4 text-muted">Controls the base font size and UI scaling.</td>
+                                            <td class="p-4 font-mono text-xs">"Compact", "Standard", "Zoom"</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Architecture -->
+                        <div class="bg-surface rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 md:p-8">
+                            <h3 class="text-2xl font-bold mb-6 flex items-center">
+                                <i class="bx bx-layer text-primary-600 mr-3"></i> Technology Stack
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="flex items-start p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30">
+                                    <div class="w-10 h-10 rounded-lg bg-yellow-100 text-yellow-600 flex items-center justify-center mr-4 shrink-0">
+                                        <i class="bx bxl-javascript text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-bold mb-1">Core Logic</h5>
+                                        <p class="text-sm text-muted">HTML5, Vanilla JavaScript (ES6+). Zero heavy frameworks required.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30">
+                                    <div class="w-10 h-10 rounded-lg bg-cyan-100 text-cyan-600 flex items-center justify-center mr-4 shrink-0">
+                                        <i class="bx bxl-tailwind-css text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-bold mb-1">Styling Engine</h5>
+                                        <p class="text-sm text-muted">Tailwind CSS via custom Plugin Architecture utilizing @apply.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30">
+                                    <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mr-4 shrink-0">
+                                        <i class="bx bx-grid-alt text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-bold mb-1">Floating Elements</h5>
+                                        <p class="text-sm text-muted">Powered by Floating UI for robust dropdowns and tooltips.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start p-4 rounded-xl bg-slate-50 dark:bg-slate-800/30">
+                                    <div class="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center mr-4 shrink-0">
+                                        <i class="bx bx-font text-2xl"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-bold mb-1">Typography & Icons</h5>
+                                        <p class="text-sm text-muted">Inter Font via Google Fonts, and Boxicons for vector iconography.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dist Integration -->
+                        <div class="bg-surface rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 md:p-8">
+                            <h3 class="text-2xl font-bold mb-4 flex items-center">
+                                <i class="bx bx-package text-orange-600 mr-3"></i> Static / Vanilla Integration
+                            </h3>
+                            <p class="text-muted mb-6">Start your integration journey here. You can choose to use an AI assistant for a seamless setup tailored to your specific framework, or integrate it manually if you're building a static project.</p>
+                            
+                            <div class="mb-8 p-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800/30 rounded-xl flex items-start gap-4">
+                                <i class="bx bx-bot text-2xl text-purple-600 mt-1"></i>
+                                <div>
+                                    <h5 class="font-bold text-purple-900 dark:text-purple-300 mb-1">Prefer an Automated Workflow?</h5>
+                                    <p class="text-sm text-purple-700 dark:text-purple-400">Check out our <a href="docs-vibe-coding.html" class="underline font-semibold">AI Vibe Coding</a> guide for a seamless, prompt-driven integration.</p>
+                                </div>
+                            </div>
+
+                            <!-- Manual Integration -->
+                            <div class="mt-6">
+                                <h4 class="text-xl font-bold mb-6 text-primary-600 border-b border-slate-200 dark:border-slate-700 pb-3 flex items-center">
+                                    <i class="bx bx-wrench mr-2"></i> Method 2: Manual Integration
+                                </h4>
+                                <p class="text-muted mb-3">Copy the <code>dist/</code> folder into your project's root or public directory. Then, link the CSS and JS files in your HTML.</p>
+                                <div class="bg-slate-900 rounded-xl p-4 overflow-x-auto">
+<pre><code class="text-slate-300 font-mono text-xs">&lt;!-- Inside &lt;head&gt; --&gt;
+&lt;script src="dist/js/vendor/tailwindcss.js"&gt;&lt;/script&gt;
+&lt;link href="dist/css/boxicons.min.css" rel="stylesheet"&gt;
+&lt;script src="dist/js/tailwind-config.js"&gt;&lt;/script&gt;
+&lt;link rel="stylesheet" href="dist/css/theme.css"&gt;
+&lt;link rel="stylesheet" href="dist/css/layout.css"&gt;
+&lt;link rel="stylesheet" href="dist/css/components.css"&gt;
+
+&lt;!-- Just before &lt;/body&gt; --&gt;
+&lt;script src="dist/js/vendor/floating-ui.core.min.js"&gt;&lt;/script&gt;
+&lt;script src="dist/js/vendor/floating-ui.dom.min.js"&gt;&lt;/script&gt;
+&lt;script src="dist/js/config.js"&gt;&lt;/script&gt;
+&lt;script src="dist/js/menu.js"&gt;&lt;/script&gt;
+&lt;script src="dist/js/app.js"&gt;&lt;/script&gt;</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CI4 Integration -->
+                        <div class="bg-surface rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 md:p-8">
+                            <h3 class="text-2xl font-bold mb-4 flex items-center">
+                                <i class="bx bx-code-block text-red-600 mr-3"></i> Framework Integration (CodeIgniter 4)
+                            </h3>
+                            <p class="text-muted mb-6">Vibe UI is designed to be easily integrated into backend MVC frameworks like CodeIgniter 4 (CI4) using View Layouts. You can choose to integrate it manually or use an AI assistant for a faster workflow.</p>
+                            
+                            <div class="mb-8 p-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800/30 rounded-xl flex items-start gap-4">
+                                <i class="bx bx-bot text-2xl text-purple-600 mt-1"></i>
+                                <div>
+                                    <h5 class="font-bold text-purple-900 dark:text-purple-300 mb-1">Automate This with AI</h5>
+                                    <p class="text-sm text-purple-700 dark:text-purple-400">Head over to the <a href="docs-vibe-coding.html" class="underline font-semibold">AI Vibe Coding</a> page to get the exact prompt for CI4 layout generation.</p>
+                                </div>
+                            </div>
+
+                            <!-- Manual Integration -->
+                            <div class="mt-6">
+                                <h4 class="text-xl font-bold mb-6 text-primary-600 border-b border-slate-200 dark:border-slate-700 pb-3 flex items-center">
+                                    <i class="bx bx-wrench mr-2"></i> Method 2: Manual Integration
+                                </h4>
+                                <div class="space-y-6">
+                                    <div>
+                                        <h5 class="text-lg font-bold mb-2">1. Base Layout (<code>app/Views/layouts/main.php</code>)</h5>
+                                        <p class="text-sm text-muted mb-3">Extract the outer shell of <code>page-blank.html</code>. This includes the HTML head, loader, sidebar overlay, and the main layout grid.</p>
+                                        <div class="bg-slate-900 rounded-xl p-4 overflow-x-auto">
+<pre><code class="text-slate-300 font-mono text-xs">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;!-- Include meta tags and CSS references here --&gt;
+    &lt;title&gt;&lt;?= $this-&gt;renderSection('title') ?&gt; - Vibe UI Kit&lt;/title&gt;
+&lt;/head&gt;
+&lt;body class="bg-body text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300"&gt;
+    &lt;div id="app-loader"&gt;&lt;div class="loader-spinner"&gt;&lt;/div&gt;&lt;/div&gt;
+
+    &lt;div id="app-layout" class="flex w-full h-screen overflow-hidden transition-all duration-500 bg-body"&gt;
+        &lt;div id="sidebar-overlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0"&gt;&lt;/div&gt;
+
+        &lt;!-- Include Sidebar Partial --&gt;
+        &lt;?= $this-&gt;include('partials/sidebar') ?&gt;
+
+        &lt;div id="content-wrapper" class="flex flex-col flex-1 min-w-0 overflow-hidden"&gt;
+            &lt;!-- Include Header Partial --&gt;
+            &lt;?= $this-&gt;include('partials/header') ?&gt;
+
+            &lt;main id="main-content" class="flex-1 overflow-y-auto w-full space-y-8 transition-all duration-500"&gt;
+                &lt;div id="main-canvas" class="w-full space-y-8 transition-all duration-500 p-6"&gt;
+                    &lt;!-- Dynamic Page Content --&gt;
+                    &lt;?= $this-&gt;renderSection('content') ?&gt;
+                &lt;/div&gt;
+            &lt;/main&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Vendor Scripts --&gt;
+    &lt;?= $this-&gt;renderSection('scripts') ?&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h5 class="text-lg font-bold mb-2">2. Partials (<code>app/Views/partials/</code>)</h5>
+                                        <p class="text-sm text-muted mb-3">Copy the <code>&lt;aside id="sidebar"&gt;</code> into <code>sidebar.php</code> and the <code>&lt;header id="app-header"&gt;</code> into <code>header.php</code>. This keeps your main layout clean and allows you to update navigation globally.</p>
+                                    </div>
+
+                                    <div>
+                                        <h5 class="text-lg font-bold mb-2">3. Content Page (<code>app/Views/pages/blank.php</code>)</h5>
+                                        <p class="text-sm text-muted mb-3">Now, you can create views that extend your base layout and inject specific content inside the <code>#main-canvas</code>.</p>
+                                        <div class="bg-slate-900 rounded-xl p-4 overflow-x-auto">
+<pre><code class="text-slate-300 font-mono text-xs">&lt;?= $this-&gt;extend('layouts/main') ?&gt;
+
+&lt;?= $this-&gt;section('title') ?&gt;
+Utility / Blank Page
+&lt;?= $this-&gt;endSection() ?&gt;
+
+&lt;?= $this-&gt;section('content') ?&gt;
+    &lt;div class="mb-8"&gt;
+        &lt;h2 class="text-3xl font-extrabold mb-2"&gt;Blank Page&lt;/h2&gt;
+        &lt;p class="text-muted font-medium"&gt;Start your new project from here.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class="h-[60vh] border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-[2rem] flex flex-col items-center justify-center text-center p-8"&gt;
+        &lt;div class="w-16 h-16 rounded-2xl bg-alt flex items-center justify-center text-muted mb-6"&gt;
+            &lt;i class="bx bx-plus text-3xl"&gt;&lt;/i&gt;
+        &lt;/div&gt;
+        &lt;h4 class="text-xl font-black mb-2 italic text-slate-400"&gt;Your content goes here...&lt;/h4&gt;
+        &lt;p class="text-sm text-slate-400 max-w-sm font-medium"&gt;This is a clean container to help you start building unique sections for your application.&lt;/p&gt;
+    &lt;/div&gt;
+&lt;?= $this-&gt;endSection() ?&gt;</code></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Vendor Scripts -->
+    <script src="../dist/js/vendor/floating-ui.core.min.js"></script>
+    <script src="../dist/js/vendor/floating-ui.dom.min.js"></script>
+    <script src="../dist/js/config.js"></script>
+    <script src="../dist/js/menu.js"></script>
+    <script src="../dist/js/app.js"></script>
+</body>
+
+</html>

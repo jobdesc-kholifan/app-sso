@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register v2 - Vibe UI Kit</title>
+    <script src="../../dist/js/vendor/tailwindcss.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../../dist/css/boxicons.min.css" rel="stylesheet">
+    <script src="../../dist/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../../dist/css/theme.css">
+    <link rel="stylesheet" href="../../dist/css/components.css">
+    <script>
+        if (localStorage.getItem('vibe-template.color-theme') === 'dark' || (!('vibe-template.color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+    <style>
+        .split-visual {
+            background-image: url('../../dist/images/auth_bg_abstract_1776397340943.png');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+
+    <style id="critical-loader-style">
+        #app-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+        }
+        .dark #app-loader { background: #0b1120; }
+        .loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(79, 70, 229, 0.1);
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        #app-loader.fade-out { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.05); }
+    </style>
+</head>
+
+<body class="font-sans antialiased bg-body overflow-hidden">
+    <div id="app-loader">
+        <div class="loader-spinner"></div>
+    </div>
+    <div class="flex min-h-screen">
+        <!-- Visual Side -->
+        <div class="hidden lg:flex lg:w-3/5 split-visual relative p-12 flex-col justify-between overflow-hidden">
+            <div class="absolute inset-0 bg-primary-900/10 backdrop-blur-[2px]"></div>
+            
+            <div class="relative z-10">
+                <div class="flex items-center gap-3 text-white">
+                    <div class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/20">
+                        <i class="bx bxs-rocket text-2xl"></i>
+                    </div>
+                    <span class="text-2xl font-black tracking-tighter uppercase">Vibe UI</span>
+                </div>
+            </div>
+
+            <div class="relative z-10 max-w-xl">
+                <h1 class="text-5xl font-black text-white leading-tight mb-6 animate-in slide-in-from-left duration-700">
+                    Join the future of <span class="text-primary-400">Dashboard Development</span>.
+                </h1>
+                <p class="text-lg text-white/80 font-medium leading-relaxed mb-8">
+                    Create stunning applications in minutes, not months. The most elegant UI kit is now at your fingertips.
+                </p>
+                <div class="flex items-center gap-4">
+                    <div class="avatar-group scale-110">
+                        <div class="avatar avatar-md avatar-circle border-2 border-primary-800"><img src="https://i.pravatar.cc/150?u=4" alt=""></div>
+                        <div class="avatar avatar-md avatar-circle border-2 border-primary-800"><img src="https://i.pravatar.cc/150?u=5" alt=""></div>
+                        <div class="avatar avatar-md avatar-circle border-2 border-primary-800"><img src="https://i.pravatar.cc/150?u=6" alt=""></div>
+                        <div class="avatar avatar-md avatar-circle border-2 border-primary-800 bg-primary-600 text-white flex items-center justify-center font-bold">+5k</div>
+                    </div>
+                    <span class="text-sm text-white/60 font-semibold ml-2">Used by the world's most innovative companies</span>
+                </div>
+            </div>
+
+            <div class="relative z-10 flex items-center justify-between text-white/50 text-xs font-bold uppercase tracking-widest">
+                <span>© 2026 Vibe UI. All rights reserved.</span>
+            </div>
+        </div>
+
+        <!-- Form Side -->
+        <div class="w-full lg:w-2/5 flex flex-col justify-center p-8 md:p-16 lg:p-20 bg-surface relative z-10">
+            <div class="max-w-[440px] mx-auto w-full">
+                <!-- Mobile Logo -->
+                <div class="lg:hidden flex items-center gap-3 mb-12">
+                    <div class="w-10 h-10 rounded-xl bg-primary-600 flex items-center justify-center text-white shadow-lg shadow-primary-600/30">
+                        <i class="bx bxs-rocket text-2xl"></i>
+                    </div>
+                    <span class="text-2xl font-black tracking-tighter uppercase text-slate-900 dark:text-white">Vibe UI</span>
+                </div>
+
+                <div class="mb-10">
+                    <h2 class="text-4xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">Create your account</h2>
+                    <p class="text-slate-500 dark:text-slate-400 mt-3 font-medium text-lg">Sign up to get started with your 14-day free trial.</p>
+                </div>
+
+                <form action="auth-login-v2.html" class="space-y-5">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="form-label mb-2 block">First Name</label>
+                            <input type="text" class="form-control form-control-lg h-14" placeholder="Jane" required>
+                        </div>
+                        <div>
+                            <label class="form-label mb-2 block">Last Name</label>
+                            <input type="text" class="form-control form-control-lg h-14" placeholder="Smith" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="form-label mb-2 block">Email Address</label>
+                        <input type="email" class="form-control form-control-lg h-14" placeholder="jane@example.com" required>
+                    </div>
+
+                    <div>
+                        <label class="form-label mb-2 block">Password</label>
+                        <input type="password" class="form-control form-control-lg h-14" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="flex items-start">
+                        <label class="form-check flex items-start gap-2 cursor-pointer">
+                            <input type="checkbox" class="form-check-input mt-1">
+                            <span class="text-sm font-semibold text-slate-600 dark:text-slate-400 leading-relaxed">
+                                I agree to the <a href="#" class="text-primary-600 hover:underline">Terms of Service</a> and <a href="#" class="text-primary-600 hover:underline">Privacy Policy</a>
+                            </span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block h-14 text-lg shadow-xl shadow-primary-600/30">
+                        Sign Up Now <i class="bx bx-user-plus ml-2 text-xl"></i>
+                    </button>
+                </form>
+
+                <div class="py-8">
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center"><span class="w-full border-t border-slate-200 dark:border-slate-800"></span></div>
+                        <div class="relative flex justify-center text-xs uppercase"><span class="bg-surface px-4 text-slate-400 font-bold tracking-widest">Or register with</span></div>
+                    </div>
+
+                    <div class="mt-6 grid grid-cols-2 gap-4">
+                       <button class="btn btn-default py-3 shadow-sm">
+                           <i class="bx bxl-google text-xl text-red-500"></i>
+                           <span class="font-bold">Google</span>
+                       </button>
+                       <button class="btn btn-default py-3 shadow-sm">
+                           <i class="bx bxl-github text-xl text-slate-900 dark:text-white"></i>
+                           <span class="font-bold">GitHub</span>
+                       </button>
+                    </div>
+                </div>
+
+                <p class="mt-4 text-center text-sm font-semibold text-slate-500 dark:text-slate-400">
+                    Already have an account? 
+                    <a href="auth-login-v2.html" class="text-primary-600 font-extrabold hover:underline">Log in now</a>
+                </p>
+            </div>
+
+            <!-- Float theme toggle -->
+            <div class="absolute top-8 right-8">
+                <button id="theme-toggle" class="flex items-center justify-center w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 transition-all hover:scale-105">
+                    <i id="theme-toggle-dark-icon" class="bx bx-moon text-lg hidden"></i>
+                    <i id="theme-toggle-light-icon" class="bx bx-sun text-lg hidden"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vendor Scripts -->
+    <script src="../../dist/js/vendor/floating-ui.core.min.js"></script>
+    <script src="../../dist/js/vendor/floating-ui.dom.min.js"></script>
+    <script src="../../dist/js/app.js"></script>
+</body>
+</html>

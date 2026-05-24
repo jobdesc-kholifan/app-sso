@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Vibe UI Kit</title>
+    <script src="../dist/js/vendor/tailwindcss.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../dist/css/boxicons.min.css" rel="stylesheet">
+    <script src="../dist/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../dist/css/theme.css">
+    <link rel="stylesheet" href="../dist/css/layout.css">
+    <link rel="stylesheet" href="../dist/css/components.css">
+    <script>
+        if (localStorage.getItem('vibe-template.color-theme') === 'dark' || (!('vibe-template.color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+    <style>
+        .profile-banner {
+            background-image: url('dist/images/profile_banner_abstract_1776397539782.png');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+
+    <style id="critical-loader-style">
+        #app-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+        }
+        .dark #app-loader { background: #0b1120; }
+        .loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(79, 70, 229, 0.1);
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        #app-loader.fade-out { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.05); }
+    </style>
+</head>
+
+<body class="bg-body text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
+    <div id="app-loader">
+        <div class="loader-spinner"></div>
+    </div>
+    
+    <div id="app-layout" class="flex w-full h-screen overflow-hidden transition-all duration-500 bg-body">
+        <!-- Overlay Layer for Mobile -->
+        <div id="sidebar-overlay"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0">
+        </div>
+
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-50 w-64 border-r transition-all duration-300 transform -translate-x-full md:translate-x-0 md:relative flex flex-col flex-shrink-0 lg:translate-x-0 no-print">
+            <div class="flex flex-col h-full w-full">
+                <!-- Floating Sidebar Toggle (Desktop) -->
+                <button id="desktop-sidebar-toggle"
+                    class="hidden md:flex absolute -right-3 top-6 w-6 h-6 bg-primary-600 text-white rounded-full items-center justify-center shadow-lg transition-all hover:scale-110 z-[60] focus:outline-none">
+                    <i id="toggle-icon" class="bx bx-chevron-left text-lg"></i>
+                </button>
+                <div id="profile-container"
+                    class="pt-4 pb-2 px-6 flex flex-row items-center transition-all duration-500">
+                    <div class="relative w-max h-auto group flex-shrink-0">
+                        <img id="side-avatar" src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff"
+                            class="w-12 h-12 rounded-full shadow-lg transition-all duration-500 border-2 border-white/20"
+                            style="background-color: rgb(var(--color-primary))" alt="side-avatar">
+                        <div class="absolute -left-1 -top-1 sidebar-hide">
+                            <button
+                                class="bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-lg hover:bg-amber-600 transition border-2 border-white">
+                                <i class="bx bx-edit-alt text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="ml-4 sidebar-hide overflow-hidden whitespace-nowrap transition-all duration-300">
+                        <span class="block text-sm font-bold text-muted/80">Administrator</span>
+                        <span class="block text-[11px] text-muted/60 font-medium uppercase tracking-tight">Super
+                            Admin</span>
+                    </div>
+                </div>
+                <nav id="sidebar-nav" class="flex-1 px-3 py-2 space-y-1 overflow-y-auto pt-8"></nav>
+                <!-- Logout Button -->
+                <div class="p-4 border-t transition-all duration-300 no-print"
+                    style="border-color: rgb(var(--color-border))">
+                    <button
+                        class="w-full flex items-center justify-start px-4 py-2.5 text-sm font-bold bg-primary-600 text-white rounded-lg shadow-sm hover:bg-primary-700 transition lg:justify-start"
+                        title="Log Out" id="logout-btn">
+                        <i class="bx bx-log-out lg:mr-3 text-lg sidebar-icon"></i>
+                        <span class="sidebar-hide">Log Out</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <div id="content-wrapper" class="flex flex-col flex-1 min-w-0 overflow-hidden">
+            <header id="app-header"
+                class="h-16 flex items-center justify-between px-8 border-b sticky top-0 z-30 transition-all duration-500 bg-surface">
+                <div class="flex items-center">
+                    <button id="mobile-sidebar-toggle"
+                        class="md:hidden mr-4 p-2 rounded-lg text-muted hover:bg-slate-100 dark:hover:bg-slate-800 text-2xl">
+                        <i class="bx bx-menu"></i>
+                    </button>
+                    <h1 class="text-sm font-bold flex items-center">
+                        <i class="bx bx-user mr-2 text-primary-600"></i> Pages / User Profile
+                    </h1>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="theme-toggle"
+                        class="flex items-center justify-center w-9 h-9 rounded-lg text-muted hover:bg-slate-200 dark:hover:bg-slate-700 transition-all focus:outline-none border shadow-sm"
+                        style="background-color: rgb(var(--color-bg-alt)); border-color: rgb(var(--color-border))">
+                        <i id="theme-toggle-dark-icon" class="bx bx-moon text-xl hidden"></i>
+                        <i id="theme-toggle-light-icon" class="bx bx-sun text-xl hidden"></i>
+                    </button>
+                    <button id="settings-toggle"
+                        class="flex items-center justify-center w-9 h-9 rounded-lg text-muted hover:bg-slate-200 dark:hover:bg-slate-700 transition-all focus:outline-none border shadow-sm"
+                        style="background-color: rgb(var(--color-bg-alt)); border-color: rgb(var(--color-border))">
+                        <i class="bx bx-cog text-xl"></i>
+                    </button>
+                </div>
+            </header>
+
+            <main id="main-content" class="flex-1 overflow-y-auto w-full space-y-0 transition-all duration-500">
+                <div id="main-canvas" class="w-full space-y-0 transition-all duration-500">
+                    <!-- Header Banner Section -->
+                    <div class="profile-banner h-48 md:h-64 relative">
+                        <div class="absolute inset-0 bg-primary-900/40"></div>
+                    </div>
+
+                    <!-- Profile Summary -->
+                    <div class="px-8 -mt-12 relative z-10 mb-8">
+                        <div class="card p-6 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                            <div class="flex flex-col md:flex-row items-center md:items-end gap-6">
+                                <div class="relative">
+                                    <img src="https://i.pravatar.cc/300?u=alfon"
+                                        class="w-32 h-32 rounded-[2rem] border-4 border-surface shadow-2xl" alt="">
+                                    <div
+                                        class="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-success-500 border-4 border-surface shadow-xl">
+                                    </div>
+                                </div>
+                                <div class="text-center md:text-left pb-2">
+                                    <h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">
+                                        Admin Alfon</h2>
+                                    <p
+                                        class="text-sm text-muted font-bold uppercase tracking-widest flex items-center justify-center md:justify-start gap-2">
+                                        <i class="bx bxs-star text-warning-400"></i> Senior Product Designer
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <button class="btn btn-outline btn-md font-bold h-11"><i
+                                        class="bx bx-message-square-detail mr-2"></i> Message</button>
+                                <button class="btn btn-primary btn-md font-bold h-11"><i
+                                        class="bx bx-user-plus mr-2"></i> Edit Profile</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabs & Content -->
+                    <div class="px-8 pb-12">
+                        <div class="nav-tabs mb-8">
+                            <button class="nav-link active" data-tab="overview">Overview</button>
+                            <button class="nav-link" data-tab="settings">Account Settings</button>
+                            <button class="nav-link" data-tab="security">Security & Privacy</button>
+                            <button class="nav-link" data-tab="activity">Activity Log</button>
+                        </div>
+
+                        <div id="tab-content" class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                            <!-- Left: Info & Stats -->
+                            <div class="space-y-8">
+                                <!-- About Card -->
+                                <div class="card p-6">
+                                    <h4
+                                        class="text-sm font-black uppercase tracking-widest mb-6 flex justify-between items-center">
+                                        About Me <button class="btn btn-ghost btn-xs sz-xs"><i
+                                                class="bx bx-edit"></i></button>
+                                    </h4>
+                                    <p class="text-sm text-muted leading-relaxed font-medium">
+                                        Passionate creator currently building the next generation of dashboard templates
+                                        with Vibe UI. Focused on pixel-perfect designs and seamless user experiences.
+                                    </p>
+                                    <div class="mt-8 space-y-4">
+                                        <div class="flex items-center gap-3 text-sm">
+                                            <i class="bx bx-map text-primary-600 text-lg"></i>
+                                            <span class="text-muted">San Francisco, CA</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 text-sm">
+                                            <i class="bx bx-envelope text-primary-600 text-lg"></i>
+                                            <span class="text-muted">admin@vibe-studio.io</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 text-sm">
+                                            <i class="bx bx-link text-primary-600 text-lg"></i>
+                                            <a href="#"
+                                                class="text-primary-600 font-bold hover:underline">vibe-kit.com</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Stats Card -->
+                                <div class="card p-6">
+                                    <h4 class="text-sm font-black uppercase tracking-widest mb-6">Network</h4>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="p-4 bg-alt rounded-2xl text-center border">
+                                            <h5 class="text-2xl font-black">12.5k</h5>
+                                            <p class="text-[10px] font-bold text-muted uppercase">Followers</p>
+                                        </div>
+                                        <div class="p-4 bg-alt rounded-2xl text-center border">
+                                            <h5 class="text-2xl font-black">840</h5>
+                                            <p class="text-[10px] font-bold text-muted uppercase">Following</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Center/Right: Main Feed/Activity -->
+                            <div class="xl:col-span-2 space-y-8">
+                                <div class="card p-6">
+                                    <h4 class="text-sm font-black uppercase tracking-widest mb-8">Recent Projects</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div
+                                            class="card bg-alt p-4 group cursor-pointer border-2 hover:border-primary-600/30 transition-all">
+                                            <div class="flex items-center justify-between mb-4">
+                                                <div
+                                                    class="w-12 h-12 rounded-xl bg-primary-600 text-white flex items-center justify-center shadow-lg shadow-primary-600/20">
+                                                    <i class="bx bxs-component text-2xl"></i>
+                                                </div>
+                                                <span
+                                                    class="badge bg-success-600/10 text-success-600 font-bold text-[10px] uppercase">Active</span>
+                                            </div>
+                                            <h5 class="font-black mb-1">UI Kit Development</h5>
+                                            <p class="text-xs text-muted mb-4 font-medium">Expanding the core component
+                                                library with functional apps.</p>
+                                            <div class="progress progress-xs h-1.5 overflow-hidden rounded-full mb-3">
+                                                <div class="progress-bar w-3/4"></div>
+                                            </div>
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-[10px] font-bold text-muted uppercase">75%
+                                                    Complete</span>
+                                                <div class="avatar-group scale-75 origin-right">
+                                                    <div class="avatar avatar-xs avatar-circle"><img
+                                                            src="https://i.pravatar.cc/150?u=9" alt=""></div>
+                                                    <div class="avatar avatar-xs avatar-circle"><img
+                                                            src="https://i.pravatar.cc/150?u=8" alt=""></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="card bg-alt p-4 group cursor-pointer border-2 hover:border-primary-600/30 transition-all">
+                                            <div class="flex items-center justify-between mb-4">
+                                                <div
+                                                    class="w-12 h-12 rounded-xl bg-orange-600 text-white flex items-center justify-center shadow-lg shadow-orange-600/20">
+                                                    <i class="bx bxs-megaphone text-2xl"></i>
+                                                </div>
+                                                <span
+                                                    class="badge bg-warning-600/10 text-warning-600 font-bold text-[10px] uppercase">Planning</span>
+                                            </div>
+                                            <h5 class="font-black mb-1">Marketing Hub</h5>
+                                            <p class="text-xs text-muted mb-4 font-medium">Re-designing the main landing
+                                                page and marketing funnel.</p>
+                                            <div class="progress progress-xs h-1.5 overflow-hidden rounded-full mb-3">
+                                                <div class="progress-bar w-1/4 bg-warning-600"></div>
+                                            </div>
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-[10px] font-bold text-muted uppercase">25%
+                                                    Complete</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card p-6">
+                                    <h4 class="text-sm font-black uppercase tracking-widest mb-8">Personal Feed</h4>
+                                    <div class="space-y-8">
+                                        <div class="flex gap-4">
+                                            <div class="avatar avatar-md avatar-circle flex-shrink-0"><img
+                                                    src="https://i.pravatar.cc/150?u=alfon" alt=""></div>
+                                            <div>
+                                                <div class="bg-alt p-5 rounded-3xl rounded-tl-none border">
+                                                    <p class="text-sm font-medium mb-3">Just finished building the new
+                                                        <span class="text-primary-600 font-bold">Invoices</span> app
+                                                        page for the UI kit. What do you guys think of the printable
+                                                        layout?</p>
+                                                    <img src="https://picsum.photos/800/400?random=12"
+                                                        class="rounded-2xl border mb-3 w-full" alt="">
+                                                    <div class="flex gap-4">
+                                                        <button
+                                                            class="text-xs font-bold text-muted flex items-center gap-1 hover:text-primary-600"><i
+                                                                class="bx bx-heart"></i> 2.4k</button>
+                                                        <button
+                                                            class="text-xs font-bold text-muted flex items-center gap-1 hover:text-primary-600"><i
+                                                                class="bx bx-comment"></i> 110</button>
+                                                    </div>
+                                                </div>
+                                                <span
+                                                    class="text-[10px] font-bold text-muted uppercase tracking-widest mt-2 block ml-1">Today,
+                                                    9:24 AM</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Vendor Scripts -->
+    <script src="../dist/js/vendor/floating-ui.core.min.js"></script>
+    <script src="../dist/js/vendor/floating-ui.dom.min.js"></script>
+    <script src="../dist/js/config.js"></script>
+    <script src="../dist/js/menu.js"></script>
+    <script src="../dist/js/app.js"></script>
+</body>
+
+</html>

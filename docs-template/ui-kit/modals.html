@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modals - Vibe UI Kit</title>
+    <script src="../dist/js/vendor/tailwindcss.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../dist/css/boxicons.min.css" rel="stylesheet">
+    <script src="../dist/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../dist/css/theme.css">
+    <link rel="stylesheet" href="../dist/css/layout.css">
+    <link rel="stylesheet" href="../dist/css/components.css">
+    <link rel="stylesheet" href="../dist/css/docs.css">
+    <script>
+        if (localStorage.getItem('vibe-template.color-theme') === 'dark' || (!('vibe-template.color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+    <style>
+        .doc-section {
+            background: rgb(var(--color-bg-surface));
+            border: 1px solid rgb(var(--color-border));
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .doc-section-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+
+    <style id="critical-loader-style">
+        #app-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+        }
+        .dark #app-loader { background: #0b1120; }
+        .loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(79, 70, 229, 0.1);
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        #app-loader.fade-out { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.05); }
+    </style>
+</head>
+
+<body class="bg-body text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
+    <div id="app-loader">
+        <div class="loader-spinner"></div>
+    </div>
+    
+    <div id="app-layout" class="flex w-full h-screen overflow-hidden transition-all duration-500 bg-body">
+        <div id="sidebar-overlay"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0">
+        </div>
+
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-50 w-64 border-r transition-all duration-300 transform -translate-x-full md:translate-x-0 md:relative flex flex-col flex-shrink-0 lg:translate-x-0">
+
+            <!-- Floating Sidebar Toggle (Desktop) -->
+            <button id="desktop-sidebar-toggle"
+                class="hidden md:flex absolute -right-3 top-6 w-6 h-6 bg-primary-600 text-white rounded-full items-center justify-center shadow-lg transition-all hover:scale-110 z-[60] focus:outline-none">
+                <i id="toggle-icon" class="bx bx-chevron-left text-lg"></i>
+            </button>
+            <div class="flex flex-col h-full w-full">
+                <!-- User Profile Section -->
+                <div id="profile-container"
+                    class="pt-4 pb-2 px-6 flex flex-row items-center transition-all duration-500">
+                    <div class="relative w-max h-auto group flex-shrink-0">
+                        <img id="side-avatar" src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff"
+                            class="w-12 h-12 rounded-full shadow-lg transition-all duration-500 border-2 border-white/20"
+                            style="background-color: rgb(var(--color-primary))" alt="side-avatar">
+                        <div class="absolute -left-1 -top-1 sidebar-hide">
+                            <button
+                                class="bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-lg hover:bg-amber-600 transition border-2 border-white">
+                                <i class="bx bx-edit-alt text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="ml-4 sidebar-hide overflow-hidden whitespace-nowrap transition-all duration-300">
+                        <span class="block text-sm font-bold text-muted/80">Administrator</span>
+                        <span class="block text-[11px] text-muted/60 font-medium uppercase tracking-tight">Super
+                            Admin</span>
+                    </div>
+                </div>
+
+                <!-- Nav Links -->
+                <nav id="sidebar-nav" class="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
+                    <!-- Menu generated by JS -->
+                </nav>
+
+                <!-- Logout Button -->
+                <div class="p-4 border-t transition-all duration-300" style="border-color: rgb(var(--color-border))">
+                    <button
+                        class="w-full flex items-center justify-start px-4 py-2.5 text-sm font-bold bg-primary-600 text-white rounded-lg shadow-sm hover:bg-primary-700 transition"
+                        id="logout-btn">
+                        <i class="bx bx-log-out lg:mr-3 text-lg sidebar-icon"></i>
+                        <span class="sidebar-hide">Log Out</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <div id="content-wrapper" class="flex flex-col flex-1 min-w-0 overflow-hidden">
+            <header id="app-header"
+                class="h-16 flex items-center justify-between px-8 border-b sticky top-0 z-30 transition-all duration-500">
+                <div class="flex items-center">
+                    <button id="mobile-sidebar-toggle"
+                        class="md:hidden mr-4 p-2 rounded-lg text-muted hover:bg-slate-100 dark:hover:bg-slate-800 text-2xl">
+                        <i class="bx bx-menu"></i>
+                    </button>
+                    <h1 class="text-sm font-bold flex items-center">
+                        <i class="bx bx-cube mr-2 text-primary-600"></i> Components / Modals
+                    </h1>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="theme-toggle"
+                        class="flex items-center justify-center w-9 h-9 rounded-lg text-muted hover:bg-slate-200 dark:hover:bg-slate-700 transition-all focus:outline-none border shadow-sm"
+                        style="background-color: rgb(var(--color-bg-alt)); border-color: rgb(var(--color-border))">
+                        <i id="theme-toggle-dark-icon" class="bx bx-moon text-xl hidden"></i>
+                        <i id="theme-toggle-light-icon" class="bx bx-sun text-xl hidden"></i>
+                    </button>
+                    <button id="settings-toggle"
+                        class="flex items-center justify-center w-9 h-9 rounded-lg text-muted hover:bg-slate-200 dark:hover:bg-slate-700 transition-all focus:outline-none border shadow-sm"
+                        style="background-color: rgb(var(--color-bg-alt)); border-color: rgb(var(--color-border))">
+                        <i class="bx bx-cog text-xl"></i>
+                    </button>
+                </div>
+            </header>
+
+            <main id="main-content" class="flex-1 overflow-y-auto w-full space-y-8 transition-all duration-500">
+                <div id="main-canvas" class="w-full space-y-8 transition-all duration-500 p-6">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-extrabold mb-2">Modals</h2>
+                        <p class="text-muted">Flexible and highly customizable dialog prompts with support for various
+                            sizes and states.</p>
+                    </div>
+
+                    <!-- Basic Modals -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-primary-600"><i class="bx bx-window"></i> Basic Modals</div>
+                        <p class="text-sm text-muted mb-6">Standard modals for general purpose information and
+                            interaction.</p>
+                        <div class="flex flex-wrap gap-4">
+                            <button class="btn btn-primary" onclick="openModal('modal-demo-1')">Open Basic
+                                Modal</button>
+                            <button class="btn btn-secondary" onclick="openModal('modal-demo-2')">Open Centered
+                                Modal</button>
+                        </div>
+
+                        <!-- Demo Modal 1 -->
+                        <div id="modal-demo-1" class="vibe-modal">
+                            <div class="vibe-modal-dialog">
+                                <div class="vibe-modal-content">
+                                    <div class="vibe-modal-header">
+                                        <h5 class="text-lg font-bold">Standard Modal Title</h5>
+                                        <button class="text-muted hover:text-rose-500 transition"
+                                            onclick="closeModal('modal-demo-1')"><i
+                                                class="bx bx-x text-2xl"></i></button>
+                                    </div>
+                                    <div class="vibe-modal-body">
+                                        <p class="text-muted">This is vertical-aligned by default. You can put any
+                                            content here including forms or complex layouts.</p>
+                                    </div>
+                                    <div class="vibe-modal-footer">
+                                        <button class="btn btn-ghost"
+                                            onclick="closeModal('modal-demo-1')">Close</button>
+                                        <button class="btn btn-primary" onclick="closeModal('modal-demo-1')">Save
+                                            Changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Centered Modal Demo -->
+                        <div id="modal-demo-2" class="vibe-modal modal-center">
+                            <div class="vibe-modal-dialog">
+                                <div class="vibe-modal-content">
+                                    <div class="vibe-modal-header">
+                                        <h5 class="text-lg font-bold">Centered Modal</h5>
+                                        <button class="text-muted hover:text-rose-500 transition"
+                                            onclick="closeModal('modal-demo-2')"><i
+                                                class="bx bx-x text-2xl"></i></button>
+                                    </div>
+                                    <div class="vibe-modal-body">
+                                        <p class="text-muted">This modal is explicitly centered in the viewport using
+                                            the <code>modal-center</code> class.</p>
+                                    </div>
+                                    <div class="vibe-modal-footer">
+                                        <button class="btn btn-primary"
+                                            onclick="closeModal('modal-demo-2')">Understood</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-container mt-6">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal"</span> <span class="token-attr">id</span>=<span class="token-val">"modal-id"</span><span class="token-tag">&gt;</span>
+    <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-dialog"</span><span class="token-tag">&gt;</span>
+        <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-content"</span><span class="token-tag">&gt;</span>
+            <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-header"</span><span class="token-tag">&gt;</span>
+                <span class="token-tag">&lt;h5</span> <span class="token-attr">class</span>=<span class="token-val">"text-lg font-bold"</span><span class="token-tag">&gt;</span><span class="token-text">Title</span><span class="token-tag">&lt;/h5&gt;</span>
+                <span class="token-tag">&lt;button</span> <span class="token-attr">onclick</span>=<span class="token-val">"closeModal('modal-id')"</span><span class="token-tag">&gt;</span><span class="token-tag">&lt;i</span> <span class="token-attr">class</span>=<span class="token-val">"bx bx-x"</span><span class="token-tag">&gt;&lt;/i&gt;</span><span class="token-tag">&lt;/button&gt;</span>
+            <span class="token-tag">&lt;/div&gt;</span>
+            <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-body"</span><span class="token-tag">&gt;</span>
+                <span class="token-tag">&lt;p</span><span class="token-tag">&gt;</span><span class="token-text">Content goes here...</span><span class="token-tag">&lt;/p&gt;</span>
+            <span class="token-tag">&lt;/div&gt;</span>
+            <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-footer"</span><span class="token-tag">&gt;</span>
+                <span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-ghost"</span><span class="token-tag">&gt;</span><span class="token-text">Cancel</span><span class="token-tag">&lt;/button&gt;</span>
+                <span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-primary"</span><span class="token-tag">&gt;</span><span class="token-text">Save</span><span class="token-tag">&lt;/button&gt;</span>
+            <span class="token-tag">&lt;/div&gt;</span>
+        <span class="token-tag">&lt;/div&gt;</span>
+    <span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;/div&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Sizing Section -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-primary-600"><i class="bx bx-expand-alt"></i> Modal Sizing
+                        </div>
+                        <p class="text-sm text-muted mb-6">Choose from five standardized widths to suit your content
+                            needs.</p>
+                        <div class="flex flex-wrap gap-4">
+                            <button class="btn btn-xs btn-outline btn-primary" onclick="openModal('modal-xs')">Extra
+                                Small (xs)</button>
+                            <button class="btn btn-sm btn-outline btn-primary" onclick="openModal('modal-sm')">Small
+                                (sm)</button>
+                            <button class="btn btn-md btn-outline btn-primary" onclick="openModal('modal-md')">Medium
+                                (md)</button>
+                            <button class="btn btn-lg btn-outline btn-primary" onclick="openModal('modal-lg')">Large
+                                (lg)</button>
+                            <button class="btn btn-xl btn-outline btn-primary" onclick="openModal('modal-xl')">Extra
+                                Large (xl)</button>
+                        </div>
+
+                        <!-- Size Modals -->
+                        <div id="modal-xs" class="vibe-modal modal-xs">
+                            <div class="vibe-modal-dialog">
+                                <div class="vibe-modal-content">
+                                    <div class="vibe-modal-body text-center">
+                                        <h4 class="font-bold mb-2">XS Modal</h4><button class="btn btn-primary"
+                                            onclick="closeModal('modal-xs')">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="modal-sm" class="vibe-modal modal-sm">
+                            <div class="vibe-modal-dialog">
+                                <div class="vibe-modal-content">
+                                    <div class="vibe-modal-body text-center">
+                                        <h4 class="font-bold mb-2">SM Modal</h4><button class="btn btn-primary"
+                                            onclick="closeModal('modal-sm')">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="modal-md" class="vibe-modal modal-md">
+                            <div class="vibe-modal-dialog">
+                                <div class="vibe-modal-content">
+                                    <div class="vibe-modal-body text-center">
+                                        <h4 class="font-bold mb-2">MD Modal</h4><button class="btn btn-primary"
+                                            onclick="closeModal('modal-md')">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="modal-lg" class="vibe-modal modal-lg">
+                            <div class="vibe-modal-dialog">
+                                <div class="vibe-modal-content">
+                                    <div class="vibe-modal-body text-center">
+                                        <h4 class="font-bold mb-2">LG Modal</h4><button class="btn btn-primary"
+                                            onclick="closeModal('modal-lg')">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="modal-xl" class="vibe-modal modal-xl">
+                            <div class="vibe-modal-dialog">
+                                <div class="vibe-modal-content">
+                                    <div class="vibe-modal-body text-center">
+                                        <h4 class="font-bold mb-2">XL Modal</h4><button class="btn btn-primary"
+                                            onclick="closeModal('modal-xl')">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-container mt-6">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;!-- Sizing Classes --&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal modal-xs"</span><span class="token-tag">&gt;</span><span class="token-text">...</span><span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal modal-sm"</span><span class="token-tag">&gt;</span><span class="token-text">...</span><span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal modal-lg"</span><span class="token-tag">&gt;</span><span class="token-text">...</span><span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal modal-xl"</span><span class="token-tag">&gt;</span><span class="token-text">...</span><span class="token-tag">&lt;/div&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Semantic Modals -->
+                    <section class="doc-section shadow-sm border-t-4 border-t-rose-500">
+                        <div class="doc-section-title text-rose-500"><i class="bx bx-error-alt"></i> Semantic Modals
+                        </div>
+                        <p class="text-sm text-muted mb-6">Modals with semantic color highlights for critical actions.
+                        </p>
+                        <div class="flex flex-wrap gap-4 mb-4">
+                            <button class="btn btn-danger" onclick="openModal('modal-danger')">Open Danger
+                                Modal</button>
+                            <button class="btn btn-success" onclick="openModal('modal-success')">Open Success
+                                Modal</button>
+                        </div>
+
+                        <!-- Demo Modal (Danger) -->
+                        <div id="modal-danger" class="vibe-modal modal-sm">
+                            <div class="vibe-modal-dialog">
+                                <div class="vibe-modal-content border-rose-500 overflow-hidden">
+                                    <div class="bg-rose-500 p-8 text-center text-white">
+                                        <i class="bx bx-trash text-6xl mb-4 animate-bounce"></i>
+                                        <h4 class="text-2xl font-bold">Are you sure?</h4>
+                                    </div>
+                                    <div class="vibe-modal-body text-center">
+                                        <p class="text-muted mb-6">This action cannot be undone. All data will be
+                                            permanently deleted from our servers.</p>
+                                        <div class="flex justify-center gap-3">
+                                            <button class="btn btn-ghost"
+                                                onclick="closeModal('modal-danger')">Cancel</button>
+                                            <button class="btn btn-danger" onclick="closeModal('modal-danger')">Yes,
+                                                Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Success Modal Demo -->
+                        <div id="modal-success" class="vibe-modal modal-sm">
+                            <div class="vibe-modal-dialog">
+                                <div class="vibe-modal-content border-emerald-500 overflow-hidden">
+                                    <div class="bg-emerald-500 p-8 text-center text-white">
+                                        <i class="bx bx-check-circle text-6xl mb-4 animate-bounce"></i>
+                                        <h4 class="text-2xl font-bold">Success!</h4>
+                                    </div>
+                                    <div class="vibe-modal-body text-center">
+                                        <p class="text-muted mb-6">Your changes have been saved successfully. You can
+                                            now continue with your next task.</p>
+                                        <button class="btn btn-emerald-500 w-full"
+                                            onclick="closeModal('modal-success')">Great, thanks!</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-container mt-6">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example (Semantic Modal)</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;!-- Semantic Modal (Success Variation) --&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal modal-sm"</span> <span class="token-attr">id</span>=<span class="token-val">"modal-success"</span><span class="token-tag">&gt;</span>
+    <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-dialog"</span><span class="token-tag">&gt;</span>
+        <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-content border-emerald-500 overflow-hidden"</span><span class="token-tag">&gt;</span>
+            <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"bg-emerald-500 p-8 text-center text-white"</span><span class="token-tag">&gt;</span>
+                <span class="token-tag">&lt;i</span> <span class="token-attr">class</span>=<span class="token-val">"bx bx-check-circle text-6xl"</span><span class="token-tag">&gt;&lt;/i&gt;</span>
+            <span class="token-tag">&lt;/div&gt;</span>
+            <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-body text-center"</span><span class="token-tag">&gt;</span>
+                <span class="token-tag">&lt;h4</span> <span class="token-attr">class</span>=<span class="token-val">"text-2xl font-bold mb-2"</span><span class="token-tag">&gt;</span><span class="token-text">Title</span><span class="token-tag">&lt;/h4&gt;</span>
+                <span class="token-tag">&lt;p</span> <span class="token-attr">class</span>=<span class="token-val">"text-muted"</span><span class="token-tag">&gt;</span><span class="token-text">Message goes here...</span><span class="token-tag">&lt;/p&gt;</span>
+                <span class="token-tag">&lt;button</span> <span class="token-attr">class</span>=<span class="token-val">"btn btn-success"</span><span class="token-tag">&gt;</span><span class="token-text">Continue</span><span class="token-tag">&lt;/button&gt;</span>
+            <span class="token-tag">&lt;/div&gt;</span>
+        <span class="token-tag">&lt;/div&gt;</span>
+    <span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;/div&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Modal Positioning -->
+                    <section class="doc-section shadow-sm">
+                        <div class="doc-section-title text-primary-600"><i class="bx bx-move"></i> Modal Positioning
+                        </div>
+                        <p class="text-sm text-muted mb-6">Control where the modal dialog appears in the viewport using
+                            positioning classes.</p>
+                        <div class="flex flex-wrap gap-4 mb-8">
+                            <button class="btn btn-outline btn-primary" onclick="openModal('modal-pos-top-0')">Top Flush
+                                (top-0)</button>
+                            <button class="btn btn-outline btn-primary" onclick="openModal('modal-pos-top')">Top
+                                Center</button>
+                            <button class="btn btn-outline btn-primary" onclick="openModal('modal-pos-center')">Center
+                                (Default)</button>
+                            <button class="btn btn-outline btn-primary" onclick="openModal('modal-pos-bottom')">Bottom
+                                Center</button>
+                        </div>
+
+                        <!-- Positioning Demos -->
+                        <div id="modal-pos-top-0" class="vibe-modal modal-top-0">
+                            <div class="vibe-modal-dialog">
+                                <div class="vibe-modal-content">
+                                    <div class="vibe-modal-body">
+                                        <h4 class="font-bold mb-2">Top Flush Positioning</h4>
+                                        <p class="text-sm text-muted mb-4">Flush with the top edge of the screen (no
+                                            padding/margin).</p><button class="btn btn-primary"
+                                            onclick="closeModal('modal-pos-top-0')">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="modal-pos-top" class="vibe-modal modal-top">
+                            <div class="vibe-modal-dialog">
+                                <div class="vibe-modal-content">
+                                    <div class="vibe-modal-body">
+                                        <h4 class="font-bold mb-2">Top Positioning</h4>
+                                        <p class="text-sm text-muted mb-4">Aligned to the top with standard margins.</p>
+                                        <button class="btn btn-primary"
+                                            onclick="closeModal('modal-pos-top')">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="modal-pos-center" class="vibe-modal modal-center">
+                            <div class="vibe-modal-dialog">
+                                <div class="vibe-modal-content">
+                                    <div class="vibe-modal-body">
+                                        <h4 class="font-bold mb-2">Center Positioning</h4>
+                                        <p class="text-sm text-muted mb-4">Perfectly centered vertically and
+                                            horizontally.</p><button class="btn btn-primary"
+                                            onclick="closeModal('modal-pos-center')">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="modal-pos-bottom" class="vibe-modal modal-bottom">
+                            <div class="vibe-modal-dialog">
+                                <div class="vibe-modal-content">
+                                    <div class="vibe-modal-body">
+                                        <h4 class="font-bold mb-2">Bottom Positioning</h4>
+                                        <p class="text-sm text-muted mb-4">Aligned to the bottom of the screen.</p>
+                                        <button class="btn btn-primary"
+                                            onclick="closeModal('modal-pos-bottom')">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang">HTML Example</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-tag">&lt;!-- Position Modifiers --&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal modal-top"</span><span class="token-tag">&gt;</span><span class="token-text">...</span><span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal modal-center"</span><span class="token-tag">&gt;</span><span class="token-text">...</span><span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal modal-bottom"</span><span class="token-tag">&gt;</span><span class="token-text">...</span><span class="token-tag">&lt;/div&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Modal Scrolling -->
+                    <section class="doc-section shadow-sm border-t-4 border-t-indigo-500">
+                        <div class="doc-section-title text-indigo-500"><i class="bx bx-move-vertical"></i> Modal
+                            Scrolling</div>
+                        <p class="text-sm text-muted mb-6">Manage how long content is handled within modals.</p>
+                        <div class="flex flex-wrap gap-4 mb-4">
+                            <button class="btn btn-outline btn-indigo" onclick="openModal('modal-scroll-long')">Long
+                                Content (Full)</button>
+                            <button class="btn btn-outline btn-indigo"
+                                onclick="openModal('modal-scroll-body')">Scrollable Body</button>
+                            <button class="btn btn-outline btn-indigo" onclick="openModal('modal-scroll-sticky')">Sticky
+                                Header</button>
+                        </div>
+
+                        <!-- Long Content Modal -->
+                        <div id="modal-scroll-long" class="vibe-modal">
+                            <div class="vibe-modal-dialog">
+                                <div class="vibe-modal-content">
+                                    <div class="vibe-modal-header">
+                                        <h5 class="text-lg font-bold">Long Content Modal</h5>
+                                        <button class="text-muted hover:text-rose-500 transition"
+                                            onclick="closeModal('modal-scroll-long')"><i
+                                                class="bx bx-x text-2xl"></i></button>
+                                    </div>
+                                    <div class="vibe-modal-body">
+                                        <div class="space-y-4">
+                                            <p class="text-muted">This example demonstrates the default behavior where
+                                                the entire modal container grows with its content. If the content is
+                                                longer than the viewport, the modal itself will scroll within the page
+                                                overlay.</p>
+                                            <div
+                                                class="p-8 bg-slate-100 dark:bg-slate-800 rounded-xl text-center font-bold text-slate-400">
+                                                Section 1</div>
+                                            <div
+                                                class="p-8 bg-slate-100 dark:bg-slate-800 rounded-xl text-center font-bold text-slate-400">
+                                                Section 2</div>
+                                            <div
+                                                class="p-8 bg-slate-100 dark:bg-slate-800 rounded-xl text-center font-bold text-slate-400">
+                                                Section 3</div>
+                                            <div
+                                                class="p-8 bg-slate-100 dark:bg-slate-800 rounded-xl text-center font-bold text-slate-400">
+                                                Section 4</div>
+                                            <div
+                                                class="p-8 bg-slate-100 dark:bg-slate-800 rounded-xl text-center font-bold text-slate-400">
+                                                Section 5</div>
+                                            <div
+                                                class="p-8 bg-slate-100 dark:bg-slate-800 rounded-xl text-center font-bold text-slate-400">
+                                                Section 6</div>
+                                            <p class="text-muted">End of content. Notice how the entire dialog scrolls.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="vibe-modal-footer">
+                                        <button class="btn btn-primary"
+                                            onclick="closeModal('modal-scroll-long')">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Scrollable Body Modal -->
+                        <div id="modal-scroll-body" class="vibe-modal">
+                            <div class="vibe-modal-dialog modal-dialog-scrollable">
+                                <div class="vibe-modal-content">
+                                    <div class="vibe-modal-header">
+                                        <h5 class="text-lg font-bold">Scrollable Body</h5>
+                                        <button class="text-muted hover:text-rose-500 transition"
+                                            onclick="closeModal('modal-scroll-body')"><i
+                                                class="bx bx-x text-2xl"></i></button>
+                                    </div>
+                                    <div class="vibe-modal-body">
+                                        <div class="space-y-4">
+                                            <p class="text-muted">In this variant, the header and footer remain fixed at
+                                                the top and bottom. Only the body content area scrolls internally. This
+                                                is perfect for large datasets or long forms where action buttons must
+                                                always be visible.</p>
+                                            <div
+                                                class="p-8 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800 rounded-xl text-center font-bold text-indigo-400">
+                                                Scrollable Area Start</div>
+                                            <div
+                                                class="p-8 bg-slate-50 dark:bg-slate-800 rounded-xl text-center font-bold text-slate-400">
+                                                Item 1</div>
+                                            <div
+                                                class="p-8 bg-slate-50 dark:bg-slate-800 rounded-xl text-center font-bold text-slate-400">
+                                                Item 2</div>
+                                            <div
+                                                class="p-8 bg-slate-50 dark:bg-slate-800 rounded-xl text-center font-bold text-slate-400">
+                                                Item 3</div>
+                                            <div
+                                                class="p-8 bg-slate-50 dark:bg-slate-800 rounded-xl text-center font-bold text-slate-400">
+                                                Item 4</div>
+                                            <div
+                                                class="p-8 bg-slate-50 dark:bg-slate-800 rounded-xl text-center font-bold text-slate-400">
+                                                Item 5</div>
+                                            <div
+                                                class="p-8 bg-slate-50 dark:bg-slate-800 rounded-xl text-center font-bold text-slate-400">
+                                                Item 6</div>
+                                            <div
+                                                class="p-8 bg-slate-50 dark:bg-slate-800 rounded-xl text-center font-bold text-slate-400">
+                                                Item 7</div>
+                                            <div
+                                                class="p-8 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800 rounded-xl text-center font-bold text-indigo-400">
+                                                Scrollable Area End</div>
+                                        </div>
+                                    </div>
+                                    <div class="vibe-modal-footer">
+                                        <button class="btn btn-ghost"
+                                            onclick="closeModal('modal-scroll-body')">Cancel</button>
+                                        <button class="btn btn-primary" onclick="closeModal('modal-scroll-body')">Submit
+                                            Form</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sticky Header Demo -->
+                        <div id="modal-scroll-sticky" class="vibe-modal modal-sticky">
+                            <div class="vibe-modal-dialog">
+                                <div class="vibe-modal-content">
+                                    <div
+                                        class="vibe-modal-header bg-slate-50 dark:bg-slate-900 border-b shadow-sm z-10 sticky top-0">
+                                        <h5 class="text-lg font-bold">Sticky Modal Header</h5>
+                                        <button class="text-muted hover:text-rose-500 transition"
+                                            onclick="closeModal('modal-scroll-sticky')"><i
+                                                class="bx bx-x text-2xl"></i></button>
+                                    </div>
+                                    <div class="vibe-modal-body">
+                                        <div class="space-y-4">
+                                            <p class="text-muted">In this example, the modal itself scrolls with the
+                                                page content, but the <strong>Modal Header</strong> is set to
+                                                <code>sticky top-0</code>. This keeps the title and close button visible
+                                                at the top of the viewport as you scroll down through long content.
+                                            </p>
+                                            <div class="space-y-4">
+                                                <div
+                                                    class="p-12 bg-slate-100 dark:bg-slate-800 rounded-xl text-center font-bold text-slate-400">
+                                                    Content Section 1</div>
+                                                <div
+                                                    class="p-12 bg-slate-100 dark:bg-slate-800 rounded-xl text-center font-bold text-slate-400">
+                                                    Content Section 2</div>
+                                                <div
+                                                    class="p-12 bg-slate-100 dark:bg-slate-800 rounded-xl text-center font-bold text-slate-400">
+                                                    Content Section 3</div>
+                                                <div
+                                                    class="p-12 bg-slate-100 dark:bg-slate-800 rounded-xl text-center font-bold text-slate-400">
+                                                    Content Section 4</div>
+                                                <div
+                                                    class="p-12 bg-slate-100 dark:bg-slate-800 rounded-xl text-center font-bold text-slate-400">
+                                                    Content Section 5</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="vibe-modal-footer">
+                                        <button class="btn btn-primary"
+                                            onclick="closeModal('modal-scroll-sticky')">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Code: Long Content -->
+                        <div class="code-container mt-6">
+                            <div class="code-header">
+                                <span class="code-lang">HTML — Long Content (Full Page Scroll)</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-comment">&lt;!-- Default: modal container scrolls with the page --&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal"</span> <span class="token-attr">id</span>=<span class="token-val">"modal-id"</span><span class="token-tag">&gt;</span>
+    <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-dialog"</span><span class="token-tag">&gt;</span>
+        <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-content"</span><span class="token-tag">&gt;</span>
+            <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-header"</span><span class="token-tag">&gt;</span><span class="token-text">...</span><span class="token-tag">&lt;/div&gt;</span>
+            <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-body"</span><span class="token-tag">&gt;</span>
+                <span class="token-text">&lt;!-- Long content here — entire dialog grows and scrolls --&gt;</span>
+            <span class="token-tag">&lt;/div&gt;</span>
+            <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-footer"</span><span class="token-tag">&gt;</span><span class="token-text">...</span><span class="token-tag">&lt;/div&gt;</span>
+        <span class="token-tag">&lt;/div&gt;</span>
+    <span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;/div&gt;</span></code>
+                            </div>
+                        </div>
+
+                        <!-- Code: Scrollable Body -->
+                        <div class="code-container mt-4">
+                            <div class="code-header">
+                                <span class="code-lang">HTML — Scrollable Body (Fixed Header &amp; Footer)</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-comment">&lt;!-- Add modal-dialog-scrollable to the dialog wrapper --&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal"</span> <span class="token-attr">id</span>=<span class="token-val">"modal-id"</span><span class="token-tag">&gt;</span>
+    <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-dialog <span class="token-mark">modal-dialog-scrollable</span>"</span><span class="token-tag">&gt;</span>
+        <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-content"</span><span class="token-tag">&gt;</span>
+            <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-header"</span><span class="token-tag">&gt;</span><span class="token-text">Fixed Header</span><span class="token-tag">&lt;/div&gt;</span>
+            <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-body"</span><span class="token-tag">&gt;</span>
+                <span class="token-text">&lt;!-- Only this area scrolls; header &amp; footer stay fixed --&gt;</span>
+            <span class="token-tag">&lt;/div&gt;</span>
+            <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-footer"</span><span class="token-tag">&gt;</span><span class="token-text">Fixed Footer</span><span class="token-tag">&lt;/div&gt;</span>
+        <span class="token-tag">&lt;/div&gt;</span>
+    <span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;/div&gt;</span></code>
+                            </div>
+                        </div>
+
+                        <!-- Code: Sticky Header -->
+                        <div class="code-container mt-4">
+                            <div class="code-header">
+                                <span class="code-lang">HTML — Sticky Header</span>
+                                <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <code><span class="token-comment">&lt;!-- Apply modal-sticky to remove default padding, then use sticky on the header --&gt;</span>
+<span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal <span class="token-mark">modal-sticky</span>"</span> <span class="token-attr">id</span>=<span class="token-val">"modal-id"</span><span class="token-tag">&gt;</span>
+    <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-dialog"</span><span class="token-tag">&gt;</span>
+        <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-content"</span><span class="token-tag">&gt;</span>
+            <span class="token-comment">&lt;!-- sticky top-0 keeps header pinned to viewport during scroll --&gt;</span>
+            <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-header <span class="token-mark">sticky top-0</span> z-10 bg-white dark:bg-slate-900 shadow-sm"</span><span class="token-tag">&gt;</span>
+                <span class="token-text">Sticky Header Title</span>
+            <span class="token-tag">&lt;/div&gt;</span>
+            <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-body"</span><span class="token-tag">&gt;</span>
+                <span class="token-text">&lt;!-- Long content scrolls past the pinned header --&gt;</span>
+            <span class="token-tag">&lt;/div&gt;</span>
+            <span class="token-tag">&lt;div</span> <span class="token-attr">class</span>=<span class="token-val">"vibe-modal-footer"</span><span class="token-tag">&gt;</span><span class="token-text">...</span><span class="token-tag">&lt;/div&gt;</span>
+        <span class="token-tag">&lt;/div&gt;</span>
+    <span class="token-tag">&lt;/div&gt;</span>
+<span class="token-tag">&lt;/div&gt;</span></code>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+        </div>
+        </main>
+    </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Vendor Scripts -->
+    <script src="../dist/js/vendor/floating-ui.core.min.js"></script>
+    <script src="../dist/js/vendor/floating-ui.dom.min.js"></script>
+    <script src="../dist/js/config.js"></script>
+    <script src="../dist/js/menu.js"></script>
+    <script src="../dist/js/app.js"></script>
+    <script src="../dist/js/docs.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe UI Kit - The Ultimate Design System</title>
+    <script src="../dist/js/vendor/tailwindcss.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link href="../dist/css/boxicons.min.css" rel="stylesheet">
+    <script src="../dist/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../dist/css/theme.css">
+    <link rel="stylesheet" href="../dist/css/components.css">
+    <script>
+        if (localStorage.getItem('vibe-template.color-theme') === 'dark' || (!('vibe-template.color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-section {
+            background: radial-gradient(circle at top right, rgba(129, 140, 248, 0.1), transparent),
+                radial-gradient(circle at bottom left, rgba(192, 132, 252, 0.1), transparent);
+        }
+
+        .floating-anim {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+    </style>
+
+    <style id="critical-loader-style">
+        #app-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+        }
+
+        .dark #app-loader {
+            background: #0b1120;
+        }
+
+        .loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(79, 70, 229, 0.1);
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #app-loader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-body text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300 antialiased overflow-x-hidden">
+    <div id="app-loader">
+        <div class="loader-spinner"></div>
+    </div>
+    <!-- Navbar -->
+    <nav
+        class="fixed top-0 w-full z-50 bg-body/80 backdrop-blur-md border-b dark:border-slate-800 h-20 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-xl bg-primary-600 flex items-center justify-center text-white shadow-lg shadow-primary-600/30">
+                    <i class="bx bxs-rocket text-2xl"></i>
+                </div>
+                <span
+                    class="text-2xl font-black tracking-tighter uppercase tracking-[0.1em] text-slate-900 dark:text-white">Vibe
+                    UI</span>
+            </div>
+
+            <div class="hidden md:flex items-center gap-10">
+                <a href="#features"
+                    class="text-sm font-bold text-muted hover:text-primary-600 transition-colors">Features</a>
+                <a href="#pages" class="text-sm font-bold text-muted hover:text-primary-600 transition-colors">Pages</a>
+                <a href="../pages/page-pricing.html"
+                    class="text-sm font-bold text-muted hover:text-primary-600 transition-colors">Pricing</a>
+                <a href="../pages/page-faq.html"
+                    class="text-sm font-bold text-muted hover:text-primary-600 transition-colors">Support</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="../pages/auth/auth-login-v1.html"
+                    class="hidden sm:block text-sm font-bold text-slate-900 dark:text-white hover:text-primary-600 transition-colors">Log
+                    In</a>
+                <a href="../pages/auth/auth-register-v1.html"
+                    class="btn btn-primary px-8 rounded-full shadow-lg shadow-primary-600/20">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero-section pt-48 pb-32">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col items-center text-center">
+            <span
+                class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-600/10 text-primary-600 text-[10px] font-black uppercase tracking-widest mb-10 border border-primary-600/20 shadow-sm">
+                <i class="bx bx-bolt-circle"></i> Vibe UI Dashboard v1.2 is here
+            </span>
+            <h1
+                class="text-5xl md:text-8xl font-black text-slate-900 dark:text-white max-w-4xl tracking-tighter leading-[0.9] mb-8">
+                Build the future of <span class="gradient-text">Dashboards</span> faster.
+            </h1>
+            <p class="text-xl md:text-2xl text-muted font-medium max-w-3xl leading-relaxed mb-12">
+                A premium, modern, and high-performance component library built for developers. Scale your startup with
+                ready-to-use applications and pages.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 mb-20 w-full justify-center">
+                <a href="../dashboards/index.html"
+                    class="btn btn-primary btn-lg px-12 rounded-full text-lg font-black h-16 shadow-2xl shadow-primary-600/40">Explore
+                    Dashboard</a>
+                <a href="buttons.html"
+                    class="btn btn-outline btn-lg px-12 rounded-full text-lg font-black h-16 bg-surface">View
+                    Components</a>
+            </div>
+
+            <div class="relative w-full max-w-5xl mx-auto floating-anim">
+                <div class="absolute inset-0 bg-primary-600 rounded-[3rem] blur-[80px] opacity-20 -z-10"></div>
+                <img src="../dist/images/landing_hero_illustration_1776397664213.png"
+                    class="w-full rounded-[2rem] md:rounded-[3rem] shadow-3xl border border-white/20"
+                    alt="Hero Illustration">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="py-32 bg-alt/30 border-t dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter mb-4">
+                    Everything you need to <span class="text-primary-600">ship</span>.</h2>
+                <p class="text-lg text-muted font-medium max-w-2xl mx-auto">From auth flows to complex app layouts, Vibe
+                    has you covered with 50+ re-usable components.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="card p-10 hover:shadow-2xl transition-all border-none">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-indigo-600 flex items-center justify-center text-white mb-8 shadow-lg shadow-indigo-600/30">
+                        <i class="bx bx-customize text-3xl"></i>
+                    </div>
+                    <h4 class="text-2xl font-black mb-4">Highly Modular</h4>
+                    <p class="text-slate-500 font-medium leading-relaxed">Every component is built with a utility-first
+                        approach using Tailwind CSS. Customize everything easily.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="card p-10 hover:shadow-2xl transition-all border-none">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-fuchsia-600 flex items-center justify-center text-white mb-8 shadow-lg shadow-fuchsia-600/30">
+                        <i class="bx bx-moon text-3xl"></i>
+                    </div>
+                    <h4 class="text-2xl font-black mb-4">Dark Mode Ready</h4>
+                    <p class="text-slate-500 font-medium leading-relaxed">Seamlessly switch between light and dark
+                        themes with a single toggle. No additional coding needed.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="card p-10 hover:shadow-2xl transition-all border-none">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-emerald-600 flex items-center justify-center text-white mb-8 shadow-lg shadow-emerald-600/30">
+                        <i class="bx bx-devices text-3xl"></i>
+                    </div>
+                    <h4 class="text-2xl font-black mb-4">Fully Responsive</h4>
+                    <p class="text-slate-500 font-medium leading-relaxed">Engineered to look perfect on smartphones,
+                        tablets, and massive desktop displays.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-32 relative overflow-hidden">
+        <div class="absolute inset-0 bg-primary-600 -z-10"></div>
+        <div class="max-w-7xl mx-auto px-6 text-center text-white relative z-10">
+            <h2 class="text-5xl md:text-7xl font-black mb-10 tracking-tighter">Ready to vibe with your <span
+                    class="italic opacity-80 decoration-fuchsia-400 decoration-8 underline">next project</span>?</h2>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#"
+                    class="btn bg-white text-primary-600 btn-lg px-12 rounded-full text-lg font-black h-16 hover:bg-slate-50">Purchase
+                    License</a>
+                <a href="../pages/page-faq.html"
+                    class="btn bg-primary-700 text-white btn-lg px-12 rounded-full text-lg font-black h-16 hover:bg-primary-800">Contact
+                    Support</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-20 bg-surface border-t dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
+                <div class="md:col-span-1">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div
+                            class="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center text-white shadow-lg">
+                            <i class="bx bxs-rocket text-xl"></i>
+                        </div>
+                        <span class="text-xl font-black tracking-tighter uppercase text-slate-900 dark:text-white">Vibe
+                            UI</span>
+                    </div>
+                    <p class="text-sm text-muted font-medium leading-relaxed">The only dashboard kit you'll ever need.
+                        Premium, functional, and fast.</p>
+                </div>
+                <div>
+                    <h5 class="text-xs font-black uppercase tracking-widest mb-6">Product</h5>
+                    <ul class="space-y-4 text-sm font-semibold text-muted">
+                        <li><a href="#" class="hover:text-primary-600">Home</a></li>
+                        <li><a href="#" class="hover:text-primary-600">Features</a></li>
+                        <li><a href="#" class="hover:text-primary-600">Pricing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-xs font-black uppercase tracking-widest mb-6">Company</h5>
+                    <ul class="space-y-4 text-sm font-semibold text-muted">
+                        <li><a href="#" class="hover:text-primary-600">About Us</a></li>
+                        <li><a href="#" class="hover:text-primary-600">Blog</a></li>
+                        <li><a href="#" class="hover:text-primary-600">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-xs font-black uppercase tracking-widest mb-6">Subscribe</h5>
+                    <p class="text-xs text-muted mb-4">Get the latest updates and component drops.</p>
+                    <div class="flex gap-2">
+                        <input type="email" class="form-control h-10 px-4" placeholder="Email">
+                        <button class="btn btn-primary btn-sm px-4">Join</button>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="flex flex-col md:flex-row justify-between items-center pt-10 border-t dark:border-slate-800 gap-6">
+                <p class="text-xs font-bold text-muted uppercase">© 2026 Vibe Studio. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="text-muted hover:text-primary-600"><i class="bx bxl-github text-xl"></i></a>
+                    <a href="#" class="text-muted hover:text-primary-600"><i class="bx bxl-twitter text-xl"></i></a>
+                    <a href="#" class="text-muted hover:text-primary-600"><i class="bx bxl-dribbble text-xl"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Vendor Scripts -->
+    <script src="../dist/js/vendor/floating-ui.core.min.js"></script>
+    <script src="../dist/js/vendor/floating-ui.dom.min.js"></script>
+    <script type="text/javascript">
+        const loader = document.getElementById('app-loader');
+        if (loader && !loader.classList.contains('fade-out')) {
+            loader.classList.add('fade-out');
+            setTimeout(() => {
+                document.body.classList.remove('preload');
+            }, 600); // 600ms matches the theme.css transition duration
+        }
+    </script>
+</body>
+
+</html>

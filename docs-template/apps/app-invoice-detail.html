@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice #INV-8821 - Vibe UI Kit</title>
+    <script src="../dist/js/vendor/tailwindcss.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="../dist/css/boxicons.min.css" rel="stylesheet">
+    <script src="../dist/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="../dist/css/theme.css">
+    <link rel="stylesheet" href="../dist/css/layout.css">
+    <link rel="stylesheet" href="../dist/css/components.css">
+    <script>
+        if (localStorage.getItem('vibe-template.color-theme') === 'dark' || (!('vibe-template.color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+    <style>
+        @media print {
+
+            aside,
+            header,
+            .no-print {
+                display: none !important;
+            }
+
+            #content-wrapper {
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+            }
+
+            #main-content {
+                padding: 0 !important;
+            }
+
+            .card {
+                box-shadow: none !important;
+                border: none !important;
+            }
+        }
+    </style>
+
+    <style id="critical-loader-style">
+        #app-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+        }
+        .dark #app-loader { background: #0b1120; }
+        .loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(79, 70, 229, 0.1);
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        #app-loader.fade-out { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.05); }
+    </style>
+</head>
+
+<body class="bg-body text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
+    <div id="app-loader">
+        <div class="loader-spinner"></div>
+    </div>
+    
+    <div id="app-layout" class="flex w-full h-screen overflow-hidden transition-all duration-500 bg-body">
+        <!-- Overlay Layer for Mobile -->
+        <div id="sidebar-overlay"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity duration-300 opacity-0">
+        </div>
+
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-50 w-64 border-r transition-all duration-300 transform -translate-x-full md:translate-x-0 md:relative flex flex-col flex-shrink-0 lg:translate-x-0 no-print">
+            <div class="flex flex-col h-full w-full">
+                <!-- Floating Sidebar Toggle (Desktop) -->
+                <button id="desktop-sidebar-toggle"
+                    class="hidden md:flex absolute -right-3 top-6 w-6 h-6 bg-primary-600 text-white rounded-full items-center justify-center shadow-lg transition-all hover:scale-110 z-[60] focus:outline-none">
+                    <i id="toggle-icon" class="bx bx-chevron-left text-lg"></i>
+                </button>
+                <div id="profile-container"
+                    class="pt-4 pb-2 px-6 flex flex-row items-center transition-all duration-500">
+                    <div class="relative w-max h-auto group flex-shrink-0">
+                        <img id="side-avatar" src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff"
+                            class="w-12 h-12 rounded-full shadow-lg transition-all duration-500 border-2 border-white/20"
+                            style="background-color: rgb(var(--color-primary))" alt="side-avatar">
+                        <div class="absolute -left-1 -top-1 sidebar-hide">
+                            <button
+                                class="bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-lg hover:bg-amber-600 transition border-2 border-white">
+                                <i class="bx bx-edit-alt text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="ml-4 sidebar-hide overflow-hidden whitespace-nowrap transition-all duration-300">
+                        <span class="block text-sm font-bold text-muted/80">Administrator</span>
+                        <span class="block text-[11px] text-muted/60 font-medium uppercase tracking-tight">Super
+                            Admin</span>
+                    </div>
+                </div>
+                <nav id="sidebar-nav" class="flex-1 px-3 py-2 space-y-1 overflow-y-auto pt-8"></nav>
+            </div>
+        </aside>
+
+        <div id="content-wrapper" class="flex flex-col flex-1 min-w-0 overflow-hidden">
+            <header id="app-header"
+                class="h-16 flex items-center justify-between px-8 border-b sticky top-0 z-30 transition-all duration-500">
+                <div class="flex items-center">
+                    <button id="mobile-sidebar-toggle"
+                        class="md:hidden mr-4 p-2 rounded-lg text-muted hover:bg-slate-100 dark:hover:bg-slate-800 text-2xl">
+                        <i class="bx bx-menu"></i>
+                    </button>
+                    <h1 class="text-sm font-bold flex items-center">
+                        <i class="bx bx-receipt mr-2 text-primary-600"></i> Applications / Invoices / Detail
+                    </h1>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="theme-toggle"
+                        class="flex items-center justify-center w-9 h-9 rounded-lg text-muted hover:bg-slate-200 dark:hover:bg-slate-700 transition-all focus:outline-none border shadow-sm"
+                        style="background-color: rgb(var(--color-bg-alt)); border-color: rgb(var(--color-border))">
+                        <i id="theme-toggle-dark-icon" class="bx bx-moon text-xl hidden"></i>
+                        <i id="theme-toggle-light-icon" class="bx bx-sun text-xl hidden"></i>
+                    </button>
+                    <button id="settings-toggle"
+                        class="flex items-center justify-center w-9 h-9 rounded-lg text-muted hover:bg-slate-200 dark:hover:bg-slate-700 transition-all focus:outline-none border shadow-sm"
+                        style="background-color: rgb(var(--color-bg-alt)); border-color: rgb(var(--color-border))">
+                        <i class="bx bx-cog text-xl"></i>
+                    </button>
+                </div>
+            </header>
+
+            <main id="main-content" class="flex-1 overflow-y-auto w-full space-y-8 transition-all duration-500">
+                <div id="main-canvas" class="w-full space-y-8 transition-all duration-500 p-6">
+                    <div class="flex justify-end" id="tools-actions">
+                        <button class="btn btn-default" onclick="window.print()">
+                            <i class="bx bx-printer mr-2"></i> Print
+                        </button>
+                        <button class="btn btn-primary">
+                            <i class="bx bx-download mr-2"></i> Download PDF
+                        </button>
+                    </div>
+                    <div class="max-w-4xl mx-auto">
+                        <!-- Invoice Card -->
+                        <div class="card shadow-2xl overflow-hidden p-8 md:p-12">
+                            <!-- Header -->
+                            <div class="flex flex-col md:flex-row justify-between gap-8 mb-12">
+                                <div>
+                                    <div class="flex items-center gap-3 mb-6">
+                                        <div
+                                            class="w-12 h-12 rounded-xl bg-primary-600 flex items-center justify-center text-white shadow-lg shadow-primary-600/30">
+                                            <i class="bx bxs-rocket text-3xl"></i>
+                                        </div>
+                                        <span
+                                            class="text-2xl font-black tracking-tighter uppercase text-slate-900 dark:text-white">Vibe
+                                            UI Kit</span>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <p class="text-sm font-bold">Vibe Creative Studio</p>
+                                        <p class="text-sm text-muted">123 Design Avenue, Creative District</p>
+                                        <p class="text-sm text-muted">San Francisco, CA 94103</p>
+                                        <p class="text-sm text-muted">hello@vibe-studio.io • +1 (555) 000-1111</p>
+                                    </div>
+                                </div>
+                                <div class="text-md-right">
+                                    <h2
+                                        class="text-4xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-4">
+                                        Invoice</h2>
+                                    <div class="space-y-2">
+                                        <div class="flex md:justify-end gap-3">
+                                            <span
+                                                class="text-xs font-bold text-muted uppercase tracking-widest">Number:</span>
+                                            <span class="text-sm font-black text-primary-600">#INV-8821</span>
+                                        </div>
+                                        <div class="flex md:justify-end gap-3">
+                                            <span
+                                                class="text-xs font-bold text-muted uppercase tracking-widest">Date:</span>
+                                            <span class="text-sm font-bold italic">Oct 10, 2026</span>
+                                        </div>
+                                        <div class="flex md:justify-end gap-3">
+                                            <span class="text-xs font-bold text-muted uppercase tracking-widest">Due
+                                                Date:</span>
+                                            <span class="text-sm font-bold italic">Oct 24, 2026</span>
+                                        </div>
+                                        <div class="mt-4 inline-flex md:float-right">
+                                            <span
+                                                class="badge bg-success-600/10 text-success-600 px-4 py-1.5 rounded-full font-black text-xs uppercase tracking-widest">Paid
+                                                In Full</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="border-slate-100 dark:border-slate-800 mb-12">
+
+                            <!-- Billing Info -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
+                                <div>
+                                    <h4
+                                        class="text-xs font-black text-muted uppercase tracking-widest mb-6 border-b pb-2 flex items-center">
+                                        <i class="bx bx-user-circle mr-2 text-primary-600"></i> Bill To
+                                    </h4>
+                                    <div class="space-y-2">
+                                        <p class="text-lg font-black text-slate-900 dark:text-white">Alice Johnson</p>
+                                        <p class="text-sm font-semibold text-muted">Head of Product at CloudScale Inc.
+                                        </p>
+                                        <p class="text-sm text-muted">456 Corporate Way, Tech Park</p>
+                                        <p class="text-sm text-muted">New York, NY 10001</p>
+                                        <p class="text-sm text-primary-600 font-bold underline">alice@cloudscale.io</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4
+                                        class="text-xs font-black text-muted uppercase tracking-widest mb-6 border-b pb-2 flex items-center">
+                                        <i class="bx bx-credit-card mr-2 text-primary-600"></i> Payment Details
+                                    </h4>
+                                    <div class="space-y-3">
+                                        <div
+                                            class="flex items-center gap-4 p-3 bg-alt rounded-xl border border-dashed border-slate-300 dark:border-slate-700">
+                                            <i class="bx bxl-visa text-4xl text-blue-600"></i>
+                                            <div>
+                                                <p class="text-xs font-bold">Visa Ending in 4242</p>
+                                                <p class="text-[10px] text-muted font-medium uppercase font-bold">Expiry
+                                                    08/29</p>
+                                            </div>
+                                        </div>
+                                        <p class="text-[10px] text-muted font-medium italic">Payment was processed via
+                                            Stripe on Oct 10, 2026 - 09:45 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Table -->
+                            <div class="table-responsive mb-12">
+                                <table class="table table-lg">
+                                    <thead>
+                                        <tr class="bg-alt">
+                                            <th class="w-16">#</th>
+                                            <th>Description</th>
+                                            <th class="text-center">QTY</th>
+                                            <th class="text-right">Unit Price</th>
+                                            <th class="text-right">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="font-bold text-muted">01</td>
+                                            <td>
+                                                <p class="font-black text-slate-900 dark:text-white">UI/UX Design
+                                                    Services
+                                                </p>
+                                                <p class="text-xs text-muted">Custom dashboard design for CloudScale
+                                                    admin
+                                                    panel including dark mode support.</p>
+                                            </td>
+                                            <td class="text-center font-bold">1</td>
+                                            <td class="text-right font-semibold">$1,800.00</td>
+                                            <td class="text-right font-black">$1,800.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-bold text-muted">02</td>
+                                            <td>
+                                                <p class="font-black text-slate-900 dark:text-white">Tailwind CSS Coding
+                                                </p>
+                                                <p class="text-xs text-muted">Implementation of 25+ re-usable components
+                                                    into a React/Tailwind workflow.</p>
+                                            </td>
+                                            <td class="text-center font-bold">1</td>
+                                            <td class="text-right font-semibold">$500.00</td>
+                                            <td class="text-right font-black">$500.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-bold text-muted">03</td>
+                                            <td>
+                                                <p class="font-black text-slate-900 dark:text-white">Extended License
+                                                </p>
+                                                <p class="text-xs text-muted">Commercial use license for up to 5
+                                                    individual
+                                                    projects.</p>
+                                            </td>
+                                            <td class="text-center font-bold">1</td>
+                                            <td class="text-right font-semibold">$150.00</td>
+                                            <td class="text-right font-black">$150.00</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Summary -->
+                            <div
+                                class="flex flex-col md:flex-row justify-between gap-12 pt-8 border-t border-slate-100 dark:border-slate-800">
+                                <div class="max-w-md">
+                                    <h4 class="text-xs font-black text-muted uppercase tracking-widest mb-4">Notes &
+                                        Instructions</h4>
+                                    <div
+                                        class="p-5 bg-alt rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800">
+                                        <p class="text-xs text-muted leading-relaxed italic">"Thank you for choosing
+                                            Vibe
+                                            Creative Studio. We appreciate your business and look forward to our next
+                                            collaboration. If you have any questions regarding this invoice, please
+                                            reach
+                                            out via our support channel."</p>
+                                    </div>
+                                </div>
+                                <div class="min-w-[280px]">
+                                    <div class="space-y-4">
+                                        <div class="flex justify-between items-center text-sm font-semibold text-muted">
+                                            <span>Subtotal</span>
+                                            <span>$2,450.00</span>
+                                        </div>
+                                        <div class="flex justify-between items-center text-sm font-semibold text-muted">
+                                            <span>Tax (0%)</span>
+                                            <span>$0.00</span>
+                                        </div>
+                                        <div class="flex justify-between items-center text-sm font-semibold text-muted">
+                                            <span>Discount</span>
+                                            <span class="text-danger-500">-$0.00</span>
+                                        </div>
+                                        <hr class="border-slate-200 dark:border-slate-800">
+                                        <div class="flex justify-between items-center pt-2">
+                                            <span class="text-lg font-black uppercase tracking-tighter">Grand
+                                                Total</span>
+                                            <span class="text-3xl font-black text-primary-600">$2,450.00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="mt-20 text-center">
+                                <p class="text-xs font-bold text-muted uppercase tracking-[0.2em] mb-4">Vibe UI Kit •
+                                    The
+                                    Ultimate Design System</p>
+                                <div class="flex justify-center gap-6">
+                                    <a href="#" class="text-muted hover:text-primary-600 transition-colors"><i
+                                            class="bx bxl-facebook text-xl"></i></a>
+                                    <a href="#" class="text-muted hover:text-primary-600 transition-colors"><i
+                                            class="bx bxl-twitter text-xl"></i></a>
+                                    <a href="#" class="text-muted hover:text-primary-600 transition-colors"><i
+                                            class="bx bxl-instagram text-xl"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Vendor Scripts -->
+    <script src="../dist/js/vendor/floating-ui.core.min.js"></script>
+    <script src="../dist/js/vendor/floating-ui.dom.min.js"></script>
+    <script src="../dist/js/config.js"></script>
+    <script src="../dist/js/menu.js"></script>
+    <script src="../dist/js/app.js"></script>
+</body>
+
+</html>
