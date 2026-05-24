@@ -1,5 +1,37 @@
 <?php
 
+if (!function_exists('vite_client')) {
+    /**
+     * Prints the Vite HMR client script in development mode
+     */
+    function vite_client(): string
+    {
+        static $printed = false;
+        if ($printed) {
+            return '';
+        }
+
+        $viteHost = env('vite.host', '127.0.0.1');
+        $vitePort = env('vite.port', '5173');
+        $isDev = false;
+
+        if (ENVIRONMENT === 'development') {
+            $connection = @fsockopen($viteHost, (int) $vitePort, $errno, $errstr, 0.5);
+            if ($connection !== false) {
+                $isDev = true;
+                fclose($connection);
+            }
+        }
+
+        if ($isDev) {
+            $printed = true;
+            return '<script type="module" src="http://' . $viteHost . ':' . $vitePort . '/@vite/client"></script>' . "\n";
+        }
+
+        return '';
+    }
+}
+
 if (!function_exists('vite_asset')) {
     /**
      * Vite integration for CodeIgniter 4
@@ -42,8 +74,7 @@ if (!function_exists('vite_asset')) {
         }
 
         if ($isDev) {
-            return '<script type="module" src="' . $devServerUrl . '/@vite/client"></script>' . "\n" .
-                   '<script type="module" src="' . $devServerUrl . '/' . $entry . '"></script>';
+            return '<script type="module" src="' . $devServerUrl . '/' . $entry . '"></script>';
         }
 
         if (!is_file($manifestPath)) {

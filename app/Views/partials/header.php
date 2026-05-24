@@ -18,24 +18,24 @@
 		<div class="dropdown">
 			<button class="btn btn-default dropdown-toggle p-2">
 				<div class="flex items-center gap-2">
-					<img src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff" class="w-6 h-6 rounded-full">
-					<span class="text-sm font-semibold">Admin</span>
+					<img src="https://ui-avatars.com/api/?name=<?= urlencode(session()->get('full_name') ?? 'User') ?>&background=4f46e5&color=fff" class="w-6 h-6 rounded-full">
+					<span class="text-sm font-semibold"><?= esc(session()->get('full_name') ?? 'Admin') ?></span>
 					<i class="bx bx-chevron-down"></i>
 				</div>
 			</button>
 			<div class="dropdown-menu min-w-[240px]">
 				<div class="px-4 py-3 flex items-center gap-3">
-					<img src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff" class="w-10 h-10 rounded-full" alt="Avatar">
+					<img src="https://ui-avatars.com/api/?name=<?= urlencode(session()->get('full_name') ?? 'User') ?>&background=4f46e5&color=fff" class="w-10 h-10 rounded-full" alt="Avatar">
 					<div class="flex flex-col min-w-0">
-						<span class="text-sm font-bold truncate">Administrator</span>
-						<span class="text-xs text-muted truncate">admin@vibeui.com</span>
+						<span class="text-sm font-bold truncate"><?= esc(session()->get('full_name') ?? 'Administrator') ?></span>
+						<span class="text-xs text-muted truncate"><?= esc(session()->get('role') ?? 'admin') ?></span>
 					</div>
 				</div>
 				<div class="dropdown-divider"></div>
 				<a href="#" class="dropdown-item"><i class="bx bx-user mr-2"></i> My Profile</a>
 				<a href="#" class="dropdown-item"><i class="bx bx-cog mr-2"></i> Account Settings</a>
 				<div class="dropdown-divider"></div>
-				<a href="#" class="dropdown-item text-danger"><i class="bx bx-log-out mr-2"></i> Sign Out</a>
+				<a href="<?= base_url('logout') ?>" class="dropdown-item text-danger"><i class="bx bx-log-out mr-2"></i> Sign Out</a>
 			</div>
 		</div>
 	</div>

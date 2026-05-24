@@ -28,6 +28,11 @@ export default defineConfig(({ mode }) => {
             {},
           ),
         },
+        output: {
+          entryFileNames: "assets/[hash].js",
+          chunkFileNames: "assets/[hash].js",
+          assetFileNames: "assets/[hash].[ext]"
+        }
       },
     },
     server: {
