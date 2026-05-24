@@ -126,3 +126,7 @@ _modules/*
 /phpunit.xml
 
 /.ai/vibe-ui/node_modules
+/node_modules
+/public/build
+package-lock.json
+composer.lock
