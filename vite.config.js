@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from "vite";
 import path from "path";
 import obfuscatorPlugin from "vite-plugin-javascript-obfuscator";
+import tailwindcss from "@tailwindcss/vite";
 import { globSync } from "glob";
 
 export default defineConfig(({ mode }) => {
@@ -34,6 +35,7 @@ export default defineConfig(({ mode }) => {
       port: parseInt(env["vite.port"]) || 5173,
     },
     plugins: [
+      tailwindcss(),
       obfuscatorPlugin({
         include: ["app/Views/**/*.js"],
         exclude: [/node_modules/],

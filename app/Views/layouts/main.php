@@ -5,12 +5,12 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title><?= $title ?? '' ?> - Vibe UI Kit</title>
-	<?= vite_asset('resources/js/main.js', false) ?>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 	<link href="<?= base_url('dist/css/boxicons.min.css') ?>" rel="stylesheet">
 	<link rel="stylesheet" href="<?= base_url('dist/css/theme.css') ?>">
 	<link rel="stylesheet" href="<?= base_url('dist/css/layout.css') ?>">
 	<link rel="stylesheet" href="<?= base_url('dist/css/components.css') ?>">
+	<?= vite_asset('resources/js/main.js', false) ?>
 	<script>
 		if (localStorage.getItem('vibe-template.color-theme') === 'dark' || (!('vibe-template.color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
 			document.documentElement.classList.add('dark');
