@@ -133,3 +133,4 @@ _modules/*
 /public/build
 package-lock.json
 composer.lock
+/client-app/vendor
