@@ -1,0 +1,87 @@
+services:
+  # 1. Layanan PHP-FPM (Aplikasi Utama)
+  appsso_app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    container_name: appsso_app
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/html:delegated
+    networks:
+      - mynetwork
+    depends_on:
+      - appsso_db
+
+  # 2. Web Server Nginx
+  appsso_web:
+    image: nginx:alpine
+    container_name: appsso_web
+    restart: unless-stopped
+    ports:
+      - "9300:80"
+    volumes:
+      - ./:/var/www/html:delegated
+      - ./docker/web/default.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - mynetwork
+    depends_on:
+      - appsso_app
+
+  # 3. Database PostgreSQL
+  appsso_db:
+    image: postgres:15-alpine
+    container_name: appsso_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: appsso
+      POSTGRES_USER: appsso_user
+      POSTGRES_PASSWORD: appsso_password
+    ports:
+      - "5442:5432"
+    volumes:
+      - appsso_db_data:/var/lib/postgresql/data
+    networks:
+      - mynetwork
+
+  # 4. Vite Dev Server (Frontend Compiler & HMR)
+  appsso_vite:
+    image: node:20-alpine
+    container_name: appsso_vite
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./:/app:delegated
+    ports:
+      - "5273:5173"
+    command: sh -c "npm install && npm run dev"
+    networks:
+      mynetwork:
+        ipv4_address: ${VITE_HOST:-127.0.0.1}
+    depends_on:
+      - appsso_app
+
+  # 5. Standalone Client App for SSO Testing (Dev Only)
+  appsso_client:
+    image: php:8.3-alpine
+    container_name: appsso_client
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./client-app:/var/www/html:delegated
+    ports:
+      - "8080:8080"
+    command: php -S 0.0.0.0:8080
+    networks:
+      - mynetwork
+    depends_on:
+      - appsso_app
+
+# Volume untuk penyimpanan database PostgreSQL secara persisten
+volumes:
+  appsso_db_data:
+
+networks:
+  mynetwork:
+    name: ${DOCKER_NETWORK:-mynetwork}
+    external: true

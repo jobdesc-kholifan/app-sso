@@ -38,3 +38,4 @@ $routes->get('oauth/logout', 'OAuthController::logout');
 $routes->post('oauth/token', 'OAuthController::token');
 $routes->get('oauth/userinfo', 'OAuthController::userinfo');
 $routes->post('oauth/userinfo', 'OAuthController::userinfo');
+$routes->get('oauth/tutorial', 'OAuthController::tutorial');

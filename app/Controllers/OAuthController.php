@@ -344,4 +344,9 @@ class OAuthController extends BaseController
             return $this->convertPsr7Response($psrResponse);
         }
     }
+
+    public function tutorial()
+    {
+        return view('auth/v_oauth_tutorial');
+    }
 }

@@ -1,0 +1,54 @@
+services:
+  # 1. Layanan PHP-FPM (Aplikasi Utama)
+  appsso_app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    container_name: appsso_app
+    restart: always
+    volumes:
+      - ./:/var/www/html:delegated
+    networks:
+      - mynetwork
+    depends_on:
+      - appsso_db
+
+  # 2. Web Server Nginx (Public Web Access)
+  appsso_web:
+    image: nginx:alpine
+    container_name: appsso_web
+    restart: always
+    ports:
+      - "80:80" # Akses web publik menggunakan port standar HTTP
+    volumes:
+      - ./:/var/www/html:delegated
+      - ./docker/web/default.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - mynetwork
+    depends_on:
+      - appsso_app
+
+  # 3. Database PostgreSQL (Highly Secure - Internal Only)
+  appsso_db:
+    image: postgres:15-alpine
+    container_name: appsso_db
+    restart: always
+    environment:
+      POSTGRES_DB: ${docker.db.database:-appsso}
+      POSTGRES_USER: ${docker.db.username:-appsso_user}
+      POSTGRES_PASSWORD: ${docker.db.password:-appsso_password} # Kredensial dinamis dari .env server
+    # Blok ports DIBUANG sepenuhnya agar database TIDAK BISA diakses dari internet publik.
+    # PHP-FPM berkomunikasi secara internal via network internal Docker.
+    volumes:
+      - appsso_db_data:/var/lib/postgresql/data
+    networks:
+      - mynetwork
+
+# Volume untuk penyimpanan database PostgreSQL secara persisten di production
+volumes:
+  appsso_db_data:
+
+networks:
+  mynetwork:
+    name: ${docker.network:-mynetwork}
+    external: true

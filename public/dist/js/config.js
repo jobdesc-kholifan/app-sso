@@ -15,4 +15,9 @@ const menuConfig = [
     icon: "bx-shield-alt-2",
     link: "oauth/sessions",
   },
+  {
+    title: "OAuth Tutorial",
+    icon: "bx-book-open",
+    link: "oauth/tutorial",
+  },
 ];

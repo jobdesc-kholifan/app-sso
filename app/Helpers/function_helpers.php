@@ -11,6 +11,11 @@ if (!function_exists('is_vite_dev')) {
             return $isDev;
         }
 
+        // Cek keberadaan file 'hot' di public/hot yang dibuat oleh Vite dev server
+        if (is_file(FCPATH . 'hot')) {
+            return $isDev = true;
+        }
+
         $isDev = false;
         if (ENVIRONMENT === 'development') {
             $viteHost = env('vite.host', '127.0.0.1');
@@ -40,11 +45,16 @@ if (!function_exists('vite_dev_url')) {
         $hotFile = FCPATH . 'hot';
         if (is_file($hotFile)) {
             $url = trim(file_get_contents($hotFile));
+            // Ubah 0.0.0.0 menjadi localhost agar kompatibel di semua browser & OS host machine
+            $url = str_replace('0.0.0.0', 'localhost', $url);
         }
 
         if (empty($url)) {
             $viteHost = env('vite.host', '127.0.0.1');
             $vitePort = env('vite.port', '5173');
+            if ($viteHost === '0.0.0.0') {
+                $viteHost = 'localhost';
+            }
             $url = "http://{$viteHost}:{$vitePort}";
         }
 

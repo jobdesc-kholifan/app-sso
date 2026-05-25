@@ -41,8 +41,8 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      host: env["vite.host"] || "127.0.0.1",
-      port: parseInt(env["vite.port"]) || 5173,
+      host: env["VITE_HOST"] || "127.0.0.1",
+      port: parseInt(env["VITE_PORT"]) || 5173,
     },
     plugins: [
       tailwindcss(),

@@ -5,13 +5,13 @@ session_start();
 
 // Use the standard league/oauth2-client generic provider
 $provider = new \League\OAuth2\Client\Provider\GenericProvider([
-    'clientId'                => 'testclient',    // The client ID assigned to you by the provider
-    'clientSecret'            => 'testsecret',   // The client password assigned to you by the provider
-    'redirectUri'             => 'http://localhost:8080/callback',
-    'urlAuthorize'            => 'http://localhost/app-sso/public/oauth/authorize',
-    'urlAccessToken'          => 'http://localhost/app-sso/public/oauth/token',
-    'urlResourceOwnerDetails' => 'http://localhost/app-sso/public/oauth/userinfo',
-    'scopes'                  => 'openid profile email'
+    'clientId' => 'testclient',    // The client ID assigned to you by the provider
+    'clientSecret' => 'testsecret',   // The client password assigned to you by the provider
+    'redirectUri' => 'http://localhost:8080/callback',
+    'urlAuthorize' => 'http://localhost:9300/oauth/authorize',
+    'urlAccessToken' => 'http://appsso_web/oauth/token',
+    'urlResourceOwnerDetails' => 'http://appsso_web/oauth/userinfo',
+    'scopes' => 'openid profile email'
 ]);
 
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -62,12 +62,12 @@ if ($path === '/callback') {
     // LOGOUT ROUTE
     session_destroy();
     // Redirect ke server SSO dengan membawa post_logout_redirect_uri
-    // header('Location: http://localhost:8080/');
-    header('Location: http://localhost/app-sso/public/oauth/logout?post_logout_redirect_uri=' . urlencode('http://localhost:8080/'));
+    header('Location: http://localhost:8080/');
+    // header('Location: http://localhost:9300/logout?post_logout_redirect_uri=' . urlencode('http://localhost:8080/'));
     exit;
 } elseif ($path === '/') {
     // HOME ROUTE / DASHBOARD
-?>
+    ?>
     <!DOCTYPE html>
     <html lang="en">
 
@@ -150,7 +150,7 @@ if ($path === '/callback') {
     </body>
 
     </html>
-<?php
+    <?php
 } else {
     // Ignore other requests like favicon.ico
     http_response_code(404);

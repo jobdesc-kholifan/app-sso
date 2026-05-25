@@ -626,7 +626,6 @@
 }
 
 .form-control:focus {
-  color: rgb(var(--sidebar-text));
   background-color: rgb(var(--bg-surface));
   border-color: rgb(var(--color-primary));
   outline: 0;

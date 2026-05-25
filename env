@@ -68,5 +68,11 @@
 
 # logger.threshold = 4
 
-vite.host = '127.0.0.1'
-vite.port = 5173
+# DOCKER_NETWORK = appsso_network
+
+# DOCKER_DB_DATABASE = app-sso
+# DOCKER_DB_USERNAME = app-sso
+# DOCKER_DB_PASSWORD = app-sso
+
+# VITE_HOST = 172.28.0.5
+# VITE_PORT = 5173
