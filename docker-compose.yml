@@ -71,7 +71,7 @@ services:
       - ./client-app:/var/www/html:delegated
     ports:
       - "8080:8080"
-    command: php -S 0.0.0.0:8080
+    command: php -S 0.0.0.0:8080 index.php
     networks:
       - mynetwork
     depends_on:
