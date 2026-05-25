@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from "vite";
 import path from "path";
+import fs from "fs";
 import obfuscatorPlugin from "vite-plugin-javascript-obfuscator";
 import tailwindcss from "@tailwindcss/vite";
 import { globSync } from "glob";
@@ -17,6 +18,10 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: {
           main: path.resolve(__dirname, "resources/js/main.js"),
+          "resources/css/main": path.resolve(
+            __dirname,
+            "resources/css/main.css",
+          ),
           // Membaca semua file .js, .ts, .css, .scss di dalam app/Views
           ...globSync("app/Views/**/*.{js,ts,css,scss}").reduce(
             (entries, file) => {
@@ -31,8 +36,8 @@ export default defineConfig(({ mode }) => {
         output: {
           entryFileNames: "assets/[hash].js",
           chunkFileNames: "assets/[hash].js",
-          assetFileNames: "assets/[hash].[ext]"
-        }
+          assetFileNames: "assets/[hash].[ext]",
+        },
       },
     },
     server: {
@@ -59,7 +64,7 @@ export default defineConfig(({ mode }) => {
           log: false,
           numbersToExpressions: true,
           renameGlobals: false,
-          selfDefending: true,
+          selfDefending: false,
           simplify: true,
           splitStrings: true,
           splitStringsChunkLength: 10,
@@ -78,6 +83,36 @@ export default defineConfig(({ mode }) => {
           unicodeEscapeSequence: false,
         },
       }),
+      {
+        name: "vite-hot-file",
+        apply: "serve",
+        configureServer(server) {
+          const hotFile = path.resolve(__dirname, "public/hot");
+          const host = server.config.server.host || "127.0.0.1";
+          const port = server.config.server.port || 5173;
+          const url = `http://${host}:${port}`;
+
+          fs.writeFileSync(hotFile, url);
+
+          const cleanup = () => {
+            try {
+              if (fs.existsSync(hotFile)) {
+                fs.unlinkSync(hotFile);
+              }
+            } catch (err) {}
+          };
+
+          server.httpServer.once("close", cleanup);
+          ["SIGINT", "SIGTERM", "exit"].forEach((signal) => {
+            process.on(signal, () => {
+              cleanup();
+              if (signal !== "exit") {
+                process.exit();
+              }
+            });
+          });
+        },
+      },
     ],
     resolve: {
       alias: {

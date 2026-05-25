@@ -29,6 +29,7 @@ use App\Libraries\OAuth\Entities\UserEntity;
 use Nyholm\Psr7\ServerRequest;
 use Nyholm\Psr7\Response as Psr7Response;
 use Nyholm\Psr7\Factory\Psr17Factory;
+use App\Libraries\OAuth\Exceptions\UserNotFoundException;
 
 class OAuthController extends BaseController
 {
@@ -302,8 +303,13 @@ class OAuthController extends BaseController
             return $this->convertPsr7Response($exception->generateHttpResponse($psrResponse));
         } catch (\Exception $exception) {
             log_message('critical', '[SSO Token]: ' . $exception->getMessage() . ' Trace ' . $exception->getTraceAsString());
-            $psrResponse = $psrResponse->withStatus(500);
-            $psrResponse->getBody()->write($exception->getMessage());
+            $psrResponse = $psrResponse
+                ->withStatus(500)
+                ->withHeader('Content-Type', 'application/json');
+            $psrResponse->getBody()->write(json_encode([
+                'error'             => 'server_error',
+                'error_description' => $exception->getMessage()
+            ]));
             return $this->convertPsr7Response($psrResponse);
         }
     }
@@ -328,8 +334,13 @@ class OAuthController extends BaseController
             return $this->convertPsr7Response($exception->generateHttpResponse($psrResponse));
         } catch (\Exception $exception) {
             log_message('critical', '[SSO UserInfo]: ' . $exception->getMessage() . ' Trace ' . $exception->getTraceAsString());
-            $psrResponse = $psrResponse->withStatus(500);
-            $psrResponse->getBody()->write($exception->getMessage());
+            $psrResponse = $psrResponse
+                ->withStatus(500)
+                ->withHeader('Content-Type', 'application/json');
+            $psrResponse->getBody()->write(json_encode([
+                'error'             => 'server_error',
+                'error_description' => $exception->getMessage()
+            ]));
             return $this->convertPsr7Response($psrResponse);
         }
     }

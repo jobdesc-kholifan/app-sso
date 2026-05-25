@@ -1,19 +1,18 @@
-import '../css/main.css';
-
-import $ from 'jquery';
+import $ from "jquery";
 window.$ = window.jQuery = $;
 
-import 'datatables.net';
-import 'datatables.net-dt/css/dataTables.dataTables.min.css';
-import './datatables-config.js';
+import "datatables.net";
+import "datatables.net-dt/css/dataTables.dataTables.min.css";
+import "./datatables-config.js";
 
-import './api.js';
+import "./api.js";
 
 // Global helper for Vibe UI Toast Notification System
 $(document).ready(function () {
   if (window.vibeToast) {
     window.vibeToast.success = function (message, title = "Success") {
-      const options = typeof message === 'object' ? message : { message, title };
+      const options =
+        typeof message === "object" ? message : { message, title };
       window.vibeToast.show({
         title: options.title || "Success",
         message: options.message || "",
@@ -23,7 +22,8 @@ $(document).ready(function () {
     };
 
     window.vibeToast.error = function (message, title = "Error") {
-      const options = typeof message === 'object' ? message : { message, title };
+      const options =
+        typeof message === "object" ? message : { message, title };
       window.vibeToast.show({
         title: options.title || "Error",
         message: options.message || "",

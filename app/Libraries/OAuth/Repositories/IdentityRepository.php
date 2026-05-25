@@ -4,6 +4,7 @@ namespace App\Libraries\OAuth\Repositories;
 
 use App\Libraries\OAuth\Entities\UserEntity;
 use OpenIDConnectServer\Repositories\IdentityProviderInterface;
+use App\Libraries\OAuth\Exceptions\UserNotFoundException;
 
 class IdentityRepository implements IdentityProviderInterface
 {
@@ -16,9 +17,8 @@ class IdentityRepository implements IdentityProviderInterface
         $db = \Config\Database::connect();
         $user = $db->table('master.users')->where('id', $identifier)->get()->getRow();
 
-        if (!$user) {
-            return null;
-        }
+        if (!$user)
+            throw new UserNotFoundException('User account is suspended or no longer exists.');
 
         $claims = [
             'sub'               => (string) $user->id,
