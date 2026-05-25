@@ -5,22 +5,21 @@
 <!-- Main Developer Console Card -->
 <div class="card card-lg shadow-xl overflow-hidden p-0">
     <!-- Header Section with Harmonious Gradient Accent (Integrated) -->
-    <div
-        class="relative overflow-hidden bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-8 border-b border-white/5">
+    <div class="relative overflow-hidden bg-gradient-to-rp-8 border-b border-white/5">
         <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
                 <div class="flex items-center gap-2 mb-2">
                     <span
-                        class="px-2.5 py-1 text-xs font-semibold bg-indigo-500/20 text-indigo-300 rounded-full border border-indigo-500/30">
+                        class="px-2.5 py-1 text-xs font-semibold bg-indigo-500/20 text-indigo-700 rounded-full border border-indigo-500/30">
                         OIDC / OAuth 2.0
                     </span>
                     <span
-                        class="px-2.5 py-1 text-xs font-semibold bg-emerald-500/20 text-emerald-300 rounded-full border border-emerald-500/30">
+                        class="px-2.5 py-1 text-xs font-semibold bg-emerald-500/20 text-emerald-700 rounded-full border border-emerald-500/30">
                         Developer Tool
                     </span>
                 </div>
                 <h2 class="text-3xl font-extrabold tracking-tight">OAuth / SSO Integration & Testing Center</h2>
-                <p class="text-indigo-200/70 text-sm mt-2 max-w-xl">
+                <p class=" text-sm mt-2 max-w-xl">
                     Gunakan dashboard interaktif ini untuk memvalidasi integrasi Single Sign-On (SSO) dari aplikasi
                     klien Anda ke server pusat ini.
                 </p>
@@ -84,9 +83,11 @@
                                     <div style="left: -29px; top: 0;"
                                         class="absolute w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border-2 border-indigo-600 dark:border-indigo-400 flex items-center justify-center font-bold text-xs">
                                         1</div>
-                                    <h4 class="font-bold text-slate-800 dark:text-white text-sm">Pengalihan Otorisasi (Redirect to SSO)</h4>
+                                    <h4 class="font-bold text-slate-800 dark:text-white text-sm">Pengalihan Otorisasi
+                                        (Redirect to SSO)</h4>
                                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                                        Aplikasi Klien Anda mengarahkan browser pengguna ke URL otorisasi SSO Pusat dengan parameter `client_id`, `redirect_uri`, `response_type=code`, dan `scope`.
+                                        Aplikasi Klien Anda mengarahkan browser pengguna ke URL otorisasi SSO Pusat
+                                        dengan parameter `client_id`, `redirect_uri`, `response_type=code`, dan `scope`.
                                     </p>
                                 </div>
 
@@ -95,9 +96,12 @@
                                     <div style="left: -29px; top: 0;"
                                         class="absolute w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border-2 border-indigo-600 dark:border-indigo-400 flex items-center justify-center font-bold text-xs">
                                         2</div>
-                                    <h4 class="font-bold text-slate-800 dark:text-white text-sm">Autentikasi & Consent</h4>
+                                    <h4 class="font-bold text-slate-800 dark:text-white text-sm">Autentikasi & Consent
+                                    </h4>
                                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                                        Pengguna login menggunakan akun pusat mereka di server SSO. Jika berhasil, layar persetujuan (Consent Screen) akan muncul meminta izin untuk membagikan data kepada aplikasi klien.
+                                        Pengguna login menggunakan akun pusat mereka di server SSO. Jika berhasil, layar
+                                        persetujuan (Consent Screen) akan muncul meminta izin untuk membagikan data
+                                        kepada aplikasi klien.
                                     </p>
                                 </div>
 
@@ -106,9 +110,11 @@
                                     <div style="left: -29px; top: 0;"
                                         class="absolute w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border-2 border-indigo-600 dark:border-indigo-400 flex items-center justify-center font-bold text-xs">
                                         3</div>
-                                    <h4 class="font-bold text-slate-800 dark:text-white text-sm">Pengiriman Authorization Code</h4>
+                                    <h4 class="font-bold text-slate-800 dark:text-white text-sm">Pengiriman
+                                        Authorization Code</h4>
                                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                                        SSO mengarahkan kembali pengguna ke `redirect_uri` Klien dengan menyertakan kode rahasia sementara (`code`) di query parameter URL.
+                                        SSO mengarahkan kembali pengguna ke `redirect_uri` Klien dengan menyertakan kode
+                                        rahasia sementara (`code`) di query parameter URL.
                                     </p>
                                 </div>
 
@@ -117,9 +123,12 @@
                                     <div style="left: -29px; top: 0;"
                                         class="absolute w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border-2 border-indigo-600 dark:border-indigo-400 flex items-center justify-center font-bold text-xs">
                                         4</div>
-                                    <h4 class="font-bold text-slate-800 dark:text-white text-sm">Penukaran Access Token (Back-channel)</h4>
+                                    <h4 class="font-bold text-slate-800 dark:text-white text-sm">Penukaran Access Token
+                                        (Back-channel)</h4>
                                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                                        Aplikasi Klien Anda secara rahasia mengirimkan `code` tersebut dari server-ke-server menggunakan metode `POST` ke `/oauth/token` bersama dengan `client_secret` untuk ditukar dengan `access_token` yang sah.
+                                        Aplikasi Klien Anda secara rahasia mengirimkan `code` tersebut dari
+                                        server-ke-server menggunakan metode `POST` ke `/oauth/token` bersama dengan
+                                        `client_secret` untuk ditukar dengan `access_token` yang sah.
                                     </p>
                                 </div>
 
@@ -128,9 +137,12 @@
                                     <div style="left: -29px; top: 0;"
                                         class="absolute w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border-2 border-indigo-600 dark:border-indigo-400 flex items-center justify-center font-bold text-xs">
                                         5</div>
-                                    <h4 class="font-bold text-slate-800 dark:text-white text-sm">Pengambilan Profil Pengguna</h4>
+                                    <h4 class="font-bold text-slate-800 dark:text-white text-sm">Pengambilan Profil
+                                        Pengguna</h4>
                                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                                        Aplikasi Klien memanggil endpoint `/oauth/userinfo` dengan menyertakan header `Authorization: Bearer <access_token>` untuk mendapatkan nama, email, dan detail profil pengguna.
+                                        Aplikasi Klien memanggil endpoint `/oauth/userinfo` dengan menyertakan header
+                                        `Authorization: Bearer <access_token>` untuk mendapatkan nama, email, dan detail
+                                            profil pengguna.
                                     </p>
                                 </div>
 
