@@ -1,3 +1,6 @@
+import { menuConfig } from "./config.js";
+import { renderMenu } from "./menu.js";
+
 // =============================================================================
 // VIBE SYSTEM UI CORE
 // Organized using Clean, Namespaced, and Modular Object Literals.
@@ -1329,7 +1332,7 @@ if (initialTheme === "dark") {
 // =============================================================================
 // WINDOW ASYNC LIFECYCLE BINDINGS
 // =============================================================================
-document.addEventListener("DOMContentLoaded", async () => {
+const initApp = async () => {
 	await VibeUtils.loadVibeConfig();
 
 	document.body.classList.add("preload");
@@ -1346,7 +1349,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 	}
 
 	VibeEvents.initSidebarState();
-});
+};
+
+if (document.readyState === "loading") {
+	document.addEventListener("DOMContentLoaded", initApp);
+} else {
+	initApp();
+}
 
 window.addEventListener("load", () => {
 	VibeEvents.hideAppLoader();

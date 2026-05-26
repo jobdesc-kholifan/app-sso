@@ -97,10 +97,10 @@
 	<!-- Vendor Scripts -->
 	<script src="<?= base_url('dist/js/vendor/floating-ui.core.min.js') ?>"></script>
 	<script src="<?= base_url('dist/js/vendor/floating-ui.dom.min.js') ?>"></script>
-	<script src="<?= base_url('dist/js/config.js') ?>"></script>
-	<script src="<?= base_url('dist/js/menu.js') ?>"></script>
-	<script src="<?= base_url('dist/js/app.js') ?>"></script>
+	<?= vite_asset('resources/js/config.js') ?>
+	<?= vite_asset('resources/js/menu.js') ?>
 	<?= vite_asset('resources/js/main.js') ?>
+	<?= vite_asset('resources/js/app.js') ?>
 
 	<?= $this->renderSection('script_foot') ?>
 </body>
