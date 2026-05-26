@@ -8,6 +8,11 @@ const menuConfig = [
     link: "master/users",
   },
   {
+    title: "Client Management",
+    icon: "bx-link-external",
+    link: "master/clients",
+  },
+  {
     header: "OAuth / SSO",
   },
   {

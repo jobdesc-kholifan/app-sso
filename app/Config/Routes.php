@@ -20,6 +20,16 @@ $routes->group('master/users', function ($routes) {
     $routes->post('delete/(:num)', 'UserController::delete/$1');
 });
 
+// Master Client Management
+$routes->group('master/clients', function ($routes) {
+    $routes->get('/', 'ClientController::index');
+    $routes->post('datatable', 'ClientController::datatable');
+    $routes->post('store', 'ClientController::store');
+    $routes->get('edit/(:num)', 'ClientController::edit/$1');
+    $routes->post('update/(:num)', 'ClientController::update/$1');
+    $routes->post('delete/(:num)', 'ClientController::delete/$1');
+});
+
 // OAuth Sessions Monitoring
 $routes->group('oauth/sessions', function ($routes) {
     $routes->get('/', 'OAuthSessionController::index');

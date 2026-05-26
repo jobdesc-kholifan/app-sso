@@ -7,12 +7,12 @@
     <title>SSO Login - App SSO</title>
     <!-- Use Vite for assets -->
     <?= vite_client() ?>
-    <?= vite_asset('resources/css/main.css', false) ?>
+    <?= vite_asset('resources/css/main.css') ?>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="<?= base_url('dist/css/boxicons.min.css') ?>" rel="stylesheet">
     <link rel="stylesheet" href="<?= base_url('dist/css/theme.css') ?>">
     <link rel="stylesheet" href="<?= base_url('dist/css/components.css') ?>">
-    
+
     <script>
         // Inline theme check to prevent flash
         if (localStorage.getItem('vibe-template.color-theme') === 'dark' || (!('vibe-template.color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -23,7 +23,8 @@
     </script>
     <style>
         body {
-            background-image: url('<?= base_url("dist/img/auth_bg.webp") ?>'); /* Fallback or relative path */
+            background-image: url('<?= base_url("dist/img/auth_bg.webp") ?>');
+            /* Fallback or relative path */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -65,7 +66,11 @@
             justify-content: center;
             transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
         }
-        .dark #app-loader { background: #0b1120; }
+
+        .dark #app-loader {
+            background: #0b1120;
+        }
+
         .loader-spinner {
             width: 48px;
             height: 48px;
@@ -75,8 +80,23 @@
             animation: spin 1s linear infinite;
             margin-bottom: 1.5rem;
         }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        #app-loader.fade-out { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.05); }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #app-loader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 
@@ -105,7 +125,7 @@
 
             <form action="<?= base_url('oauth/login/process') ?>" method="POST" class="space-y-6">
                 <?= csrf_field() ?>
-                
+
                 <div>
                     <label class="form-label mb-2 block">Username / Email</label>
                     <div class="input-icon-wrapper">
@@ -126,7 +146,7 @@
                     <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg bg-sky-500 hover:bg-sky-600 text-white shadow-sky-500/30 border-0">
                         Sign In & Continue
                     </button>
-                    
+
                     <a href="<?= base_url('login') ?>" class="btn btn-default btn-block btn-lg">
                         Cancel
                     </a>
@@ -146,7 +166,8 @@
     <!-- Vendor Scripts -->
     <script src="<?= base_url('dist/js/vendor/floating-ui.core.min.js') ?>"></script>
     <script src="<?= base_url('dist/js/vendor/floating-ui.dom.min.js') ?>"></script>
-    <?= vite_asset('resources/js/main.js', false) ?>
+    <?= vite_asset('resources/js/main.js') ?>
     <script src="<?= base_url('dist/js/app.js') ?>"></script>
 </body>
+
 </html>

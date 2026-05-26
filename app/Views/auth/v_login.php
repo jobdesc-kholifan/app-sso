@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="<?= base_url('dist/css/theme.css') ?>">
     <link rel="stylesheet" href="<?= base_url('dist/css/layout.css') ?>">
     <link rel="stylesheet" href="<?= base_url('dist/css/components.css') ?>">
-    <?= vite_asset('resources/css/main.css', false) ?>
+    <?= vite_asset('resources/css/main.css') ?>
     <style>
         .split-visual {
             background-image: url('<?= base_url("dist/images/auth_bg_abstract_1776397340943.png") ?>');
@@ -202,7 +202,7 @@
     <!-- Vendor Scripts -->
     <script src="<?= base_url('dist/js/vendor/floating-ui.core.min.js') ?>"></script>
     <script src="<?= base_url('dist/js/vendor/floating-ui.dom.min.js') ?>"></script>
-    <?= vite_asset('login.js', false) ?>
+    <?= vite_asset('login.js', true) ?>
     <script src="<?= base_url('dist/js/app.js') ?>"></script>
 </body>
 

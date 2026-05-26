@@ -24,7 +24,7 @@
 	<link rel="stylesheet" href="<?= base_url('dist/css/theme.css') ?>">
 	<link rel="stylesheet" href="<?= base_url('dist/css/layout.css') ?>">
 	<link rel="stylesheet" href="<?= base_url('dist/css/components.css') ?>">
-	<?= vite_asset('resources/css/main.css', false) ?>
+	<?= vite_asset('resources/css/main.css') ?>
 
 	<style id="critical-loader-style">
 		#app-loader {
@@ -100,7 +100,7 @@
 	<script src="<?= base_url('dist/js/config.js') ?>"></script>
 	<script src="<?= base_url('dist/js/menu.js') ?>"></script>
 	<script src="<?= base_url('dist/js/app.js') ?>"></script>
-	<?= vite_asset('resources/js/main.js', false) ?>
+	<?= vite_asset('resources/js/main.js') ?>
 
 	<?= $this->renderSection('script_foot') ?>
 </body>

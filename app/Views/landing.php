@@ -8,7 +8,7 @@
 			<div class="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-primary-500/20 rounded-full blur-3xl"></div>
 			<div class="absolute -bottom-[20%] -right-[10%] w-[50%] h-[50%] bg-purple-500/20 rounded-full blur-3xl"></div>
 		</div>
-		
+
 		<div class="relative z-10 max-w-3xl">
 			<div class="w-24 h-24 rounded-3xl bg-primary-100 text-primary-600 dark:bg-primary-900/50 dark:text-primary-400 flex items-center justify-center mx-auto mb-8 shadow-inner border border-primary-200 dark:border-primary-800">
 				<i class="bx bx-rocket text-5xl"></i>
@@ -36,5 +36,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('script_foot') ?>
-	<?= vite_asset('landing.js') ?>
+<?= vite_asset('landing.js', true) ?>
 <?= $this->endSection() ?>

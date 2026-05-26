@@ -88,7 +88,7 @@ if (!function_exists('vite_asset')) {
      * Automatically loads from Vite dev server during development
      * and from build manifest during production.
      */
-    function vite_asset(string $entry = 'main.js', $dynamicResolve = true): string
+    function vite_asset(string $entry = 'main.js', $dynamicResolve = false): string
     {
         $manifestPath = FCPATH . 'build/.vite/manifest.json';
 
