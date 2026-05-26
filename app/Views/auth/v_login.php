@@ -1,5 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+    data-theme="light"
+    data-accent="solar-yellow"
+    data-bg-preset="Neutral"
+    data-canvas-style="Full"
+    data-zoom-level="Standard"
+    data-nav-mode="sidebar"
+    data-light-palette="Modern Gray"
+    data-dark-palette="midnight-onyx"
+    data-sidebar-theme="expanded">
 
 <head>
     <meta charset="UTF-8">
@@ -7,20 +16,12 @@
     <title>Login - App SSO</title>
     <!-- Use Vite for assets -->
     <?= vite_client() ?>
-    <?= vite_asset('resources/css/main.css', false) ?>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="<?= base_url('dist/css/boxicons.min.css') ?>" rel="stylesheet">
     <link rel="stylesheet" href="<?= base_url('dist/css/theme.css') ?>">
     <link rel="stylesheet" href="<?= base_url('dist/css/layout.css') ?>">
     <link rel="stylesheet" href="<?= base_url('dist/css/components.css') ?>">
-    
-    <script>
-        if (localStorage.getItem('vibe-template.color-theme') === 'dark' || (!('vibe-template.color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark')
-        }
-    </script>
+    <?= vite_asset('resources/css/main.css', false) ?>
     <style>
         .split-visual {
             background-image: url('<?= base_url("dist/images/auth_bg_abstract_1776397340943.png") ?>');
@@ -42,7 +43,11 @@
             justify-content: center;
             transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
         }
-        .dark #app-loader { background: #0b1120; }
+
+        .dark #app-loader {
+            background: #0b1120;
+        }
+
         .loader-spinner {
             width: 48px;
             height: 48px;
@@ -52,20 +57,32 @@
             animation: spin 1s linear infinite;
             margin-bottom: 1.5rem;
         }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        #app-loader.fade-out { opacity: 0; visibility: hidden; pointer-events: none; transform: scale(1.05); }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #app-loader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 
 <body class="font-sans antialiased bg-body overflow-hidden">
-    <div id="app-loader">
-        <div class="loader-spinner"></div>
-    </div>
     <div class="flex min-h-screen">
         <!-- Visual Side -->
         <div class="hidden lg:flex lg:w-3/5 split-visual relative p-12 flex-col justify-between overflow-hidden">
             <div class="absolute inset-0 bg-primary-900/10 backdrop-blur-[2px]"></div>
-            
+
             <div class="relative z-10">
                 <div class="flex items-center gap-3 text-white">
                     <div class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/20">
@@ -115,7 +132,7 @@
                         <?= session()->getFlashdata('error') ?>
                     </div>
                 <?php endif; ?>
-                
+
                 <?php if (session()->getFlashdata('success')) : ?>
                     <div class="mb-6 bg-emerald-100 text-emerald-700 p-4 rounded-xl text-sm font-semibold flex items-center gap-3">
                         <i class="bx bx-check-circle text-xl"></i>
@@ -124,14 +141,14 @@
                 <?php endif; ?>
 
                 <div class="grid grid-cols-2 gap-4 mb-8">
-                   <button type="button" class="btn btn-default py-3.5 shadow-sm">
-                       <i class="bx bxl-google text-xl text-red-500"></i>
-                       <span class="font-bold">Google</span>
-                   </button>
-                   <button type="button" class="btn btn-default py-3.5 shadow-sm">
-                       <i class="bx bxl-github text-xl text-slate-900 dark:text-white"></i>
-                       <span class="font-bold">GitHub</span>
-                   </button>
+                    <button type="button" class="btn btn-default py-3.5 shadow-sm">
+                        <i class="bx bxl-google text-xl text-red-500"></i>
+                        <span class="font-bold">Google</span>
+                    </button>
+                    <button type="button" class="btn btn-default py-3.5 shadow-sm">
+                        <i class="bx bxl-github text-xl text-slate-900 dark:text-white"></i>
+                        <span class="font-bold">GitHub</span>
+                    </button>
                 </div>
 
                 <div class="relative mb-8">
@@ -167,7 +184,7 @@
                 </form>
 
                 <p class="mt-10 text-center text-sm font-semibold text-slate-500 dark:text-slate-400">
-                    New to App SSO? 
+                    New to App SSO?
                     <a href="#" class="text-primary-600 font-extrabold hover:underline">Contact Administrator</a>
                 </p>
             </div>
@@ -175,8 +192,8 @@
             <!-- Float theme toggle for form side -->
             <div class="absolute top-8 right-8">
                 <button id="theme-toggle" class="flex items-center justify-center w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 transition-all hover:scale-105">
-                    <i id="theme-toggle-dark-icon" class="bx bx-moon text-lg hidden"></i>
-                    <i id="theme-toggle-light-icon" class="bx bx-sun text-lg hidden"></i>
+                    <i id="theme-toggle-dark-icon" class="bx bx-moon text-lg hidden!"></i>
+                    <i id="theme-toggle-light-icon" class="bx bx-sun text-lg hidden!"></i>
                 </button>
             </div>
         </div>
@@ -185,7 +202,8 @@
     <!-- Vendor Scripts -->
     <script src="<?= base_url('dist/js/vendor/floating-ui.core.min.js') ?>"></script>
     <script src="<?= base_url('dist/js/vendor/floating-ui.dom.min.js') ?>"></script>
-    <?= vite_asset('resources/js/main.js', false) ?>
+    <?= vite_asset('login.js', false) ?>
     <script src="<?= base_url('dist/js/app.js') ?>"></script>
 </body>
+
 </html>

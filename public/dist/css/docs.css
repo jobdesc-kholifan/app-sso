@@ -1,163 +1,163 @@
 /* Documentation - Specific Styles for Vibe UI */
 
 .code-container {
-    margin-top: 1.5rem;
-    border-radius: 1rem;
-    overflow: hidden;
-    position: relative;
-    border: 1px solid rgba(var(--color-border), 0.8);
-    background: rgb(var(--bg-surface));
-    transition: all 0.3s ease;
+	margin-top: 1.5rem;
+	border-radius: 1rem;
+	overflow: hidden;
+	position: relative;
+	border: 1px solid rgba(var(--color-border), 0.8);
+	background: rgb(var(--bg-surface));
+	transition: all 0.3s ease;
 }
 
 .dark .code-container {
-    background: rgb(var(--bg-surface));
-    border-color: rgba(255, 255, 255, 0.05);
+	background: rgb(var(--bg-surface));
+	border-color: rgba(255, 255, 255, 0.05);
 }
 
 .code-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.75rem 1rem;
-    background: rgba(0, 0, 0, 0.02);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.75rem 1rem;
+	background: rgba(0, 0, 0, 0.02);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .dark .code-header {
-    background: rgba(255, 255, 255, 0.03);
-    border-color: rgba(255, 255, 255, 0.05);
+	background: rgba(255, 255, 255, 0.03);
+	border-color: rgba(255, 255, 255, 0.05);
 }
 
 .code-lang {
-    font-size: 11px;
-    font-weight: 700;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+	font-size: 11px;
+	font-weight: 700;
+	color: #64748b;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
 }
 
 .dark .code-lang {
-    color: #94a3b8;
+	color: #94a3b8;
 }
 
 .code-content {
-    padding: 1.25rem;
-    overflow-x: auto;
-    font-family: 'Fira Code', 'Cascadia Code', monospace;
-    font-size: 13px;
-    line-height: 1.6;
-    color: #334155;
+	padding: 1.25rem;
+	overflow-x: auto;
+	font-family: "Fira Code", "Cascadia Code", monospace;
+	font-size: 13px;
+	line-height: 1.6;
+	color: #334155;
 }
 
 .dark .code-content {
-    color: #e2e8f0;
+	color: #e2e8f0;
 }
 
 .code-content code {
-    display: block;
-    white-space: pre;
+	display: block;
+	white-space: pre;
 }
 
 /* Syntax Highlighting Tokens - Softer for Light Mode */
 .token-tag {
-    color: #be185d;
+	color: #be185d;
 }
 
 .dark .token-tag {
-    color: #f472b6;
+	color: #f472b6;
 }
 
 .token-attr {
-    color: #0369a1;
+	color: #0369a1;
 }
 
 .dark .token-attr {
-    color: #38bdf8;
+	color: #38bdf8;
 }
 
 .token-val {
-    color: #b45309;
+	color: #b45309;
 }
 
 .dark .token-val {
-    color: #fbbf24;
+	color: #fbbf24;
 }
 
 .token-text {
-    color: #334155;
+	color: #334155;
 }
 
 .dark .token-text {
-    color: #e2e8f0;
+	color: #e2e8f0;
 }
 
 .token-keyword {
-    color: #7c3aed;
+	color: #7c3aed;
 }
 
 .dark .token-keyword {
-    color: #a78bfa;
+	color: #a78bfa;
 }
 
 .token-comment {
-    color: #64748b;
-    font-style: italic;
+	color: #64748b;
+	font-style: italic;
 }
 
 .dark .token-comment {
-    color: #64748b;
+	color: #64748b;
 }
 
 .token-string {
-    color: #059669;
+	color: #059669;
 }
 
 .dark .token-string {
-    color: #34d399;
+	color: #34d399;
 }
 
 .token-number {
-    color: #ea580c;
+	color: #ea580c;
 }
 
 .dark .token-number {
-    color: #fb923c;
+	color: #fb923c;
 }
 
 .token-key {
-    color: #2563eb;
+	color: #2563eb;
 }
 
 .dark .token-key {
-    color: #60a5fa;
+	color: #60a5fa;
 }
 
 .copy-btn {
-    background: transparent;
-    border: none;
-    color: #64748b;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 11px;
-    font-weight: 600;
+	background: transparent;
+	border: none;
+	color: #64748b;
+	cursor: pointer;
+	transition: all 0.2s;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 11px;
+	font-weight: 600;
 }
 
 .dark .copy-btn {
-    color: #94a3b8;
+	color: #94a3b8;
 }
 
 .copy-btn:hover {
-    color: #0f172a;
+	color: #0f172a;
 }
 
 .dark .copy-btn:hover {
-    color: #f8fafc;
+	color: #f8fafc;
 }
 
 .copy-btn i {
-    font-size: 14px;
+	font-size: 14px;
 }

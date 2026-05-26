@@ -1,5 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+	data-theme="light"
+	data-accent="solar-yellow"
+	data-bg-preset="Neutral"
+	data-canvas-style="Full"
+	data-zoom-level="Standard"
+	data-nav-mode="sidebar"
+	data-light-palette="Modern Gray"
+	data-dark-palette="midnight-onyx"
+	data-sidebar-theme="expanded">
 
 <head>
 	<meta charset="UTF-8">
@@ -16,13 +25,6 @@
 	<link rel="stylesheet" href="<?= base_url('dist/css/layout.css') ?>">
 	<link rel="stylesheet" href="<?= base_url('dist/css/components.css') ?>">
 	<?= vite_asset('resources/css/main.css', false) ?>
-	<script>
-		if (localStorage.getItem('vibe-template.color-theme') === 'dark' || (!('vibe-template.color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-			document.documentElement.classList.add('dark');
-		} else {
-			document.documentElement.classList.remove('dark')
-		}
-	</script>
 
 	<style id="critical-loader-style">
 		#app-loader {
@@ -74,9 +76,6 @@
 </head>
 
 <body class="bg-body text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
-	<div id="app-loader">
-		<div class="loader-spinner"></div>
-	</div>
 
 	<div id="app-layout" class="flex w-full h-screen overflow-hidden transition-all duration-500 bg-body">
 		<!-- Overlay Layer for Mobile -->

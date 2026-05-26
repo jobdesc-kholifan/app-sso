@@ -9,8 +9,8 @@
 	</div>
 	<div class="flex items-center gap-2">
 		<button id="theme-toggle" class="flex items-center justify-center w-9 h-9 rounded-lg text-muted hover:bg-slate-200 dark:hover:bg-slate-700 transition-all focus:outline-none border shadow-sm" style="background-color: rgb(var(--color-bg-alt)); border-color: rgb(var(--color-border))">
-			<i id="theme-toggle-dark-icon" class="bx bx-moon text-xl !hidden"></i>
-			<i id="theme-toggle-light-icon" class="bx bx-sun text-xl !hidden"></i>
+			<i id="theme-toggle-dark-icon" class="bx bx-moon text-xl hidden!"></i>
+			<i id="theme-toggle-light-icon" class="bx bx-sun text-xl hidden!"></i>
 		</button>
 		<button id="settings-toggle" class="flex items-center justify-center w-9 h-9 rounded-lg text-muted hover:bg-slate-200 dark:hover:bg-slate-700 transition-all focus:outline-none border shadow-sm" style="background-color: rgb(var(--color-bg-alt)); border-color: rgb(var(--color-border))">
 			<i class="bx bx-cog text-xl"></i>

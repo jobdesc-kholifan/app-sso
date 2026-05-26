@@ -6,7 +6,7 @@
 		</button>
 		<div id="profile-container" class="pt-4 pb-2 px-6 flex flex-row items-center transition-all duration-500">
 			<div class="relative w-max h-auto group flex-shrink-0">
-				<img id="side-avatar" src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff" class="w-12 h-12 rounded-full shadow-lg transition-all duration-500 border-2 border-white/20" style="background-color: rgb(var(--color-primary))" alt="side-avatar">
+				<img id="side-avatar" class="w-12 h-12 rounded-full shadow-lg transition-all duration-500 border-2 border-white/20" style="background-color: rgb(var(--color-primary))" alt="side-avatar">
 				<div class="absolute -left-1 -top-1 sidebar-hide">
 					<button class="bg-amber-500 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-lg hover:bg-amber-600 transition border-2 border-white">
 						<i class="bx bx-edit-alt text-xs"></i>

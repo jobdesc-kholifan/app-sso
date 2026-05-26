@@ -10,7 +10,7 @@ $provider = new \League\OAuth2\Client\Provider\GenericProvider([
     'clientId' => 'testclient',    // The client ID assigned to you by the provider
     'clientSecret' => 'testsecret',   // The client password assigned to you by the provider
     'redirectUri' => 'http://localhost:8080/callback',
-    'urlAuthorize' => 'http://localhost:9300/oauth/authorize',
+    'urlAuthorize' => 'http://localhost/oauth/authorize',
     'urlAccessToken' => 'http://appsso_web/oauth/token',
     'urlResourceOwnerDetails' => 'http://appsso_web/oauth/userinfo',
     'scopes' => 'openid profile email'
@@ -39,7 +39,7 @@ if ($path === '/callback') {
             $_SESSION['user_profile'] = $resourceOwner->toArray();
             $_SESSION['access_token'] = $accessToken->getToken();
 
-            ?>
+?>
             <!DOCTYPE html>
             <html lang="en">
 
@@ -99,7 +99,7 @@ if ($path === '/callback') {
                         setTimeout(() => {
                             window.opener.setTimelineStep(3);
                             document.getElementById('popup-status').innerText = 'Menukarkan Code dengan Access Token...';
-                            
+
                             // 3. After another 1.2s, reload parent window to show finished dashboard
                             setTimeout(() => {
                                 document.getElementById('popup-status').innerText = 'Koneksi sukses! Menutup jendela...';
@@ -120,7 +120,7 @@ if ($path === '/callback') {
             </body>
 
             </html>
-            <?php
+    <?php
             exit;
         } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
             exit('OAuth Provider Error: ' . $e->getMessage());
@@ -733,7 +733,7 @@ if ($path === '/callback') {
     </body>
 
     </html>
-    <?php
+<?php
 } else {
     http_response_code(404);
     echo "Not Found";
