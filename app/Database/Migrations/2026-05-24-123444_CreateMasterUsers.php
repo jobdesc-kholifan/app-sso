@@ -27,6 +27,12 @@ class CreateMasterUsers extends Migration
                 'constraint' => '100',
                 'unique'     => true,
             ],
+            'email' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '255',
+                'unique'     => true,
+                'null'       => true,
+            ],
             'user_password' => [
                 'type'       => 'VARCHAR',
                 'constraint' => '255',

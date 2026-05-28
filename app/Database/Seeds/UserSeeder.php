@@ -13,6 +13,7 @@ class UserSeeder extends Seeder
         $data = [
             'full_name'     => 'Super Administrator',
             'username'      => 'superadmin',
+            'email'         => 'superadmin@example.com',
             'user_password' => password_hash('superadmin123', PASSWORD_ARGON2ID),
             'role'          => 'superadmin',
             'status'        => 1,

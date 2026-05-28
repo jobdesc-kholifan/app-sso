@@ -25,6 +25,7 @@ class IdentityRepository implements IdentityProviderInterface
             'name'              => $user->full_name,
             'preferred_username' => $user->username,
             'role'              => $user->role,
+            'email'             => $user->email ?? null,
         ];
 
         return new UserEntity((string) $identifier, $claims);
