@@ -46,8 +46,8 @@
     </div>
 
     <div class="card-body">
-        <!-- Native Vibe UI Tabs Navigation -->
-        <div class="nav-tabs mb-6">
+        <!-- Vibe UI Pill Tabs Navigation -->
+        <div class="nav-pills mb-6">
             <div class="nav-link active" data-tab-target="#tab-workflow">
                 <i class="bx bx-git-repo-forked text-lg"></i>
                 <span>1. SSO Workflow</span>
@@ -154,45 +154,63 @@
                         </div>
                     </div>
 
-                    <!-- Sidebar Info -->
-                    <div class="space-y-6">
-                        <div
-                            class="card p-6 bg-linear-to-b from-indigo-50/50 to-white dark:from-indigo-950/20 dark:to-slate-900 border-indigo-100 dark:border-indigo-900">
-                            <h3
-                                class="text-sm font-bold text-indigo-900 dark:text-indigo-300 uppercase tracking-wider mb-3">
-                                Seeded Test Credentials</h3>
-                            <p class="text-xs text-slate-500 mb-4">Secara default, database telah dikonfigurasi dengan
-                                kredensial uji coba berikut:</p>
+                    <!-- Sidebar Info — Merged Card -->
+                    <div>
+                        <div class="card p-6 bg-linear-to-b from-indigo-50/50 to-emerald-50/30 dark:from-indigo-950/20 dark:to-emerald-950/10 border-indigo-100 dark:border-indigo-900">
+
+                            <!-- Seeded Test Credentials -->
+                            <h3 class="text-sm font-bold text-indigo-900 dark:text-indigo-300 uppercase tracking-wider mb-3">
+                                Seeded Test Credentials
+                            </h3>
+                            <p class="text-xs text-slate-500 mb-4">Secara default, database telah dikonfigurasi dengan kredensial uji coba berikut:</p>
                             <div class="space-y-3">
-                                <div
-                                    class="p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
-                                    <span class="block text-[10px] text-slate-400 uppercase font-semibold">Client ID
-                                        (Identifier)</span>
-                                    <code
-                                        class="text-xs font-bold text-indigo-600 dark:text-indigo-400 select-all">testclient</code>
+                                <div class="p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+                                    <span class="block text-[10px] text-slate-400 uppercase font-semibold">Client ID (Identifier)</span>
+                                    <code class="text-xs font-bold text-indigo-600 dark:text-indigo-400 select-all">testclient</code>
                                 </div>
-                                <div
-                                    class="p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
-                                    <span class="block text-[10px] text-slate-400 uppercase font-semibold">Client
-                                        Secret</span>
-                                    <code
-                                        class="text-xs font-bold text-indigo-600 dark:text-indigo-400 select-all">testsecret</code>
+                                <div class="p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+                                    <span class="block text-[10px] text-slate-400 uppercase font-semibold">Client Secret</span>
+                                    <code class="text-xs font-bold text-indigo-600 dark:text-indigo-400 select-all">testsecret</code>
                                 </div>
-                                <div
-                                    class="p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
-                                    <span class="block text-[10px] text-slate-400 uppercase font-semibold">Valid
-                                        Redirect
-                                        URI</span>
-                                    <code
-                                        class="text-xs font-bold text-indigo-600 dark:text-indigo-400 select-all">http://localhost:8080/callback</code>
+                                <div class="p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+                                    <span class="block text-[10px] text-slate-400 uppercase font-semibold">Valid Redirect URI</span>
+                                    <code class="text-xs font-bold text-indigo-600 dark:text-indigo-400 select-all">http://localhost:8080/callback</code>
                                 </div>
                             </div>
-                            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
-                                <button onclick="startSimulation()"
-                                    class="w-full btn btn-primary flex items-center justify-center gap-2 py-2 text-xs font-bold">
-                                    Mulai Simulasi <i class="bx bx-right-arrow-alt"></i>
-                                </button>
+
+                            <!-- Divider -->
+                            <div class="my-5 mb-3 border-t border-slate-200 dark:border-slate-700"></div>
+
+                            <!-- Client App Demo -->
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">
+                                Jalankan aplikasi klien demo di terminal Anda, lalu buka melalui tombol di bawah.
+                            </p>
+
+                            <!-- Terminal Command -->
+                            <div class="rounded-xl overflow-hidden border border-slate-800 mb-4">
+                                <div class="flex items-center justify-between bg-slate-800 px-3 py-2">
+                                    <div class="flex items-center gap-1.5">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-rose-500"></div>
+                                        <div class="w-2.5 h-2.5 rounded-full bg-amber-400"></div>
+                                        <div class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
+                                    </div>
+                                    <span class="text-[10px] text-slate-400 font-mono">Terminal</span>
+                                    <button onclick="copyClientCommand(this)"
+                                        class="text-[10px] text-slate-400 hover:text-white transition flex items-center gap-1 font-mono bg-slate-700 hover:bg-slate-600 px-2 py-0.5 rounded">
+                                        <i class="bx bx-copy text-xs"></i> Copy
+                                    </button>
+                                </div>
+                                <div class="bg-slate-900 px-4 py-3">
+                                    <code id="client-cmd" class="text-xs font-mono text-emerald-400 select-all block">php -S 0.0.0.0:8080 client-app/index.php</code>
+                                </div>
                             </div>
+
+                            <!-- Open Button -->
+                            <button onclick="openClientApp()"
+                                class="w-full btn btn-success flex items-center justify-center gap-2 py-2 text-xs font-bold">
+                                <i class="bx bx-link-external"></i> Buka Client App
+                            </button>
+                            <p class="text-[10px] text-slate-400 text-center mt-2">Pastikan server sudah berjalan di port <code class="font-mono">8080</code></p>
                         </div>
                     </div>
                 </div>
@@ -410,12 +428,12 @@
                                         </div>
                                         <div class="code-content">
                                             <code>{
-  "token_type": "Bearer",
-  "expires_in": 3600,
-  "access_token": "eyJhbGciOiJSUzI1...",
-  "refresh_token": "def502008f51a...",
-  "id_token": "eyJhbGciOiJSUzI1..." // (OIDC JWT)
-}</code>
+                                                "token_type": "Bearer",
+                                                "expires_in": 3600,
+                                                "access_token": "eyJhbGciOiJSUzI1...",
+                                                "refresh_token": "def502008f51a...",
+                                                "id_token": "eyJhbGciOiJSUzI1..." // (OIDC JWT)
+                                                }</code>
                                         </div>
                                     </div>
                                     <div class="space-y-2 text-xs text-slate-500 dark:text-slate-400">
@@ -438,9 +456,9 @@
                                         </div>
                                         <div class="code-content">
                                             <code>{
-  "error": "invalid_grant",
-  "error_description": "Authorization code is invalid or expired"
-}</code>
+                                                "error": "invalid_grant",
+                                                "error_description": "Authorization code is invalid or expired"
+                                                }</code>
                                         </div>
                                     </div>
                                     <div class="space-y-3 text-xs text-slate-500 dark:text-slate-400">
@@ -531,14 +549,14 @@
                                         </div>
                                         <div class="code-content">
                                             <code>{
-  "sub": "1", // Unique User ID
-  "name": "Administrator",
-  "nickname": "Admin",
-  "preferred_username": "admin",
-  "email": "admin@appsso.id",
-  "email_verified": true,
-  "role": "superadmin"
-}</code>
+                                                "sub": "1", // Unique User ID
+                                                "name": "Administrator",
+                                                "nickname": "Admin",
+                                                "preferred_username": "admin",
+                                                "email": "admin@appsso.id",
+                                                "email_verified": true,
+                                                "role": "superadmin"
+                                                }</code>
                                         </div>
                                     </div>
                                     <div class="space-y-2 text-xs text-slate-500 dark:text-slate-400">
@@ -561,9 +579,9 @@
                                         </div>
                                         <div class="code-content">
                                             <code>{
-  "error": "access_denied",
-  "message": "The access token expired or is invalid"
-}</code>
+                                                "error": "access_denied",
+                                                "message": "The access token expired or is invalid"
+                                                }</code>
                                         </div>
                                     </div>
                                     <div class="space-y-3 text-xs text-slate-500 dark:text-slate-400">
@@ -591,4 +609,30 @@
 
 <?= $this->section('script_foot') ?>
 <?= vite_asset('scripts/oauth_tutorial.js', true) ?>
+<script>
+    function copyClientCommand(btn) {
+        const cmd = document.getElementById('client-cmd').textContent;
+        navigator.clipboard.writeText(cmd).then(() => {
+            const original = btn.innerHTML;
+            btn.innerHTML = '<i class="bx bx-check text-xs"></i> Copied!';
+            btn.classList.add('text-emerald-400');
+            setTimeout(() => {
+                btn.innerHTML = original;
+                btn.classList.remove('text-emerald-400');
+            }, 2000);
+        });
+    }
+
+    function openClientApp() {
+        const width = 1280;
+        const height = 800;
+        const left = Math.round((screen.width - width) / 2);
+        const top = Math.round((screen.height - height) / 2);
+        window.open(
+            'http://localhost:8080',
+            'client_app_window',
+            `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes,status=no`
+        );
+    }
+</script>
 <?= $this->endSection() ?>
