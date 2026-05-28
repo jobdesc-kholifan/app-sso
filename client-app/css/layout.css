@@ -1,0 +1,339 @@
+/* --- Navigation Layout Core --- */
+#app-layout {
+	overflow-x: hidden;
+}
+
+#sidebar {
+	background-color: rgb(var(--sidebar-bg));
+	color: rgb(var(--sidebar-text));
+	border-right: 1px solid rgb(var(--sidebar-border, var(--color-border)));
+}
+
+.sidebar-mini #sidebar,
+[data-sidebar-theme="mini"] #sidebar {
+	width: 5rem !important;
+}
+
+.sidebar-mini .sidebar-hide,
+[data-sidebar-theme="mini"] .sidebar-hide {
+	display: none !important;
+}
+
+.sidebar-mini .sidebar-mini-show,
+[data-sidebar-theme="mini"] .sidebar-mini-show {
+	display: block !important;
+}
+
+/* --- Sidebar Submenu Accordion --- */
+.submenu-container {
+	display: none;
+}
+
+.submenu-container.open {
+	display: block;
+	animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-5px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* --- Floating Elements --- */
+.floating-menu-bg {
+	background-color: rgb(var(--floating-bg, var(--color-bg-surface)));
+	color: rgb(var(--floating-text, var(--color-text-body)));
+	border: 1px solid rgb(var(--floating-border, var(--color-border)));
+	border-radius: 0.75rem;
+	box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+	position: relative;
+	z-index: 2000;
+	transition:
+		opacity 0.2s,
+		transform 0.2s;
+}
+
+.floating-item a,
+.floating-item div.cursor-pointer {
+	color: rgb(var(--floating-text, var(--color-text-muted))) !important;
+}
+
+.floating-item a:hover,
+.floating-item div.cursor-pointer:hover,
+.floating-item a.hover-active,
+.floating-item div.cursor-pointer.hover-active {
+	background-color: var(
+		--floating-hover-bg,
+		var(--sidebar-item-hover-bg, rgba(var(--color-primary), 0.1))
+	) !important;
+	color: var(--floating-hover-text, var(--sidebar-item-hover-text, rgb(var(--color-primary)))) !important;
+}
+
+.floating-item a[data-active="true"],
+.floating-item div.cursor-pointer[data-active="true"],
+.floating-item a[data-child-active="true"],
+.floating-item div.cursor-pointer[data-child-active="true"] {
+	background-color: var(
+		--floating-active-bg,
+		var(--sidebar-item-active-bg, rgba(var(--color-primary), 0.15))
+	) !important;
+	color: var(--floating-active-text, var(--sidebar-item-active-text, rgb(var(--color-primary)))) !important;
+	font-weight: 700;
+}
+
+.floating-menu-bg:not(.opacity-0) {
+	opacity: 1 !important;
+	pointer-events: auto !important;
+}
+
+/* --- Dynamic Placement Arrows --- */
+.floating-menu-bg::before {
+	content: "";
+	position: absolute;
+	width: 10px;
+	height: 10px;
+	background: inherit;
+	transform: rotate(45deg);
+	z-index: -1;
+	display: none;
+	/* Shown by placement classes */
+}
+
+/* Arrow points LEFT (Menu is on the RIGHT of trigger) */
+.placement-right::before,
+.placement-right-start::before,
+.placement-right-end::before {
+	display: block !important;
+	left: -6px !important;
+	top: 15px !important;
+	border-left: 1px solid rgb(var(--color-border)) !important;
+	border-bottom: 1px solid rgb(var(--color-border)) !important;
+	border-top: none !important;
+	border-right: none !important;
+}
+
+/* Arrow points RIGHT (Menu is on the LEFT of trigger - FLIPPED) */
+.placement-left::before,
+.placement-left-start::before,
+.placement-left-end::before {
+	display: block !important;
+	right: -6px !important;
+	top: 15px !important;
+	border-right: 1px solid rgb(var(--color-border)) !important;
+	border-top: 1px solid rgb(var(--color-border)) !important;
+	border-left: none !important;
+	border-bottom: none !important;
+}
+
+/* Arrow points UP (Menu is BELOW trigger) */
+.placement-bottom::before,
+.placement-bottom-start::before {
+	display: block !important;
+	top: -6px !important;
+	left: 20px !important;
+	border-top: 1px solid rgb(var(--color-border)) !important;
+	border-left: 1px solid rgb(var(--color-border)) !important;
+	border-right: none !important;
+	border-bottom: none !important;
+}
+
+.placement-bottom-end::before {
+	display: block !important;
+	top: -6px !important;
+	right: 20px !important;
+	left: auto !important;
+	border-top: 1px solid rgb(var(--color-border)) !important;
+	border-left: 1px solid rgb(var(--color-border)) !important;
+	border-right: none !important;
+	border-bottom: none !important;
+}
+
+/* Arrow points DOWN (Menu is ABOVE trigger - FLIPPED) */
+.placement-top::before,
+.placement-top-start::before,
+.placement-top-end::before {
+	display: block !important;
+	bottom: -6px !important;
+	left: 20px !important;
+	border-bottom: 1px solid rgb(var(--color-border)) !important;
+	border-right: 1px solid rgb(var(--color-border)) !important;
+	border-top: none !important;
+	border-left: none !important;
+}
+
+/* Settings Panel */
+#settings-panel {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width: 320px;
+	background-color: rgb(var(--color-bg-surface));
+	border-left: 1px solid rgb(var(--color-border));
+	z-index: 10000;
+	transform: translateX(100%);
+	transition: transform 0.3s ease-in-out;
+}
+
+#settings-panel.open {
+	transform: translateX(0);
+}
+
+#settings-backdrop {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.5);
+	backdrop-filter: blur(4px);
+	z-index: 9999;
+	display: none;
+}
+
+#settings-backdrop.open {
+	display: block;
+}
+
+/* --- Utilities --- */
+.sidebar-nav-link,
+.top-nav-link {
+	color: var(--sidebar-item-text);
+}
+
+.sidebar-nav-link:hover,
+.top-nav-link:hover {
+	background-color: var(--sidebar-item-hover-bg, rgba(var(--color-primary), 0.08)) !important;
+	color: var(--sidebar-item-hover-text, rgb(var(--color-primary))) !important;
+}
+
+.sidebar-nav-link[data-active="true"],
+.sidebar-nav-link[data-child-active="true"],
+.top-nav-link[data-active="true"],
+.top-nav-link[data-child-active="true"] {
+	background-color: var(--sidebar-item-active-bg, rgba(var(--color-primary), 0.12)) !important;
+	color: var(--sidebar-item-active-text, rgb(var(--color-primary))) !important;
+}
+
+.sidebar-nav-link.active,
+.top-nav-link.active {
+	background-color: var(--sidebar-item-active-bg);
+	color: var(--sidebar-item-active-text);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+
+.no-scrollbar {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+/* --- Top Floating Action Bar --- */
+.floating-action-bar {
+	position: sticky;
+	top: 0.5rem;
+	right: 0.5rem;
+	z-index: 25;
+	pointer-events: none;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.floating-action-inner {
+	display: inline-flex;
+	pointer-events: auto;
+	background-color: rgba(var(--color-bg-surface), 0.85);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border: 1px solid rgba(var(--color-border), 0.1);
+	border-radius: 1rem;
+	padding: 0.5rem;
+	box-shadow:
+		0 10px 30px -5px rgba(0, 0, 0, 0.1),
+		0 4px 12px -2px rgba(0, 0, 0, 0.05);
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	gap: 0.5rem;
+}
+
+.floating-action-inner:empty {
+	display: none;
+}
+
+.dark .floating-action-inner,
+[data-theme="dark"] .floating-action-inner {
+	background-color: rgba(var(--color-bg-alt), 0.82);
+	border-color: rgba(var(--color-border), 0.2);
+}
+
+/* --- Tools Actions Fixed Top --- */
+#tools-actions {
+	position: sticky;
+	top: 0;
+	/* Offsetting the p-6 padding of main-canvas to touch the header border */
+	z-index: 35;
+	background-color: rgba(var(--color-bg-body), 0.8);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	margin: -2rem -1.5rem 2rem -1.5rem;
+	/* Stretch to edges of canvas p-6 */
+	padding: 1rem 1.5rem;
+	border-bottom: 1px solid rgba(var(--color-border), 0.1);
+	display: flex;
+	justify-content: end;
+	gap: 0.5rem;
+	transition: all 0.3s ease;
+}
+
+.dark #tools-actions,
+[data-theme="dark"] #tools-actions {
+	background-color: rgba(var(--color-bg-body), 0.7);
+	border-color: rgba(var(--color-border), 0.2);
+}
+/* --- Mobile Bottom Navigation --- */
+.mobile-bottom-nav {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 4.5rem;
+	background-color: rgba(var(--color-bg-surface), 0.85);
+	backdrop-filter: blur(12px);
+	border-top: 1px solid rgba(var(--color-border), 0.1);
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	z-index: 40;
+	padding-bottom: env(safe-area-inset-bottom);
+}
+
+.mobile-bottom-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	color: rgb(var(--color-text-muted));
+	font-size: 0.65rem;
+	font-weight: 600;
+	gap: 0.25rem;
+	transition: all 0.2s ease;
+}
+
+.mobile-bottom-item.active {
+	color: rgb(var(--color-primary));
+}
+
+.mobile-bottom-item i {
+	font-size: 1.5rem;
+}
+
+@media (min-width: 768px) {
+	.mobile-bottom-nav {
+		display: none;
+	}
+}

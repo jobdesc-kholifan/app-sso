@@ -1,5 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+    data-theme="light"
+    data-accent="solar-yellow"
+    data-bg-preset="Neutral"
+    data-canvas-style="Full"
+    data-zoom-level="Standard"
+    data-nav-mode="sidebar"
+    data-light-palette="Modern Gray"
+    data-dark-palette="midnight-onyx"
+    data-sidebar-theme="expanded">
 
 <head>
     <meta charset="UTF-8">
@@ -7,108 +16,21 @@
     <title>SSO Login - App SSO</title>
     <!-- Use Vite for assets -->
     <?= vite_client() ?>
-    <?= vite_asset('resources/css/main.css') ?>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="<?= base_url('dist/css/boxicons.min.css') ?>" rel="stylesheet">
     <link rel="stylesheet" href="<?= base_url('dist/css/theme.css') ?>">
     <link rel="stylesheet" href="<?= base_url('dist/css/components.css') ?>">
+    <?= vite_asset('resources/css/main.css') ?>
 
-    <script>
-        // Inline theme check to prevent flash
-        if (localStorage.getItem('vibe-template.color-theme') === 'dark' || (!('vibe-template.color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark')
-        }
-    </script>
-    <style>
-        body {
-            background-image: url('<?= base_url("dist/img/auth_bg.webp") ?>');
-            /* Fallback or relative path */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
 
-        .auth-bg-overlay {
-            background-image: url('<?= base_url("dist/images/auth_bg_abstract_1776397340943.png") ?>');
-            background-size: cover;
-            background-position: center;
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .dark .glass-card {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .dark .auth-bg-overlay {
-            filter: brightness(0.25) saturate(0.6);
-            background-color: #020617;
-        }
-    </style>
-
-    <style id="critical-loader-style">
-        #app-loader {
-            position: fixed;
-            inset: 0;
-            z-index: 99999;
-            background: #f8fafc;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
-        }
-
-        .dark #app-loader {
-            background: #0b1120;
-        }
-
-        .loader-spinner {
-            width: 48px;
-            height: 48px;
-            border: 3px solid rgba(14, 165, 233, 0.1);
-            border-top-color: #0ea5e9;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1.5rem;
-        }
-
-        @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        #app-loader.fade-out {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transform: scale(1.05);
-        }
-    </style>
 </head>
 
 <body class="font-sans antialiased overflow-hidden">
-    <div id="app-loader">
-        <div class="loader-spinner"></div>
-    </div>
     <div class="auth-bg-overlay fixed inset-0 z-0"></div>
 
     <div class="relative z-10 min-h-screen flex items-center justify-center p-6">
-        <div class="glass-card w-full max-w-[420px] p-8 md:p-10 rounded-[2rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-500">
-            <div class="text-center mb-10">
+        <div id="auth-card" class="glass-card w-full max-w-[420px] p-8 md:p-10 rounded-4xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-500 hidden">
+            <div id="default-header" class="text-center mb-10">
                 <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-sky-500/10 text-sky-500 mb-6 group transition-transform hover:scale-110">
                     <i class="bx bxs-key text-4xl"></i>
                 </div>
@@ -116,20 +38,57 @@
                 <p class="text-slate-500 dark:text-slate-400 mt-2 font-medium">Verify your identity to continue</p>
             </div>
 
-            <?php if (session()->getFlashdata('error')) : ?>
-                <div class="mb-6 bg-rose-100 text-rose-700 p-4 rounded-xl text-sm font-semibold flex items-center gap-3">
-                    <i class="bx bx-error-circle text-xl"></i>
-                    <?= session()->getFlashdata('error') ?>
+            <div id="account-chooser-header" class="text-center mb-6 hidden animate-in fade-in slide-in-from-top duration-300">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-sky-500/10 text-sky-500 mb-6">
+                    <i class="bx bxs-user-account text-4xl"></i>
                 </div>
-            <?php endif; ?>
+                <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Choose an account</h2>
+                <p class="text-slate-500 dark:text-slate-400 mt-2 font-medium">to continue to SSO Gateway</p>
+            </div>
 
-            <form action="<?= base_url('oauth/login/process') ?>" method="POST" class="space-y-6">
+            <div id="selected-account-header" class="text-center mb-6 hidden animate-in fade-in zoom-in duration-300">
+                <div id="selected-account-avatar-container" class="mb-4 flex justify-center">
+                    <img id="selected-account-avatar" src="" class="w-16 h-16 rounded-full border-2 border-sky-500 shadow-md">
+                </div>
+                <h2 id="selected-account-name" class="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">Welcome</h2>
+                <div id="selected-account-email" class="text-sm font-semibold text-slate-500 bg-slate-100 dark:bg-slate-800/80 px-3 py-1 rounded-full inline-flex items-center gap-1.5 mt-2 border border-slate-200/50 dark:border-slate-700/50">
+                    <i class="bx bx-envelope text-slate-400"></i>
+                    <span></span>
+                </div>
+            </div>
+
+            <!-- Error message container (Dynamic for AJAX & static session errors) -->
+            <div id="error-alert" class="mb-6 bg-rose-100 text-rose-700 p-4 rounded-xl text-sm font-semibold flex items-center gap-3 <?= session()->getFlashdata('error') ? '' : 'hidden' ?>">
+                <i class="bx bx-error-circle text-xl"></i>
+                <span id="error-message"><?= session()->getFlashdata('error') ?? '' ?></span>
+            </div>
+
+            <!-- State 1: Account Chooser Section -->
+            <div id="account-chooser-section" class="space-y-4 hidden animate-in fade-in slide-in-from-bottom duration-300">
+                <div id="accounts-list" class="flex flex-col gap-2 space-y-2.5 max-h-[220px] overflow-y-auto pr-1">
+                    <!-- Dynamic Account Items go here -->
+                </div>
+
+                <button type="button" id="btn-use-another" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all font-semibold text-sm text-left">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500">
+                        <i class="bx bx-user-plus text-lg"></i>
+                    </div>
+                    <span class="flex-1 text-slate-700 dark:text-slate-300">Use another account</span>
+                </button>
+            </div>
+
+            <!-- State 2: Unified Form -->
+            <form id="login-form" action="<?= base_url('oauth/login/process') ?>" method="POST" class="space-y-6">
                 <?= csrf_field() ?>
 
-                <div>
+                <!-- Hidden inputs for password-only flow -->
+                <input type="hidden" name="email" id="hidden-email">
+
+                <!-- Visible Email Input Container -->
+                <div id="email-field-container">
                     <label class="form-label mb-2 block">Username / Email</label>
                     <div class="input-icon-wrapper">
-                        <input type="text" name="email" value="<?= old('email') ?>" class="form-control" placeholder="admin" required autofocus>
+                        <input type="text" name="email_visible" id="email-visible" value="<?= old('email') ?>" class="form-control" placeholder="admin" autofocus>
                         <i class="bx bx-user"></i>
                     </div>
                 </div>
@@ -137,7 +96,7 @@
                 <div>
                     <label class="form-label mb-2 block">Password</label>
                     <div class="input-icon-wrapper">
-                        <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                        <input type="password" name="password" id="password" class="form-control" placeholder="••••••••" required>
                         <i class="bx bx-lock-alt"></i>
                     </div>
                 </div>
@@ -147,7 +106,11 @@
                         Sign In & Continue
                     </button>
 
-                    <a href="<?= base_url('login') ?>" class="btn btn-default btn-block btn-lg">
+                    <button type="button" id="btn-back-to-chooser" class="btn btn-default btn-block btn-lg hidden">
+                        Back to accounts
+                    </button>
+
+                    <a href="<?= base_url('login') ?>" id="btn-cancel" class="btn btn-default btn-block btn-lg">
                         Cancel
                     </a>
                 </div>
@@ -167,7 +130,8 @@
     <script src="<?= base_url('dist/js/vendor/floating-ui.core.min.js') ?>"></script>
     <script src="<?= base_url('dist/js/vendor/floating-ui.dom.min.js') ?>"></script>
     <?= vite_asset('resources/js/main.js') ?>
-    <script src="<?= base_url('dist/js/app.js') ?>"></script>
+    <?= vite_asset('resources/js/app.js') ?>
+    <?= vite_asset('scripts/oauth_login.js', true) ?>
 </body>
 
 </html>

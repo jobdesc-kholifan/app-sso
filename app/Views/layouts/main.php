@@ -97,12 +97,37 @@
 	<!-- Vendor Scripts -->
 	<script src="<?= base_url('dist/js/vendor/floating-ui.core.min.js') ?>"></script>
 	<script src="<?= base_url('dist/js/vendor/floating-ui.dom.min.js') ?>"></script>
-	<?= vite_asset('resources/js/config.js') ?>
-	<?= vite_asset('resources/js/menu.js') ?>
 	<?= vite_asset('resources/js/main.js') ?>
 	<?= vite_asset('resources/js/app.js') ?>
 
 	<?= $this->renderSection('script_foot') ?>
+	
+	<!-- Save Logged-In User to localStorage for Account Chooser -->
+	<script>
+		<?php if (session()->get('isLoggedIn')): ?>
+			(function() {
+				let accounts = JSON.parse(localStorage.getItem('sso_accounts') || '[]');
+				let currentUsername = <?= json_encode(session()->get('username')) ?>;
+				let currentFullName = <?= json_encode(session()->get('full_name')) ?>;
+				let currentRole = <?= json_encode(session()->get('role')) ?>;
+				let currentAvatar = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(currentFullName) + '&background=0ea5e9&color=fff&bold=true';
+				
+				let accountExists = accounts.some(function(acc) {
+					return acc.username === currentUsername;
+				});
+				
+				if (!accountExists) {
+					accounts.push({
+						username: currentUsername,
+						full_name: currentFullName,
+						role: currentRole,
+						avatar: currentAvatar
+					});
+					localStorage.setItem('sso_accounts', JSON.stringify(accounts));
+				}
+			})();
+		<?php endif; ?>
+	</script>
 </body>
 
 </html>

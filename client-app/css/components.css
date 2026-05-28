@@ -2119,8 +2119,9 @@
 }
 
 .page-link:hover:not(.active) {
-	background: rgba(var(--color-primary), 0.9);
-	box-shadow: 0 6px 20px rgba(var(--color-primary), 0.23);
+	background: rgb(var(--color-bg-alt));
+	border-color: rgb(var(--color-primary));
+	color: rgb(var(--color-primary));
 }
 
 /* Sizes */

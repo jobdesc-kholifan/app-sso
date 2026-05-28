@@ -28,10 +28,12 @@ class AuthController extends BaseController
     public function process()
     {
         $throttler = Services::throttler();
+        $isAjax = $this->request->isAJAX();
 
         // Rate Limiter: 5 attempts per minute based on IP address
         if ($throttler->check($this->request->getIPAddress(), 5, MINUTE) === false) {
-            return redirect()->back()->with('error', 'Too many login attempts. Please try again later.');
+            $msg = 'Too many login attempts. Please try again later.';
+            return $isAjax ? $this->response->setJSON(['status' => 'error', 'message' => $msg]) : redirect()->back()->with('error', $msg);
         }
 
         $rules = [
@@ -40,7 +42,8 @@ class AuthController extends BaseController
         ];
 
         if (!$this->validate($rules)) {
-            return redirect()->back()->with('error', 'Please fill all required fields correctly.')->withInput();
+            $msg = 'Please fill all required fields correctly.';
+            return $isAjax ? $this->response->setJSON(['status' => 'error', 'message' => $msg]) : redirect()->back()->with('error', $msg)->withInput();
         }
 
         $username = $this->request->getPost('email');
@@ -52,7 +55,8 @@ class AuthController extends BaseController
 
         if ($user) {
             if ((int) $user->status !== 1) {
-                return redirect()->back()->with('error', 'Your account is inactive.');
+                $msg = 'Your account is inactive.';
+                return $isAjax ? $this->response->setJSON(['status' => 'error', 'message' => $msg]) : redirect()->back()->with('error', $msg);
             }
 
             if (password_verify($password, $user->user_password)) {
@@ -61,21 +65,28 @@ class AuthController extends BaseController
                     'username'  => $user->username,
                     'full_name' => $user->full_name,
                     'role'      => $user->role,
-                    'isLoggedIn'=> true
+                    'isLoggedIn' => true
                 ];
-                
+
                 // Update last login
                 $userModel->update($user->id, ['last_login' => date('Y-m-d H:i:s')]);
 
                 session()->set($sessionData);
-                $redirectUrl = session()->get('redirect_after_login') ?? '/master/users';
+                $redirectUrl = session()->get('redirect_after_login') ?? base_url('/');
                 session()->remove('redirect_after_login');
-                return redirect()->to($redirectUrl)->with('success', 'Welcome back, ' . $user->full_name);
+
+                return $isAjax ? $this->response->setJSON([
+                    'status' => 'success',
+                    'message' => 'Welcome back, ' . $user->full_name,
+                    'redirect' => $redirectUrl
+                ]) : redirect()->to($redirectUrl)->with('success', 'Welcome back, ' . $user->full_name);
             } else {
-                return redirect()->back()->with('error', 'Invalid password.');
+                $msg = 'Invalid password.';
+                return $isAjax ? $this->response->setJSON(['status' => 'error', 'message' => $msg]) : redirect()->back()->with('error', $msg);
             }
         } else {
-            return redirect()->back()->with('error', 'User not found.');
+            $msg = 'User not found.';
+            return $isAjax ? $this->response->setJSON(['status' => 'error', 'message' => $msg]) : redirect()->back()->with('error', $msg);
         }
     }
 

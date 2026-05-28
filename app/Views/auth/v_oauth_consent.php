@@ -13,17 +13,13 @@
     <link rel="stylesheet" href="<?= base_url('dist/css/theme.css') ?>">
     <link rel="stylesheet" href="<?= base_url('dist/css/layout.css') ?>">
     <link rel="stylesheet" href="<?= base_url('dist/css/components.css') ?>">
-
-    <script>
-        if (localStorage.getItem('vibe-template.color-theme') === 'dark' || (!('vibe-template.color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark')
-        }
-    </script>
 </head>
 
-<body class="font-sans antialiased bg-slate-50 dark:bg-slate-900 flex items-center justify-center min-h-screen p-4">
+<body class="font-sans antialiased bg-slate-50 dark:bg-slate-900 flex items-center justify-center min-h-screen p-4"
+    data-logged-in="<?= session()->get('isLoggedIn') ? 'true' : 'false' ?>"
+    data-username="<?= esc(session()->get('username')) ?>"
+    data-full-name="<?= esc(session()->get('full_name')) ?>"
+    data-role="<?= esc(session()->get('role')) ?>">
     <div class="max-w-md w-full bg-white dark:bg-slate-800 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden">
 
         <!-- Header -->
@@ -97,6 +93,8 @@
             </p>
         </div>
     </div>
+    <!-- Save Logged-In User to localStorage for Account Chooser -->
+    <?= vite_asset('scripts/oauth_consent.js', true) ?>
 </body>
 
 </html>

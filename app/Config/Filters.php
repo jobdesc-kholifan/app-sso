@@ -35,6 +35,7 @@ class Filters extends BaseFilters
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
         'auth'          => \App\Filters\AuthFilter::class,
+        'cors_oauth'    => \App\Filters\CorsFilter::class,
     ];
 
     /**
@@ -108,5 +109,11 @@ class Filters extends BaseFilters
      *
      * @var array<string, array<string, list<string>>>
      */
-    public array $filters = [];
+    public array $filters = [
+        // CORS applied only to OAuth API endpoints (not admin/login pages)
+        'cors_oauth' => [
+            'before' => ['oauth/token', 'oauth/userinfo'],
+            'after'  => ['oauth/token', 'oauth/userinfo'],
+        ],
+    ];
 }

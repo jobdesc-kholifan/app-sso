@@ -136,9 +136,11 @@ class OAuthController extends BaseController
     public function processLogin()
     {
         $throttler = Services::throttler();
+        $isAjax = $this->request->isAJAX();
 
         if ($throttler->check($this->request->getIPAddress(), 5, MINUTE) === false) {
-            return redirect()->back()->with('error', 'Too many login attempts. Please try again later.');
+            $msg = 'Too many login attempts. Please try again later.';
+            return $isAjax ? $this->response->setJSON(['status' => 'error', 'message' => $msg]) : redirect()->back()->with('error', $msg);
         }
 
         $rules = [
@@ -147,7 +149,8 @@ class OAuthController extends BaseController
         ];
 
         if (!$this->validate($rules)) {
-            return redirect()->back()->with('error', 'Please fill all required fields correctly.')->withInput();
+            $msg = 'Please fill all required fields correctly.';
+            return $isAjax ? $this->response->setJSON(['status' => 'error', 'message' => $msg]) : redirect()->back()->with('error', $msg)->withInput();
         }
 
         $username = $this->request->getPost('email');
@@ -158,7 +161,8 @@ class OAuthController extends BaseController
 
         if ($user) {
             if ((int) $user->status !== 1) {
-                return redirect()->back()->with('error', 'Your account is inactive.');
+                $msg = 'Your account is inactive.';
+                return $isAjax ? $this->response->setJSON(['status' => 'error', 'message' => $msg]) : redirect()->back()->with('error', $msg);
             }
 
             if (password_verify($password, $user->user_password)) {
@@ -175,12 +179,34 @@ class OAuthController extends BaseController
 
                 $redirectUrl = session()->get('oauth_redirect_after_login') ?? '/master/users';
                 session()->remove('oauth_redirect_after_login');
-                return redirect()->to($redirectUrl);
+
+                // Determine or generate avatar
+                $avatar = base_url('dist/img/avatar.webp'); // Default fallback
+                if (!empty($user->avatar)) {
+                    $avatar = base_url($user->avatar);
+                } else if (isset($user->full_name)) {
+                    $avatar = 'https://ui-avatars.com/api/?name=' . urlencode($user->full_name) . '&background=0ea5e9&color=fff';
+                }
+
+                $accountData = [
+                    'username' => $user->username,
+                    'full_name' => $user->full_name,
+                    'avatar' => $avatar
+                ];
+
+                return $isAjax ? $this->response->setJSON([
+                    'status' => 'success',
+                    'message' => 'Login successful.',
+                    'redirect' => $redirectUrl,
+                    'user' => $accountData
+                ]) : redirect()->to($redirectUrl);
             } else {
-                return redirect()->back()->with('error', 'Invalid password.');
+                $msg = 'Invalid password.';
+                return $isAjax ? $this->response->setJSON(['status' => 'error', 'message' => $msg]) : redirect()->back()->with('error', $msg);
             }
         } else {
-            return redirect()->back()->with('error', 'User not found.');
+            $msg = 'User not found.';
+            return $isAjax ? $this->response->setJSON(['status' => 'error', 'message' => $msg]) : redirect()->back()->with('error', $msg);
         }
     }
 
@@ -217,6 +243,15 @@ class OAuthController extends BaseController
             }
 
             $userId       = (string) session()->get('user_id');
+
+            // Validasi apakah user aktif atau terdaftar
+            $userModel = new UserModel();
+            $dbUser = $userModel->find($userId);
+            if (!$dbUser || (int) $dbUser->status !== 1) {
+                session()->destroy();
+                throw OAuthServerException::serverError('User account is inactive or not found.');
+            }
+
             $clientId     = $authRequest->getClient()->getIdentifier();
 
             $userEntity = new UserEntity($userId);
@@ -254,12 +289,34 @@ class OAuthController extends BaseController
                 'scopes'     => $scopes
             ]);
         } catch (OAuthServerException $exception) {
-            return $this->convertPsr7Response($exception->generateHttpResponse($psrResponse));
+            log_message('critical', '[SSO Authorization] ' . $exception->getTraceAsString());
+            $errorType = $exception->getErrorType();
+            
+            $clientId = $this->request->getGet('client_id');
+            $clientModel = new \App\Models\ClientModel();
+            $clientExists = $clientId ? ($clientModel->where('client_identifier', $clientId)->first() !== null) : false;
+
+            return $this->response->setStatusCode($exception->getHttpStatusCode())
+                ->setBody(view('auth/v_oauth_error', [
+                    'error_type' => $errorType,
+                    'message'    => $exception->getMessage(),
+                    'hint'       => $exception->getHint(),
+                    'client_exists' => $clientExists
+                ]));
         } catch (\Exception $exception) {
             log_message('critical', '[SSO Authorization] ' . $exception->getTraceAsString());
-            $psrResponse = $psrResponse->withStatus(500);
-            $psrResponse->getBody()->write($exception->getMessage());
-            return $this->convertPsr7Response($psrResponse);
+            
+            $clientId = $this->request->getGet('client_id');
+            $clientModel = new \App\Models\ClientModel();
+            $clientExists = $clientId ? ($clientModel->where('client_identifier', $clientId)->first() !== null) : false;
+
+            return $this->response->setStatusCode(500)
+                ->setBody(view('auth/v_oauth_error', [
+                    'error_type' => 'server_error',
+                    'message'    => $exception->getMessage(),
+                    'hint'       => 'An unexpected server error occurred during authorization.',
+                    'client_exists' => $clientExists
+                ]));
         }
     }
 
@@ -282,6 +339,7 @@ class OAuthController extends BaseController
             $psrResponse = $this->server->completeAuthorizationRequest($authRequest, $psrResponse);
             return $this->convertPsr7Response($psrResponse);
         } catch (OAuthServerException $exception) {
+            log_message('critical', '[SSO Authorization Process]: ' . $exception->getMessage() . ' Trace ' . $exception->getTraceAsString());
             return $this->convertPsr7Response($exception->generateHttpResponse($psrResponse));
         } catch (\Exception $exception) {
             log_message('critical', '[SSO Authorization Process]: ' . $exception->getMessage() . ' Trace ' . $exception->getTraceAsString());
@@ -300,6 +358,7 @@ class OAuthController extends BaseController
             $psrResponse = $this->server->respondToAccessTokenRequest($psrRequest, $psrResponse);
             return $this->convertPsr7Response($psrResponse);
         } catch (OAuthServerException $exception) {
+            log_message('critical', '[SSO Token]: ' . $exception->getMessage() . ' Trace ' . $exception->getTraceAsString());
             return $this->convertPsr7Response($exception->generateHttpResponse($psrResponse));
         } catch (\Exception $exception) {
             log_message('critical', '[SSO Token]: ' . $exception->getMessage() . ' Trace ' . $exception->getTraceAsString());
@@ -331,6 +390,7 @@ class OAuthController extends BaseController
 
             return $this->response->setJSON($userEntity->getClaims());
         } catch (OAuthServerException $exception) {
+            log_message('critical', '[SSO UserInfo]: ' . $exception->getMessage() . ' Trace ' . $exception->getTraceAsString());
             return $this->convertPsr7Response($exception->generateHttpResponse($psrResponse));
         } catch (\Exception $exception) {
             log_message('critical', '[SSO UserInfo]: ' . $exception->getMessage() . ' Trace ' . $exception->getTraceAsString());

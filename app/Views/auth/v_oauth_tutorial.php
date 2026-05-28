@@ -1,11 +1,15 @@
 <?= $this->extend('layouts/main') ?>
 
+<?= $this->section('style_head') ?>
+<link rel="stylesheet" href="<?= base_url('dist/css/docs.css') ?>">
+<?= $this->endSection() ?>
+
 <?= $this->section('content') ?>
 
 <!-- Main Developer Console Card -->
-<div class="card card-lg shadow-xl overflow-hidden p-0">
+<div id="tutorial-container" class="card card-lg shadow-xl overflow-hidden p-0" data-base-url="<?= base_url() ?>">
     <!-- Header Section with Harmonious Gradient Accent (Integrated) -->
-    <div class="relative overflow-hidden bg-gradient-to-rp-8 border-b border-white/5">
+    <div class="card-header">
         <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
                 <div class="flex items-center gap-2 mb-2">
@@ -24,7 +28,7 @@
                     klien Anda ke server pusat ini.
                 </p>
             </div>
-            <div class="flex-shrink-0">
+            <div class="shrink-0">
                 <div
                     class="flex items-center gap-3 bg-white/5 backdrop-blur-md px-4 py-3 rounded-xl border border-white/10">
                     <i class="bx bx-shield-quarter text-indigo-400 text-3xl"></i>
@@ -153,7 +157,7 @@
                     <!-- Sidebar Info -->
                     <div class="space-y-6">
                         <div
-                            class="card p-6 bg-gradient-to-b from-indigo-50/50 to-white dark:from-indigo-950/20 dark:to-slate-900 border-indigo-100 dark:border-indigo-900">
+                            class="card p-6 bg-linear-to-b from-indigo-50/50 to-white dark:from-indigo-950/20 dark:to-slate-900 border-indigo-100 dark:border-indigo-900">
                             <h3
                                 class="text-sm font-bold text-indigo-900 dark:text-indigo-300 uppercase tracking-wider mb-3">
                                 Seeded Test Credentials</h3>
@@ -394,22 +398,65 @@
                                 </div>
                             </div>
 
-                            <h4 class="font-bold text-slate-800 dark:text-white text-xs mb-3 uppercase tracking-wider">
-                                Format
-                                Respons JSON Sukses:</h4>
-                            <div class="code-container">
-                                <div class="code-header">
-                                    <span class="code-lang">JSON</span>
-                                    <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
-                                </div>
-                                <div class="code-content">
-                                    <code>{
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                                <div>
+                                    <h4 class="font-bold text-slate-800 dark:text-white text-xs mb-3 uppercase tracking-wider">
+                                        Format Respons JSON Sukses:
+                                    </h4>
+                                    <div class="code-container mb-4">
+                                        <div class="code-header">
+                                            <span class="code-lang">JSON</span>
+                                            <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                                        </div>
+                                        <div class="code-content">
+                                            <code>{
   "token_type": "Bearer",
   "expires_in": 3600,
   "access_token": "eyJhbGciOiJSUzI1...",
   "refresh_token": "def502008f51a...",
-  "id_token": "eyJhbGciOiJSUzI1..." // (OIDC Claim Token)
+  "id_token": "eyJhbGciOiJSUzI1..." // (OIDC JWT)
 }</code>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2 text-xs text-slate-500 dark:text-slate-400">
+                                        <div><strong>token_type:</strong> Tipe token otentikasi (selalu <code>Bearer</code>).</div>
+                                        <div><strong>expires_in:</strong> Masa aktif access token dalam detik (3600 detik = 1 jam).</div>
+                                        <div><strong>access_token:</strong> Token JWT rahasia untuk mengakses API resource server.</div>
+                                        <div><strong>refresh_token:</strong> Token khusus untuk memperbarui access token tanpa login ulang.</div>
+                                        <div><strong>id_token:</strong> Token JWT khusus berstandar OpenID Connect (OIDC) yang berisi klaim data identitas user terenkripsi.</div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-bold text-rose-600 dark:text-rose-400 text-xs mb-3 uppercase tracking-wider">
+                                        Format Respons JSON Error:
+                                    </h4>
+                                    <div class="code-container mb-4">
+                                        <div class="code-header">
+                                            <span class="code-lang">JSON (Error)</span>
+                                            <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                                        </div>
+                                        <div class="code-content">
+                                            <code>{
+  "error": "invalid_grant",
+  "error_description": "Authorization code is invalid or expired"
+}</code>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-3 text-xs text-slate-500 dark:text-slate-400">
+                                        <div class="p-2 bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900 rounded-lg">
+                                            <span class="font-bold text-rose-600 dark:text-rose-400 block">invalid_client</span>
+                                            Kunci <code>client_secret</code> salah, client tidak terdaftar, atau otentikasi client gagal.
+                                        </div>
+                                        <div class="p-2 bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900 rounded-lg">
+                                            <span class="font-bold text-rose-600 dark:text-rose-400 block">invalid_grant</span>
+                                            Kode otorisasi (<code>code</code>) sudah kedaluwarsa atau sudah pernah digunakan sebelumnya (proteksi sekali pakai).
+                                        </div>
+                                        <div class="p-2 bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900 rounded-lg">
+                                            <span class="font-bold text-rose-600 dark:text-rose-400 block">invalid_request</span>
+                                            Permintaan tidak lengkap (misal parameter <code>grant_type</code> atau <code>code</code> terlewat).
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -472,17 +519,19 @@
                                 </div>
                             </div>
 
-                            <h4 class="font-bold text-slate-800 dark:text-white text-xs mb-3 uppercase tracking-wider">
-                                Format
-                                Respons JSON Profil Pengguna:</h4>
-                            <div class="code-container">
-                                <div class="code-header">
-                                    <span class="code-lang">JSON</span>
-                                    <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
-                                </div>
-                                <div class="code-content">
-                                    <code>{
-  "sub": "1",                 // Unique User ID
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                                <div>
+                                    <h4 class="font-bold text-slate-800 dark:text-white text-xs mb-3 uppercase tracking-wider">
+                                        Format Respons JSON Profil Pengguna:
+                                    </h4>
+                                    <div class="code-container mb-4">
+                                        <div class="code-header">
+                                            <span class="code-lang">JSON</span>
+                                            <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                                        </div>
+                                        <div class="code-content">
+                                            <code>{
+  "sub": "1", // Unique User ID
   "name": "Administrator",
   "nickname": "Admin",
   "preferred_username": "admin",
@@ -490,6 +539,44 @@
   "email_verified": true,
   "role": "superadmin"
 }</code>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2 text-xs text-slate-500 dark:text-slate-400">
+                                        <div><strong>sub:</strong> <i>Subject</i>, ID unik global pengguna (OIDC Standard). Jangan gunakan email/username sebagai key di database Anda, gunakan kolom <code>sub</code> ini.</div>
+                                        <div><strong>name:</strong> Nama lengkap pengguna untuk display UI.</div>
+                                        <div><strong>email:</strong> Alamat email utama yang terdaftar di SSO.</div>
+                                        <div><strong>email_verified:</strong> Status verifikasi email (true/false).</div>
+                                        <div><strong>role:</strong> Peran/otoritas pengguna (Custom Claim untuk RBAC).</div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-bold text-rose-600 dark:text-rose-400 text-xs mb-3 uppercase tracking-wider">
+                                        Format Respons JSON Error:
+                                    </h4>
+                                    <div class="code-container mb-4">
+                                        <div class="code-header">
+                                            <span class="code-lang">JSON (Error 401)</span>
+                                            <button class="copy-btn"><i class="bx bx-copy"></i> Copy</button>
+                                        </div>
+                                        <div class="code-content">
+                                            <code>{
+  "error": "access_denied",
+  "message": "The access token expired or is invalid"
+}</code>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-3 text-xs text-slate-500 dark:text-slate-400">
+                                        <div class="p-2 bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900 rounded-lg">
+                                            <span class="font-bold text-rose-600 dark:text-rose-400 block">HTTP 401 Unauthorized</span>
+                                            Dilemparkan jika header <code>Authorization</code> tidak disertakan, format salah, atau token tidak valid.
+                                        </div>
+                                        <div class="p-2 bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900 rounded-lg">
+                                            <span class="font-bold text-rose-600 dark:text-rose-400 block">Access Token Expired</span>
+                                            Header respons menyertakan:<br>
+                                            <code class="text-[10px] block bg-slate-900 text-slate-300 p-1 mt-1 rounded">WWW-Authenticate: Bearer error="invalid_token", error_description="The access token expired"</code>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -499,87 +586,9 @@
 
         </div> <!-- Closing card-body -->
     </div> <!-- Closing card -->
+</div>
+<?= $this->endSection() ?>
 
-    <?= $this->endSection() ?>
-
-    <?= $this->section('script_foot') ?>
-    <script>
-        // Native Vibe UI Tab trigger helper to navigate from Tab 1 to Tab 2
-        function startSimulation() {
-            const targetTab = document.querySelector('.nav-link[data-tab-target="#tab-authorize"]');
-            if (targetTab) {
-                targetTab.click(); // Triggers Vibe UI's native app.js tab switcher
-            }
-        }
-
-        // Dynamic State generator
-        function randomState() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let result = '';
-            for (let i = 0; i < 16; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            document.getElementById('auth-state').value = result;
-            generateAuthUrl();
-        }
-
-        // Dynamic URL Generator for Authorize Tab
-        function generateAuthUrl() {
-            const base = document.getElementById('auth-base').value;
-            const clientId = document.getElementById('auth-client-id').value;
-            const redirect = document.getElementById('auth-redirect').value;
-            const state = document.getElementById('auth-state').value;
-
-            let scopes = [];
-            if (document.getElementById('scope-openid').checked) scopes.push('openid');
-            if (document.getElementById('scope-profile').checked) scopes.push('profile');
-            if (document.getElementById('scope-email').checked) scopes.push('email');
-
-            const scopeStr = encodeURIComponent(scopes.join(' '));
-            const redirectStr = encodeURIComponent(redirect);
-
-            const finalUrl = `${base}?response_type=code&client_id=${clientId}&redirect_uri=${redirectStr}&scope=${scopeStr}&state=${state}`;
-
-            document.getElementById('url-output').innerText = finalUrl;
-            document.getElementById('btn-redirect-test').href = finalUrl;
-        }
-
-        // Dynamic Token Command generator
-        function generateTokenCmd() {
-            const baseUrlVal = "<?= base_url() ?>".replace(/\/$/, "");
-            const code = document.getElementById('token-code').value || 'PASTE_YOUR_CODE_HERE';
-            const secret = document.getElementById('token-secret').value || 'testsecret';
-            const clientId = document.getElementById('auth-client-id').value || 'testclient';
-            const redirect = document.getElementById('auth-redirect').value || 'http://localhost:8080/callback';
-
-            const cmd = `curl -X POST "${baseUrlVal}/oauth/token" \\
-  -H "Content-Type: application/x-www-form-urlencoded" \\
-  -d "grant_type=authorization_code" \\
-  -d "client_id=${clientId}" \\
-  -d "client_secret=${secret}" \\
-  -d "redirect_uri=${redirect}" \\
-  -d "code=${code}"`;
-
-            document.getElementById('token-cmd-output').innerText = cmd;
-        }
-
-        // Dynamic UserInfo Command generator
-        function generateUserInfoCmd() {
-            const baseUrlVal = "<?= base_url() ?>".replace(/\/$/, "");
-            const token = document.getElementById('userinfo-token').value || 'PASTE_YOUR_ACCESS_TOKEN_HERE';
-
-            const cmd = `curl -X GET "${baseUrlVal}/oauth/userinfo" \\
-  -H "Authorization: Bearer ${token}"`;
-
-            document.getElementById('userinfo-cmd-output').innerText = cmd;
-        }
-
-        // Initialize values on load
-        document.addEventListener('DOMContentLoaded', () => {
-            randomState();
-            generateAuthUrl();
-            generateTokenCmd();
-            generateUserInfoCmd();
-        });
-    </script>
-    <?= $this->endSection() ?>
+<?= $this->section('script_foot') ?>
+<?= vite_asset('scripts/oauth_tutorial.js', true) ?>
+<?= $this->endSection() ?>

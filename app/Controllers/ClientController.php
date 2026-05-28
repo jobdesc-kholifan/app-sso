@@ -52,6 +52,7 @@ class ClientController extends BaseController
         ];
 
         if ($model->insert($data)) {
+            \Config\Services::cache()->delete('oauth_allowed_origins');
             return $this->response->setJSON(['success' => true, 'message' => 'Client created successfully']);
         }
 
@@ -97,6 +98,7 @@ class ClientController extends BaseController
         }
 
         if ($model->update($id, $data)) {
+            \Config\Services::cache()->delete('oauth_allowed_origins');
             return $this->response->setJSON(['success' => true, 'message' => 'Client updated successfully']);
         }
 
@@ -107,6 +109,7 @@ class ClientController extends BaseController
     {
         $model = new ClientModel();
         if ($model->delete($id)) {
+            \Config\Services::cache()->delete('oauth_allowed_origins');
             return $this->response->setJSON(['success' => true, 'message' => 'Client deleted successfully']);
         }
         return $this->response->setJSON(['success' => false, 'message' => 'Failed to delete client']);

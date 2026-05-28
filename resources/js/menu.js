@@ -220,7 +220,7 @@ function renderMenu(items, container, depth = 0) {
 			headerEl.innerHTML = `
                 <div class="flex items-center gap-2">
                     <span class="whitespace-nowrap">${item.header}</span>
-                    <div class="h-[1px] flex-1 bg-sidebar-text/60"></div>
+                    <div class="h-px flex-1 bg-sidebar-text/60"></div>
                 </div>
             `;
 			container.appendChild(headerEl);
@@ -228,7 +228,7 @@ function renderMenu(items, container, depth = 0) {
 			// For mini-sidebar: add a subtle divider
 			const miniDivider = document.createElement("div");
 			miniDivider.className = "sidebar-mini-show hidden px-4 py-2";
-			miniDivider.innerHTML = `<div class="h-[1px] w-full bg-sidebar-text/50"></div>`;
+			miniDivider.innerHTML = `<div class="h-px w-full bg-sidebar-text/50"></div>`;
 			container.appendChild(miniDivider);
 			return;
 		}
@@ -268,17 +268,17 @@ function renderMenu(items, container, depth = 0) {
 
 		let iconHtml = "";
 		if (item.icon) {
-			iconHtml = `<i class="bx ${item.icon} lg:mr-3 text-lg sidebar-icon flex-shrink-0 leading-4" style="color: inherit"></i>`;
+			iconHtml = `<i class="bx ${item.icon} lg:mr-3 text-lg sidebar-icon shrink-0 leading-4" style="color: inherit"></i>`;
 		} else {
 			const dotActive = isDirectActive || isChildActive;
 			iconHtml = `<div class="w-5 flex items-center justify-center lg:mr-3 sidebar-icon"><div class="w-1.5 h-1.5 rounded-full" style="background: currentColor; opacity: ${dotActive ? "1" : "0.45"}"></div></div>`;
 		}
 
 		link.innerHTML = `
-            ${iconHtml}
-            <span class="sidebar-hide flex-1 leading-4 truncate" style="color: inherit!important">${item.title}</span>
-            ${hasChildren ? `<i class="bx bx-chevron-right sidebar-hide text-lg chevron-rotate leading-4 ${isChildActive ? "rotate" : ""}"></i>` : ""}
-        `;
+      ${iconHtml}
+      <span class="sidebar-hide flex-1 leading-4 truncate" style="color: inherit!important">${item.title}</span>
+      ${hasChildren ? `<i class="bx bx-chevron-right sidebar-hide text-lg chevron-rotate leading-4 ${isChildActive ? "rotate" : ""}"></i>` : ""}
+    `;
 
 		itemWrapper.appendChild(link);
 

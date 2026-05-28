@@ -46,6 +46,10 @@ $routes->post('oauth/authorize', 'OAuthController::authorizeProcess');
 $routes->get('oauth/logout', 'OAuthController::logout');
 
 $routes->post('oauth/token', 'OAuthController::token');
+$routes->options('oauth/token', static fn() => service('response')->setStatusCode(200));
+
 $routes->get('oauth/userinfo', 'OAuthController::userinfo');
 $routes->post('oauth/userinfo', 'OAuthController::userinfo');
+$routes->options('oauth/userinfo', static fn() => service('response')->setStatusCode(200));
+
 $routes->get('oauth/tutorial', 'OAuthController::tutorial');

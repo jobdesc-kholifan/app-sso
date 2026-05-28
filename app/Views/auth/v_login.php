@@ -31,50 +31,7 @@
         }
     </style>
 
-    <style id="critical-loader-style">
-        #app-loader {
-            position: fixed;
-            inset: 0;
-            z-index: 99999;
-            background: #f8fafc;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
-        }
 
-        .dark #app-loader {
-            background: #0b1120;
-        }
-
-        .loader-spinner {
-            width: 48px;
-            height: 48px;
-            border: 3px solid rgba(79, 70, 229, 0.1);
-            border-top-color: #4f46e5;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1.5rem;
-        }
-
-        @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        #app-loader.fade-out {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transform: scale(1.05);
-        }
-    </style>
 </head>
 
 <body class="font-sans antialiased bg-body overflow-hidden">
@@ -126,12 +83,11 @@
                     <p class="text-slate-500 dark:text-slate-400 mt-3 font-medium text-lg">Enter your credentials to access the system.</p>
                 </div>
 
-                <?php if (session()->getFlashdata('error')) : ?>
-                    <div class="mb-6 bg-rose-100 text-rose-700 p-4 rounded-xl text-sm font-semibold flex items-center gap-3">
-                        <i class="bx bx-error-circle text-xl"></i>
-                        <?= session()->getFlashdata('error') ?>
-                    </div>
-                <?php endif; ?>
+                <!-- Dynamic Error Alert -->
+                <div id="error-alert" class="mb-6 bg-rose-100 text-rose-700 p-4 rounded-xl text-sm font-semibold flex items-center gap-3 <?= session()->getFlashdata('error') ? '' : 'hidden' ?>">
+                    <i class="bx bx-error-circle text-xl"></i>
+                    <span id="error-message"><?= session()->getFlashdata('error') ?? '' ?></span>
+                </div>
 
                 <?php if (session()->getFlashdata('success')) : ?>
                     <div class="mb-6 bg-emerald-100 text-emerald-700 p-4 rounded-xl text-sm font-semibold flex items-center gap-3">
@@ -156,7 +112,7 @@
                     <div class="relative flex justify-center text-xs uppercase"><span class="bg-surface px-4 text-slate-400 font-bold tracking-widest">Or sign in with email</span></div>
                 </div>
 
-                <form action="<?= base_url('login/process') ?>" method="POST" class="space-y-6">
+                <form id="login-form" action="<?= base_url('login/process') ?>" method="POST" class="space-y-6">
                     <?= csrf_field() ?>
                     <div>
                         <label class="form-label mb-2 block">Username</label>
@@ -202,8 +158,8 @@
     <!-- Vendor Scripts -->
     <script src="<?= base_url('dist/js/vendor/floating-ui.core.min.js') ?>"></script>
     <script src="<?= base_url('dist/js/vendor/floating-ui.dom.min.js') ?>"></script>
-    <?= vite_asset('login.js', true) ?>
-    <script src="<?= base_url('dist/js/app.js') ?>"></script>
+    <?= vite_asset('resources/js/app.js') ?>
+    <?= vite_asset('scripts/login.js', true) ?>
 </body>
 
 </html>
