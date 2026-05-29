@@ -103,7 +103,7 @@ if (!function_exists('vite_asset')) {
 
                 // Only prepend if entry doesn't already have the path
                 if (!str_starts_with($entry, $relativePath)) {
-                    $entry = $relativePath . '/' . ltrim($entry, '/');
+                    $entry = str_replace('\\', '/', $relativePath) . '/' . ltrim($entry, '/');
                 }
             }
         }
